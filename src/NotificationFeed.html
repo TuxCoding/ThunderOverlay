@@ -122,11 +122,12 @@
 
       <!-- Disable module error -->
       <script>var exports = {};</script>
-      <script src="./assets/javascript/src/index.js"></script>
-      <!-- Run update only on the site -->
-      <script>main();</script>
+      <script src="./assets/javascript/bundle.js"></script>
       <script>
-
+        document.getElementById("killer-tank").onerror="this.style.display='none'";
+        document.getElementById("destroyed-tank").onerror = () => {
+            document.getElementById("destroyed-tank").src = "";
+        };
       </script>
   </body>
 </html>
