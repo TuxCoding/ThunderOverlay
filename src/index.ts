@@ -19,7 +19,7 @@ export type Damage = {
 };
 
 async function query(url: string): Promise<any> {
-    const response = await fetch(HOST + query, {
+    const response = await fetch(HOST + url, {
         method: 'GET',
         headers: {
             Accept: 'application/json',
@@ -49,15 +49,33 @@ export type DestroyMessage = {
     killed: string
 }
 
-function main() {
-    update();
+export function main() {
+    update(0, 0);
 }
 
-function update() {
+async function update(seenEvent: number, seenDamange: number) {
     try {
-        //updateHUD(0, 0);
+        const events = await updateHUD(0, seenDamange);
+        const entries = events.damage;
+
+        let lastId = seenDamange;
+        if (entries.length > 0) {
+            lastId = entries[entries.length - 1].id;
+            console.log("Updating last id to " + lastId);
+        }
+
+        // schedule next update
+        setTimeout(() => update(seenEvent, lastId), 5000);
     } catch (error) {
-        console.error(error);
+        if (error instanceof Error) {
+            const err = error as Error;
+            if (err.name == "TypeError") {
+                // delay update process if not running
+                console.error("Unknown error: some browser extension might blocked this request or War Thunder is not running");
+                console.error("Updating after 1min");
+                setTimeout(() => update(seenEvent, seenDamange), 60 * 1000);
+            }
+        }
     }
 }
 
@@ -83,6 +101,7 @@ const KNOWN_SQUAD_MEMBERS = [
     "SGTCross96",
     "Icefruit",
     "l-IlIllIIlIIllI",
+    "Frevbucksmaster"
 ]
 
 export function isSquadRelevant(msg: DestroyMessage): boolean {
