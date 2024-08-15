@@ -1,5 +1,5 @@
 import { DestroyMessage } from "../src/index";
-import { isSquadRelevant } from "../src/team";
+import { getSquadAvatar, isSquadRelevant } from "../src/team";
 
 describe('Squad member check', () => {
     const otherPlayerMsg: DestroyMessage = {
@@ -42,3 +42,24 @@ describe('Squad member check', () => {
         expect(isSquadRelevant(squadKillerDestroyed)).toBeTruthy();
     })
 });
+
+describe('find avatar', () => {
+    const KNOWN_SQUAD_MEMBERS = [
+        "CassualTux",
+        "Lukasxox",
+        "nudel28",
+        "SGTCross96",
+        "Icefruit",
+        "l-IlIllIIlIIllI",
+    ]
+
+    test('Not existing', () => {
+        expect(getSquadAvatar("somebody")).toBeNull();
+    });
+
+    for (const member of KNOWN_SQUAD_MEMBERS) {
+        test('Existing', () => {
+            expect(getSquadAvatar(member)).toBeDefined();
+        });
+    }
+})
