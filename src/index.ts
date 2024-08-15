@@ -227,6 +227,6 @@ function hide(container: HTMLElement, hideSec: number) {
 }
 
 /* Run update only on the site */
-if (document) {
+if (typeof document !== 'undefined') {
     main();
 }
