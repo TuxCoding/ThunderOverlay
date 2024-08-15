@@ -1,5 +1,3 @@
-import { xyz } from "./assets";
-
 const HOST = "http://localhost:8111/"
 
 export type HudEvents = {
@@ -96,6 +94,3 @@ export function isSquadRelevant(msg: DestroyMessage): boolean {
 
     return false;
 }
-
-
-main();
