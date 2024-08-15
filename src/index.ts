@@ -225,3 +225,8 @@ function hide(container: HTMLElement, hideSec: number) {
         container.style.display = "none";
     }, hideSec * 1000);
 }
+
+/* Run update only on the site */
+if (document) {
+    main();
+}
