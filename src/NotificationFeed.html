@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+  </head>
+  <style>
+    :root {
+        --color-accent: #00A3A3;
+        --color-idea: #004d99;
+        --color-shadow: black;
+        --text-base-color: #302e24;
+
+        /* --font: 'Sans Serif'; */
+        --font: Monaco;
+        /*--font: "Segoe UI";*/
+        /*--font: Roboto Mono;
+        /* --font: 'Helvetica, sans-serif'; */
+    }
+
+    #notification {
+        display: flex;
+
+        max-width: 1200px;
+
+        align-items: center;
+
+        animation: slide-in 3s 1;
+    }
+
+    @keyframes slide-in {
+        from {
+            margin-top: 200px;
+        }
+        to {
+            margin-top: 0%;
+        }
+    }
+
+    .tank img {
+        width: 128px;
+
+        /*
+        border: 2px solid #00A3A3;
+        border-radius: 5px;
+
+        background-color: rgba(02, 02, 02, 0.8);
+
+        box-shadow: 0 0 10px black;*/
+    }
+
+    .tank-single img {
+        height: 100px;
+    }
+
+    .avatar img {
+        height: 100px;
+
+        /* box-shadow: 0 0 10px var(--color-shadow); */
+        box-shadow: 0 0.5rem 15rem rgba(0, 0 , 0, 0.15);
+        border: 3px solid var(--color-accent);
+
+        align-content: center;
+    }
+
+    #title {
+        font-size: 1.7rem;
+        font-weight: bolder;
+        font-family: var(--font);
+
+        text-align: center;
+
+        color: var(--text-base-color);
+
+        /*text-shadow: 0 3px 10px black;*/
+        /*background-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 0 5px black;*/
+
+        flex-grow: 1;
+
+        margin: auto;
+    }
+
+    .killer-name, .killed-name {
+        color: var(--color-accent);
+    }
+  </style>
+  <body>
+    <div id="notification" class="container" disabled="true">
+        <div class="avatar">
+            <img src="./assets/img/avatars/cardicon_bundeswehr_infantryman.png">
+        </div>
+
+        <div class="tank">
+            <img src="./assets/img/vehicles/il_merkava_mk_2b_early.png">
+        </div>
+
+        <div id="title">
+            <p class="title">
+                <span class="icon-eye"></span>
+                <span class="player-name killer-name">-GFF7- Lukasxox</span>
+                zerstörte
+                <span class="player-name killed-name">-GFF7- CassualTux</span>!
+            </p>
+        </div>
+
+        <div class="tank-single">
+            <img src="./assets/img/vehicles/sw_kungstiger.png">
+        </div>
+<!--
+        <div class="avatar">
+            <img src="./assets/avatars/cardicon_esport_drops.png">
+        </div> -->
+      </div>
+
+      <script>var exports = {};</script>
+      <script src="./assets/javascript/index.js"></script>
+  </body>
+</html>

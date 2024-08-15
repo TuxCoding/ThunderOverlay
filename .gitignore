@@ -1,0 +1,18 @@
+node_modules/
+
+# Temp projects
+scraper/
+
+# Assets which could be copyrighted, but keep folder structure
+src/assets/img/vehicles/*
+!src/assets/img/vehicles/.gitkeep
+
+src/assets/img/avatars/*
+!src/assets/img/avatars/.gitkeep
+
+src/assets/img/13px-Rp_icon.png
+src/assets/img/19px-Ge_icon.png
+src/assets/img/19px-Sl_icon.png
+
+# Compiled Typescript
+src/assets/javascript/*

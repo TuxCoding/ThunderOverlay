@@ -1,0 +1,22 @@
+{
+    "valid": true,
+    "army": "tank",
+    "type": "tankModels/il_magach_6r",
+    "stabilizer": 1.000000,
+    "gear": 8.000000,
+    "gear_neutral": 2.000000,
+    "speed": 32.000000,
+    "has_speed_warning": 0.000000,
+    "rpm": 2242.000000,
+    "driving_direction_mode": 0.000000,
+    "cruise_control": 3.000000,
+    "lws": -1.000000,
+    "ircm": -1.000000,
+    "roll_indicators_is_available": 0.000000,
+    "first_stage_ammo": 22.000000,
+    "crew_total": 4.000000,
+    "crew_current": 4.000000,
+    "crew_distance": 1.000000,
+    "gunner_state": 0.000000,
+    "driver_state": 0.000000
+}

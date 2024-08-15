@@ -1,0 +1,21 @@
+{
+    "events": [],
+    "damage": [
+        {
+            "id": 57,
+            "msg": "-RBoF- Rhino_Immerse (Ra’am Sagol) hat \"Panzer-Retter: x1\" erreicht",
+            "sender": "",
+            "enemy": false,
+            "mode": "",
+            "time": 232
+        },
+        {
+            "id": 43,
+            "msg": "=Mahno= Hash browns (Т-80U-Е1) zerstört -GSqd- Onlyfans_Poon (Desert Warrior)",
+            "sender": "",
+            "enemy": false,
+            "mode": "",
+            "time": 191
+        }
+    ]
+}
