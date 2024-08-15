@@ -1,3 +1,6 @@
+import { findVehicleFile } from "./assets";
+import { getSquadAvatar } from "./team";
+
 const HOST = "http://localhost:8111/"
 
 export type HudEvents = {
@@ -147,7 +150,22 @@ function handleEvents(events: Damage[]) {
             continue;
         }
 
-        notifications.push();
+        const killerAvatar = getSquadAvatar(msg.killer);
+
+        const destroyerTank = findVehicleFile(msg.destroyerTank);
+        const destroyedTank = findVehicleFile(msg.destroyedTank);
+        if (!killerAvatar || !destroyerTank || !destroyedTank) {
+            continue;
+        }
+
+        const notification: Notification = {
+            killer: msg.killer,
+            killerAvatar: "./assets/img/avatar/" + killerAvatar + ".png",
+            killerTankIcon: destroyerTank,
+            destroyedTank: destroyedTank,
+            killed: msg.killed,
+        };
+        notifications.push(notification);
     }
 }
 
