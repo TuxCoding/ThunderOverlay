@@ -27,15 +27,15 @@ describe('Test file parsing', () => {
 
 describe('Message parsing', () => {
     const expected: DestroyMessage = {
-        killer: "-GFF7 Lukasxox",
+        killer: "-GFF7- Lukasxox",
         destroyerTank: "IT-1",
 
         destroyedTank: "Magach 6M",
-        killed: "-GFF7 CassualTux"
+        killed: "-GFF7- CassualTux"
     };
 
     test('Destroy message parsing', () => {
-        expect(parseMessage("-GFF7- Lukasxox (IT-1) zerstört -GFF7- CassualTux (Magach 6M)")).toBe(expected);
+        expect(parseMessage("-GFF7- Lukasxox (IT-1) zerstört -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
     });
 
     test('Ignore test drive', () => {

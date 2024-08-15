@@ -9,7 +9,7 @@ describe('Squad member check', () => {
         killed: "[CoyC] DRAGON#28"
     }
     test('Not relevant', () => {
-        expect(isSquadRelevant(otherPlayerMsg)).toBe(false);
+        expect(isSquadRelevant(otherPlayerMsg)).toBeFalsy();
     })
 
     const consolePlayerMsg: DestroyMessage = {
@@ -19,7 +19,7 @@ describe('Squad member check', () => {
         killed: "[CoyC] DRAGON#28"
     }
     test('Console player', () => {
-        expect(isSquadRelevant(consolePlayerMsg)).toBe(true);
+        expect(isSquadRelevant(consolePlayerMsg)).toBeTruthy();
     })
 
     const squadKiller: DestroyMessage = {
@@ -29,7 +29,7 @@ describe('Squad member check', () => {
         killed: "[CoyC] DRAGON#28"
     }
     test('Squad destroyed somebody', () => {
-        expect(isSquadRelevant(squadKiller)).toBe(true);
+        expect(isSquadRelevant(squadKiller)).toBeTruthy();
     })
 
     const squadKillerDestroyed: DestroyMessage = {
@@ -39,6 +39,6 @@ describe('Squad member check', () => {
         killed: "[CoyC] nudel28"
     }
     test('Squad got destroyed', () => {
-        expect(isSquadRelevant(squadKillerDestroyed)).toBe(true);
+        expect(isSquadRelevant(squadKillerDestroyed)).toBeTruthy();
     })
 });
