@@ -11,7 +11,7 @@
     },
     "scripts": {
         "test": "jest",
-        "watch": "esbuild src/index.ts --bundle --outfile=./src/assets/javascript/bundle.js --sourcemap --watch",
+        "watch": "esbuild src/index.ts --bundle --outfile=./src/assets/javascript/bundle.js --sourcemap --watch --minify",
         "lint": "eslint ."
     },
     "dependencies": {
