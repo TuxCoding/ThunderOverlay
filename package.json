@@ -7,11 +7,13 @@
         "ts-loader": "^9.5.1",
         "ts-node": "^10.9.2",
         "typescript": "^5.5.4",
-        "webpack": "^5.93.0"
+        "webpack": "^5.93.0",
+        "typescript-eslint": "^8.1.0"
     },
     "scripts": {
         "test": "jest",
-        "watch": "webpack -w"
+        "watch": "webpack -w",
+        "lint": "eslint ."
     },
     "dependencies": {
         "webpack-cli": "^5.1.4"

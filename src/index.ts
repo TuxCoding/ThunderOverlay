@@ -3,16 +3,12 @@ import { getSquadAvatar } from "./team";
 
 const HOST = "http://localhost:8111/"
 
-export type HudEvents = {
-    events: Events[],
+export interface HudEvents {
+    events: [],
     damage: Damage[]
 };
 
-export type Events = {
-    // unknown
-};
-
-export type Damage = {
+export interface Damage {
     // increasing id
     id: number,
     // battle log message
@@ -79,7 +75,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
     }
 }
 
-export type DestroyMessage = {
+export interface DestroyMessage {
     killer: string,
 
     destroyerTank: string,
@@ -143,7 +139,7 @@ export function parseMessage(msg: string): DestroyMessage | null {
 }
 
 function handleEvents(events: Damage[]) {
-    let notifications = [];
+    const notifications = [];
     for (const event of events) {
         const msg = parseMessage(event.msg);
         if (!msg) {
@@ -169,13 +165,13 @@ function handleEvents(events: Damage[]) {
     }
 }
 
-var notificationQueueRunning = false;
+const notificationQueueRunning = false;
 
 function notificationLoop() {
 
 }
 
-type Notification = {
+interface Notification {
     killer: string,
     killerAvatar: string,
     killerTankIcon: string,

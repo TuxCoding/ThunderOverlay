@@ -21,7 +21,7 @@ describe('Test file parsing', () => {
         const raw = JSON.parse(resp);
         const events = raw as HudEvents;
 
-        expect(raw).toStrictEqual(expected);
+        expect(events).toStrictEqual(expected);
     });
 });
 
