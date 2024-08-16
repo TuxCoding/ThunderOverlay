@@ -23,7 +23,7 @@ export interface Damage {
     time: number
 };
 
-async function query(url: string): Promise<any> {
+async function query(url: string): Promise<Response> {
     const response = await fetch(HOST + url, {
         method: 'GET',
         headers: {
@@ -35,11 +35,11 @@ async function query(url: string): Promise<any> {
         throw new Error(`Unexpected response code: ${response.status}`);
     }
 
-    return await response.json();
+    return response;
 }
 
 async function fetchHUD(seenEvent: number, seenDamange: number): Promise<HudEvents> {
-    const events = await query(`hudmsg?lastEvt=${seenEvent}&lastDmg=${seenDamange}`);
+    const events = await (await query(`hudmsg?lastEvt=${seenEvent}&lastDmg=${seenDamange}`)).json();
     return events as HudEvents;
 }
 
@@ -88,8 +88,8 @@ export function main() {
     const not: Notification = {
         killer: "xyz",
         killerAvatar: "./assets/img/avatars/cardicon_fem_06.png",
-        killerTankIcon: "./assets/img/vehicles/ussr_t_55a.png",
-        destroyedTank: "./assets/img/vehicles/ussr_t_44_122.png",
+        killerTankIcon: "./assets/img/vehicles/t_55a.png",
+        destroyedTank: "./assets/img/vehicles/t_44_122.png",
         killed: "abc"
     }
 
