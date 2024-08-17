@@ -3,7 +3,7 @@ import { findVehicleFile } from "../src/assets";
 
 describe('find vehicle', () => {
     test('Not existing vehicle', () => {
-        expect(findVehicleFile('Unknown')).toBeUndefined();
+        expect(findVehicleFile('Unknown')).toBeNull();
     });
 
     test('Simple name', () => {
