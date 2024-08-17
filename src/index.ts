@@ -117,7 +117,7 @@ export function parseMessage(msg: string): DestroyMessage | null {
     }
 
     //(.* [\w]+) \(([\w ]+)\) zerstört (.* [\w]+) \(([\w ]+)\)
-    const regexp = /(.* [\w]+) \(([\w\- ]+)\) zerstört (.* [\w]+) \(([\w\- ]+)\)/g;
+    const regexp = /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen|bomb)? ([^(]+) \((.+)\)/g;
     const matches = [...msg.matchAll(regexp)];
     if (matches.length < 1) {
         return null;
