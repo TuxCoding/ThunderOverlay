@@ -228,7 +228,7 @@ function showNotification(notification: Notification) {
     killerTank.src = notification.killerTankIcon;
     destroyedTank.src = notification.destroyedTank;
 
-    popup(container, 2, 3);
+    popup(container, 2, 4);
 }
 
 function popup(container: HTMLElement, showSec: number, hideSec: number) {
