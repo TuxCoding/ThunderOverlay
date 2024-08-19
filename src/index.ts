@@ -193,7 +193,7 @@ function notificationLoop() {
 
     console.log("Showing notification:" + lastNot);
     showNotification(lastNot);
-    setTimeout(() => notificationLoop(), 6 * 1000);
+    setTimeout(() => notificationLoop(), 8 * 1000);
 }
 
 interface Notification {
@@ -228,21 +228,21 @@ function showNotification(notification: Notification) {
     killerTank.src = notification.killerTankIcon;
     destroyedTank.src = notification.destroyedTank;
 
-    popup(container, 2, 4);
+    popup(container, 2, 4, 2);
 }
 
-function popup(container: HTMLElement, showSec: number, hideSec: number) {
+function popup(container: HTMLElement, startSec: number, showSec: number, endSec: number) {
     // activate show animation and make it visible
-    container.style.animation = `slide-in ${showSec}s 1`;
+    container.style.animation = `slide-in ${startSec}s 1`;
     container.style.animationFillMode = "forwards";
 
-    setTimeout(() => hide(container, hideSec), showSec * 1000);
+    setTimeout(() => hide(container, endSec), showSec * 1000);
 }
 
 function hide(container: HTMLElement, hideSec: number) {
     // add the hide animation and make it invisible after it
     container.style.animation = `fade-out ${hideSec}s 1`;
-    container.style.animationTimingFunction = "linear";
+    container.style.animationTimingFunction = "ease-in";
     container.style.animationFillMode = "forwards";
 }
 
