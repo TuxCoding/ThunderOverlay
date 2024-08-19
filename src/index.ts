@@ -113,9 +113,12 @@ async function start() {
     updateHUD(0, lastId);
 }
 
+//(.* [\w]+) \(([\w ]+)\) zerstört (.* [\w]+) \(([\w ]+)\)
+//const regexp = /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen|bomb)? ([^(]+) \((.+)\)/g;
+//const regexp = /(.* [\w]+) \((.+)\) (?:zerstört|abgeschossen|bomb)? (.+) \(([\w\- ]+)\)/g;
+const regexp = /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen|bomb)? ([^(]+) \((.+)\)/g;
+
 export function parseMessage(msg: string): DestroyMessage | null {
-    //(.* [\w]+) \(([\w ]+)\) zerstört (.* [\w]+) \(([\w ]+)\)
-    const regexp = /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen|bomb)? ([^(]+) \((.+)\)/g;
     const matches = [...msg.matchAll(regexp)];
     if (matches.length < 1) {
         return null;
