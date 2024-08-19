@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
+
+<head>
     <meta charset="utf-8">
-  </head>
-  <style>
+</head>
+<style>
     :root {
         --color-accent: #00A3A3;
         --color-idea: #004d99;
@@ -40,7 +41,7 @@
     }
 
     @keyframes fade-out {
-        from   {
+        from {
             opacity: 1;
         }
 
@@ -96,11 +97,13 @@
         margin: auto;
     }
 
-    #killer-name, #killed-name {
+    #killer-name,
+    #killed-name {
         color: var(--color-accent);
     }
-  </style>
-  <body>
+</style>
+
+<body>
     <div id="notification" class="container" disabled="true">
         <div class="avatar">
             <img id="killer-avatar">
@@ -122,33 +125,31 @@
         <div class="tank-single">
             <img id="destroyed-tank">
         </div>
-<!--
+        <!--
         <div class="avatar">
             <img src="./assets/avatars/cardicon_esport_drops.png">
         </div> -->
-      </div>
+    </div>
 
-      <!-- Disable module error -->
-      <script src="./assets/javascript/bundle.js"></script>
-      <script>
+    <!-- Disable module error -->
+    <script src="./assets/javascript/bundle.js"></script>
+    <script>
         /* Disable images if they are not found */
-        document.getElementById("killer-tank").onload = () => {
-            document.getElementById("killer-tank").style.opacity = "1";
-        };
+        function restore() {
+            this.style.opacity = "1";
+        }
 
-        document.getElementById("killer-tank").onerror = () => {
-            document.getElementById("killer-tank").src = "";
-            document.getElementById("killer-tank").style.opacity = "0";
-        };
+        function hideImg() {
+            this.src = "";
+            this.style.opacity = "0";
+        }
 
-        document.getElementById("destroyed-tank").onload = () => {
-            document.getElementById("destroyed-tank").style.opacity = "1";
-        };
+        document.getElementById("killer-tank").onload = restore
+        document.getElementById("killer-tank").onerror = hideImg;
 
-        document.getElementById("destroyed-tank").onerror = () => {
-            document.getElementById("destroyed-tank").src = "";
-            document.getElementById("destroyed-tank").style.opacity = "0";
-        };
-      </script>
-  </body>
+        document.getElementById("destroyed-tank").onload = restore;
+        document.getElementById("destroyed-tank").onerror = hideImg;
+    </script>
+</body>
+
 </html>
