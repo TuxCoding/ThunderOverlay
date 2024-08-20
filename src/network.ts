@@ -36,6 +36,7 @@ async function query(url: string): Promise<Response> {
 }
 
 export async function fetchHUD(seenEvent: number, seenDamange: number): Promise<HudEvents> {
-    const events = await (await query(`hudmsg?lastEvt=${seenEvent}&lastDmg=${seenDamange}`)).json();
+    const resp = await query(`hudmsg?lastEvt=${seenEvent}&lastDmg=${seenDamange}`);
+    const events = await resp.json();
     return events as HudEvents;
 }

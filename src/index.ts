@@ -44,7 +44,7 @@ export interface DestroyMessage {
 }
 
 export function main() {
-/*
+
     const not: Notification = {
         killer: "xyz",
         killerAvatar: "./assets/img/avatars/cardicon_fem_06.png",
@@ -54,7 +54,7 @@ export function main() {
     }
 
     showNotification(not);
-*/
+
     start();
 }
 
@@ -119,7 +119,7 @@ function handleEvents(events: Damage[]) {
         const destroyerTank = findVehicleFile(msg.destroyerTank);
         const destroyedTank = findVehicleFile(msg.destroyedTank);
         if (!killerAvatar || !destroyerTank || !destroyedTank) {
-            console.error(`Killer: ${msg.killer} (${killerAvatar}) with ${destroyerTank} to ${destroyedTank}`);
+            console.error(`Killer: ${msg.killer} (${killerAvatar}) with ${msg.destroyerTank}->${destroyerTank} to ${msg.destroyedTank}->${destroyedTank}`);
             continue;
         }
 
