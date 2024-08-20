@@ -222,7 +222,8 @@ function showNotification(notification: Notification) {
     killerTank.src = notification.killerTankIcon;
     destroyedTank.src = notification.destroyedTank;
 
-    popup(container, 2, 4, 2);
+    // delay the pop by one ms to load the image first
+    setTimeout(() => popup(container, 2, 4, 2), 1);
 }
 
 function popup(container: HTMLElement, startSec: number, showSec: number, endSec: number) {
