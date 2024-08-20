@@ -17,3 +17,4 @@ src/assets/img/19px-Sl_icon.png
 
 # Compiled Typescript
 src/assets/javascript/*
+!src/assets/javascript/.gitkeep
