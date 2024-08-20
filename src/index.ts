@@ -44,11 +44,12 @@ export interface DestroyMessage {
 }
 
 export function main() {
+    addErrorHandlerImg();
 
     const not: Notification = {
         killer: "xyz",
         killerAvatar: "./assets/img/avatars/cardicon_fem_06.png",
-        killerTankIcon: "./assets/img/vehicles/ground/ussr_t_55a.png",
+        killerTankIcon: "./assets/img/vehicles/ground/ussr_t_55b.png",
         destroyedTank: "./assets/img/vehicles/ground/ussr_t_44_122.png",
         killed: "abc"
     }
@@ -56,6 +57,29 @@ export function main() {
     showNotification(not);
 
     start();
+}
+
+function addErrorHandlerImg() {
+    /* Disable images if they are not found */
+    function restore(this: HTMLElement) {
+        this.style.opacity = "1";
+    }
+
+    function hideImg(this: HTMLImageElement) {
+        this.style.opacity = "0";
+    }
+
+    const killerImg = document.getElementById("killer-tank");
+    if (killerImg) {
+        killerImg.addEventListener('load', restore);
+        killerImg.onerror = hideImg;
+    }
+
+    const destroyed = document.getElementById("destroyed-tank");
+    if (destroyed) {
+        destroyed.addEventListener('load', restore);
+        destroyed.onerror = hideImg;
+    }
 }
 
 async function start() {
