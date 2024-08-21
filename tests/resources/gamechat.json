@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "msg": "Augen auf die Karte!<color=#FF50BE46> [a3]</color>",
+        "sender": "Lostarmour",
+        "enemy": false,
+        "mode": "Team",
+        "time": 176
+    },
+    {
+        "id": 2,
+        "msg": "Augen auf die Karte!<color=#FF50BE46> [a5]</color>",
+        "sender": "billydarkholme",
+        "enemy": false,
+        "mode": "Team",
+        "time": 186
+    }
+]
