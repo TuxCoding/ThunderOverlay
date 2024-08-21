@@ -6,9 +6,11 @@
 
     /* --font: 'Sans Serif'; */
     --font: 'Sans Serif';
-    /* --font: "Segoe UI"; */
-    /* --font: Roboto Mono;
-    /* --font: 'Helvetica, sans-serif'; */
+}
+
+@font-face {
+    font-family: Icons;
+    src: url("./icons.ttf");
 }
 
 #notification {
