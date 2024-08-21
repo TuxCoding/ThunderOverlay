@@ -1,10 +1,15 @@
 :root {
+    /* Brand color */
     --color-accent: #00A3A3;
+
     --color-idea: #004d99;
     --color-shadow: black;
+
     --text-base-color: white;
 
-    /* --font: 'Sans Serif'; */
+    --background-color: rgb(02 02 02 / 70%);
+    --shadow: 0 0.5rem 15rem rgb(0 0 0 / 15%);
+
     --font: 'Sans Serif';
 }
 
@@ -23,10 +28,11 @@
     opacity: 0;
 }
 
+/* Make the component visible and slide it in from below */
 @keyframes slide-in {
     from {
         opacity: 1;
-        margin-top: 200px;
+        margin-top: 150px;
     }
 
     to {
@@ -45,17 +51,13 @@
     }
 }
 
+#title p span {
+    display: block;
+}
+
 .tank img {
     height: 100px;
     width: 200px;
-
-    /*
-    border: 2px solid #00A3A3;
-    border-radius: 5px;
-
-    background-color: rgba(02, 02, 02, 0.8%);
-
-    box-shadow: 0 0 10px black; */
 }
 
 .tank-single img {
@@ -67,8 +69,7 @@
     height: 125px;
     width: 125px;
 
-    /* box-shadow: 0 0 10px var(--color-shadow); */
-    box-shadow: 0 0.5rem 15rem rgb(0 0 0 / 15%);
+    box-shadow: var(--shadow);
 
     border: 3px solid var(--color-accent);
 
@@ -84,9 +85,16 @@
 
     color: var(--text-base-color);
 
-    /* text-shadow: 0 3px 10px black; */
-    /* background-color: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 5px black; */
+    /* horizontal vertical blur color */
+    -webkit-font-smoothing: antialiased;
+    text-shadow: 2px 0 black,
+        -2px 0 black,
+        0 2px black,
+        0 -2px black,
+        1px 1px black,
+        -1px -1px black,
+        1px -1px black,
+        -1px 1px black;
 
     flex-grow: 1;
 
@@ -95,19 +103,20 @@
 
 #killer-name,
 #killed-name {
-    color: var(--color-accent);
+    color: #00c0c0;
 }
 
 #summary {
-    background-color: rgb(02 02 02 / 70%);
+    background-color: var(--background-color);
     width: 200px;
 
-    box-shadow: 0 0.5rem 15rem rgb(0 0 0 / 15%);
+    box-shadow: var(--shadow);
 
-    color: #efeff1;
+    color: var(--text-base-color);
 
     border-width: 3px;
     border-color: var(--color-accent);
+    /* ignore right border */
     border-style: solid none solid solid;
 
     animation: fade-in 2s 1;
@@ -124,7 +133,6 @@
 }
 
 h1 {
-    font-family: var("monaco");
     text-align: center;
 }
 
@@ -156,19 +164,20 @@ h1 {
 }
 
 #team {
-    box-shadow: 0 0.5rem 15rem rgb(0 0 0 / 15%);
+    box-shadow: var(--shadow);
 
-    color: #efeff1;
+    color: var(--text-base-color);
 
     border-width: 3px;
     border-color: var(--color-accent);
+    /* except left border */
     border-style: solid solid solid none;
 
     animation: fade-in 2s 1;
 }
 
 #team .line {
-    background-color: rgba(02 02 02 / 70%);
+    background-color: var(--background-color);
 
     display: flex;
 
@@ -190,7 +199,7 @@ h1 {
 #team .line p {
     flex-grow: 1;
 
-    max-width: 150px;
+    max-width: 200px;
 
     font-weight: 600;
     font-size: 1.3rem;
