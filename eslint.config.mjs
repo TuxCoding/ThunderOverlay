@@ -1,13 +1,16 @@
 // @ts-check
 
+// add ts type data
 import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
     {
-        // config with just ignores is the replacement for `.eslintignore`
-        ignores: ['**/build/**', '**/dist/**', 'jest.config.js', 'src/assets/**', 'webpack.config.js'],
+        // ignored compiled and configs
+        ignores: ['jest.config.js', 'src/assets/**'],
     },
+
+    // enable strict configuration
     eslint.configs.recommended,
     ...tseslint.configs.strict,
     ...tseslint.configs.stylistic,

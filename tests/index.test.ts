@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import type { HudEvents } from './network';
-import { parseMessage, type DestroyMessage } from './index';
+
+import { DestroyMessage } from '../src/index';
+import { parseMessage } from '../src/index';
 
 describe('Test file parsing', () => {
     const damage = {
