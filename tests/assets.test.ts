@@ -1,6 +1,5 @@
 import { findVehicleFile } from "../src/assets";
 
-
 describe('find vehicle', () => {
     test('Not existing vehicle', () => {
         expect(findVehicleFile('Unknown')).toBeNull();
@@ -30,7 +29,7 @@ describe('find vehicle', () => {
         expect(findVehicleFile("VCC-80/30")).toBe("./assets/img/vehicles/ground/it_vcc_80_hitfist_30.png");
     });
 
-    test("Name with underscore and dot", () => {
+    test("Name with dot", () => {
         expect(findVehicleFile("Merkava Mk.1B")).toBe("./assets/img/vehicles/ground/il_merkava_mk_1b.png");
     });
 
