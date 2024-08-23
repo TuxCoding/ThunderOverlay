@@ -1,3 +1,4 @@
+# Packages
 node_modules/
 pnpm-lock.yaml
 
@@ -15,6 +16,6 @@ src/assets/img/13px-Rp_icon.png
 src/assets/img/19px-Ge_icon.png
 src/assets/img/19px-Sl_icon.png
 
-# Compiled Typescript
+# Compiled and bundled Typescript
 src/assets/javascript/*
 !src/assets/javascript/.gitkeep

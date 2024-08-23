@@ -1,3 +1,6 @@
+/**
+ * Team members with name -> file name
+ */
 const KNOWN_SQUAD_MEMBERS = [
     ["CassualTux", "cardicon_esport_drops"],
     ["Lukasxox", "cardicon_bundeswehr_infantryman"],
@@ -18,8 +21,15 @@ const MAX_NAME_LEN = 16;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MIN_NAME_LEN = 2;
 
+/**
+ * Check if the message includes the name of a squad member
+ * @param msg complete battle log msg
+ * @returns if one squad avatar is included
+ */
 export function isSquadRelevant(msg: string): boolean {
     for (const member of KNOWN_SQUAD_MEMBERS) {
+        // use includes check to be more aggressive if message includes spaces and we could
+        // check against the complete log message
         if (msg.includes(member[0])) {
             return true;
         }
@@ -28,9 +38,15 @@ export function isSquadRelevant(msg: string): boolean {
     return false;
 }
 
+/**
+ * Get squad avatar file name
+ * @param name squad member with clan
+ * @returns avatar file name or null
+ */
 export function getSquadAvatar(name: string): string | null {
     for (const member of KNOWN_SQUAD_MEMBERS) {
         if (name.endsWith(member[0])) {
+            // use endsWith, because its not necessary to check with different positions
             return member[1];
         }
     }
