@@ -2,7 +2,7 @@
  * Team members with name -> file name
  */
 const KNOWN_SQUAD_MEMBERS = [
-    ["CassualTux", "cardicon_esport_drops"],
+    ["TuxCode", "cardicon_esport_drops"],
     ["Lukasxox", "cardicon_bundeswehr_infantryman"],
     ["nudel28", "cardicon_fem_06"],
     ["SGTCross96", "cardicon_general_06"],
@@ -10,7 +10,7 @@ const KNOWN_SQUAD_MEMBERS = [
     ["l-IlIllIIlIIllI", "cardicon_fem_ru_modern_01"],
     ["Frevbucksmaster", "cardicon_tanker_il_01"],
     ["GA x Krabbe", "cardicon_strikemaster_pilot"],
-    ["-SKTro- Ratten_pt", "cardicon_tanker_ger_08"]
+    ["Ratten_pt", "cardicon_tanker_ger_08"]
 ]
 
 // Clan tags have a symbol before and after and 5 alphanumeric chars between
