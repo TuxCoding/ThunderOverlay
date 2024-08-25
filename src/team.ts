@@ -10,12 +10,15 @@ const KNOWN_SQUAD_MEMBERS = [
     ["l-IlIllIIlIIllI", "cardicon_fem_ru_modern_01"],
     ["Frevbucksmaster", "cardicon_tanker_il_01"],
     ["GA x Krabbe", "cardicon_strikemaster_pilot"],
-    ["Ratten_pt", "cardicon_tanker_ger_08"]
+    ["Ratten_pt", "cardicon_tanker_ger_08"],
+    ["dunkler78", "cardicon_tanker_ger_07"],
+    ["QuasarAimx", "cardicon_football_marathon_2023"],
 ]
 
 // Clan tags have a symbol before and after and 5 alphanumeric chars between
 // alphanumberic, _, - and spaces are allowed for names
 
+// based on https://store.gaijin.net/profile.php?view=change_nick
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MAX_NAME_LEN = 16;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
