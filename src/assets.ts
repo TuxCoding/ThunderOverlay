@@ -27,7 +27,7 @@ type Vehicle = keyof Mapping;
  * @returns file name with extension and path or null if not existing
  */
 export function findVehicleFile(vehicle: Vehicle): string | null {
-    const fileName = findMapping(vehicle);
+    const fileName = findMapping(vehicle.trim());
     if (fileName) {
         // add path data if existing
         return `${VEHICLE_FILE_PATH}/${fileName}.${FILE_EXT}`;
