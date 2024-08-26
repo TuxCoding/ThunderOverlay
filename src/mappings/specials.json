@@ -1,3 +1,21 @@
 {
-    "Abrams": "ground/us_m1_abrams"
+    "Abrams": "ground/us_m1_abrams",
+    "M18": "ground/us_m18_hellcat",
+    "Т-62": "ground/cn_t_62",
+    "Type 87 RCV": "ground/jp_type_87_rcv",
+
+    "Tiger Ausf. E": "ground/germ_pzkpfw_vi_ausf_e_tiger",
+    "Tiger Ausf. H1": "ground/germ_pzkpfw_vi_ausf_h1_tiger  ",
+
+    "M36": "ground/us_m36",
+
+    "Ki-43": "air/ki_43_1",
+    "Bf 110 G": "air/bf-110g-2",
+    "I-185": "air/i_185_m71_standard",
+    "Do 335 B": "air/do_335b_2",
+    "Fw 190 A": "air/fw-190a-1",
+
+    "Pz.IV/70": "ground/germ_pz_iv_l70_a",
+    "Panzerbefehlswagen VI (P)": "germ_panzerbefelhswagen_vi_p",
+    "VK 30.02 (M)": "ground/germ_vk_3002m"
 }
