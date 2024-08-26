@@ -29,6 +29,10 @@ describe('Test file parsing', () => {
 });
 
 describe('Message parsing', () => {
+    test('Ignore suicide', () => {
+        expect(parseMessage("╀CroDD╀ NoPrisoners_ (Q-5A/B) wurde zerstört")).toBeNull();
+    });
+
     const expected: DestroyMessage = {
         killer: "-GFF7- Lukasxox",
         destroyerTank: "IT-1",
@@ -99,9 +103,5 @@ describe('Message parsing', () => {
     };
     test('Destroy parsing line break', () => {
         expect(parseMessage("╀CroDD╀ NoPrisoners_ (Q-5A/B\r\n) zerstört ⋇Einherjar1910 (JaPz.K A2)")).toStrictEqual(expect_line);
-    });
-
-    test('Destroy suicide', () => {
-        expect(parseMessage("╀CroDD╀ NoPrisoners_ (Q-5A/B) wurde zerstört")).toBeNull();
     });
 });
