@@ -28,7 +28,7 @@ describe('find avatar', () => {
         ["l-IlIllIIlIIllI"]
     ];
 
-    test.each(KNOWN_SQUAD_MEMBERS)('Squad member check', (member) => {
+    test.each(KNOWN_SQUAD_MEMBERS)('Squad member check (%s)', (member) => {
         expect(getSquadAvatar(member)).toBeDefined();
     });
 });
