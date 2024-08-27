@@ -13,7 +13,7 @@ const KNOWN_SQUAD_MEMBERS = [
     ["Ratten_pt", "cardicon_tanker_ger_08"],
     ["dunkler78", "cardicon_tanker_ger_07"],
     ["QuasarAimx", "cardicon_football_marathon_2023"],
-]
+];
 
 // Clan tags have a symbol before and after and 5 alphanumeric chars between
 // alphanumberic, _, - and spaces are allowed for names

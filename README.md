@@ -7,12 +7,12 @@
 >
 # Install dependencies
 pnpm install
-# Compile typescript
-pnpm esbuild
 # Optional (Development): run the test suit
-pnpm jest
+pnpm test
 # Optional (Development): linting
 pnpm lint
+# Compile TypeScript
+pnpm watchJS
 
 ## Installation
 

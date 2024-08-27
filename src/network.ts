@@ -1,5 +1,5 @@
 /** War thunder API host */
-const HOST = "http://localhost:8111"
+const HOST = "http://localhost:8111";
 
 /**
  * battle log events

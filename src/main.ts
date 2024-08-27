@@ -35,10 +35,10 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
                 // delay update process if not running
                 setTimeout(() => updateHUD(seenEvent, seenDamange), 60 * 1_000);
             } else {
-                console.error(`Unknown error: ${err.name}: ${err.message}`)
+                console.error(`Unknown error: ${err.name}: ${err.message}`);
             }
         } else {
-            console.error(`Unknown error: ${error}`)
+            console.error(`Unknown error: ${error}`);
         }
     }
 }
@@ -70,7 +70,7 @@ export function init() {
         destroyedTank: "./assets/img/vehicles/ground/il_aml_90.png",
 
         killed: "by CasualTuxCode / games647"
-    }
+    };
 
     showNotification(not);
 
@@ -85,7 +85,7 @@ function addErrorHandlerImg() {
 
     // Disable images if they are not found without showing browser default missing icon
     function hideImg(this: HTMLImageElement) {
-        console.error(`Failed to load image for: ${this.src}`)
+        console.error(`Failed to load image for: ${this.src}`);
         this.style.opacity = "0";
     }
 
@@ -154,7 +154,7 @@ export function parseMessage(msg: string): DestroyMessage | null {
     const [, killer, destroyerTank, killed, destroyedTank] = groups;
     return {
         killer, destroyerTank, killed, destroyedTank
-    }
+    };
 }
 
 /** Queue of not delivered notifications */

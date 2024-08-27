@@ -13,11 +13,11 @@ describe('Squad member check', () => {
 describe('find avatar', () => {
     test('Not a squad member', () => {
         expect(getSquadAvatar("somebody")).toBeNull();
-    })
+    });
 
     test('Console player', () => {
         expect(getSquadAvatar("⋇l-IlIllIIlIIllI")).toBe("cardicon_fem_ru_modern_01");
-    })
+    });
 
     const KNOWN_SQUAD_MEMBERS = [
         ["TuxCode"],
@@ -26,9 +26,9 @@ describe('find avatar', () => {
         ["SGTCross96"],
         ["Icefruit"],
         ["l-IlIllIIlIIllI"]
-    ]
+    ];
 
     test.each(KNOWN_SQUAD_MEMBERS)('Squad member check', (member) => {
         expect(getSquadAvatar(member)).toBeDefined();
     });
-})
+});
