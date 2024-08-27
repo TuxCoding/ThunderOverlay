@@ -29,6 +29,7 @@
     --vehicle-size-combined: 100px;
     --vehicle-size-single: 128px;
 
+    /* Default animation when activating component */
     --default-animation: fade-in 2s 1;
 }
 
@@ -38,7 +39,7 @@
     font-family: Icons;
 
     /* Extracted from War Thunder client webinterface */
-    src: url("./icons.ttf");
+    src: url("./fonts/icons.ttf");
 }
 
 /* Kill notification overlay */
@@ -63,8 +64,9 @@
     }
 
     to {
+        /* Without this the component would become invisible again */
         opacity: 1;
-        margin-top: 0%;
+        margin-top: 0;
     }
 }
 
@@ -79,11 +81,6 @@
     }
 }
 
-#title p span {
-    /* Disable inherited flex layout and display items below each other */
-    display: block;
-}
-
 /* Game profile avatar */
 .avatar img {
     height: var(--avatar-size);
@@ -95,20 +92,16 @@
     border: var(--brand-border-width) solid var(--color-accent);
 }
 
+/* Smaller tank icon next to killer icon */
 .tank img {
     /* Smaller variant next to the avatar */
     height: var(--vehicle-size-combined);
     width: calc(var(--vehicle-size-combined) * 2);
 }
 
-.tank-single img {
-    /* Similar size as the avatar for the left side */
-    height: var(--vehicle-size-single);
-    width: calc(var(--vehicle-size-single) * 2);
-}
-
+/* Notification text */
 #title {
-    font-size: 1.7rem;
+    font-size: 2rem;
     font-weight: var(--text-normal-weight);
     font-family: var(--font);
 
@@ -135,13 +128,58 @@
 
     /* Add left-right margin automatically to be centered */
     margin: auto;
+
+    /* Title children */
+    & span {
+        /* Disable inherited flex layout and display items below each other */
+        display: block;
+    }
+
+    /* Ammunition image */
+    & #ammunition {
+        /* original size: 3107x414 */
+        height: 48px;
+        width: 360px;
+
+        /* hide by default */
+        opacity: 0;
+    }
 }
 
-/* Ammunition image */
-#title #ammunition {
-    /* original size: 3107x414 */
-    height: 48px;
-    width: 360px;
+/* Firing smoke video */
+#smoke {
+    /* Requires absolute positioning to be displayed as background without affecting other layouts */
+    position: absolute;
+
+    /* video size */
+    --video-height: 200px;
+    height: var(--video-height);
+
+    /* position */
+    --smoke-start-x: 50px;
+    /* Shortly after the tank icon that means after avatar with border and the vehicle width */
+    left: calc(var(--avatar-size) + var(--brand-border-width) + var(--vehicle-size-combined) * 2 - var(--smoke-start-x));
+
+    /* Same position as the tank icon that is centered from the bigger avatar
+    -> getting top and bottom margin of the tank icon to the avatar and divide by 2 to remove the bottom margin */
+    top: calc(0px - (var(--avatar-size) - var(--vehicle-size-combined)) / 2);
+}
+
+/* shot animation to slide from left to right */
+@keyframes slide-right {
+    from {
+        /* Do not hide it fully, because it causes a pop effect, but show it like it would appearing to the eye */
+        opacity: 0.4;
+        /* Start from left side */
+        margin-right: 50%;
+    }
+
+    to {
+        opacity: 1;
+        /* move it only slightly above center to not go over the tank */
+        margin-right: 0;
+        margin-left: 70%;
+    }
 }
 
 /* Game name formatting */
@@ -149,6 +187,21 @@
 #killed-name {
     /* Darker brand color variant */
     color: var(--color-accent-dark);
+}
+
+/* Right side slightly enlarged */
+.tank-single {
+    /* Allows the use of z-index */
+    display: flex;
+
+    /* Display ammunition under the tank */
+    z-index: 42;
+
+    & img {
+        /* Similar size as the avatar for the left side */
+        height: var(--vehicle-size-single);
+        width: calc(var(--vehicle-size-single) * 2);
+    }
 }
 
 /* Game summary overlay */
@@ -169,6 +222,49 @@
 
     /* Appear animation when enabled */
     animation: var(--default-animation);
+
+    /* Title of the summary */
+    & h1 {
+        text-align: center;
+    }
+
+    /* List item */
+    & .line {
+        display: flex;
+
+        /* Verticaly align icons */
+        align-items: center;
+    }
+
+    /* Line icons */
+    & .line img {
+        /* original size 19px*20px or 13*19px */
+        height: 25px;
+    }
+
+    /* Line icon container */
+    & .line div {
+        /* Icon container width */
+        width: 30px;
+
+        /* Space to right text */
+        padding-left: var(--text-spacing);
+        padding-right: var(--text-spacing);
+    }
+
+    /* Symbolic title icon for that line */
+    & .line-icon {
+        /* Horizontal align */
+        text-align: center;
+    }
+
+    /* Values */
+    & .line p {
+        flex-grow: 1;
+
+        font-weight: var(--text-normal-weight);
+        font-size: var(--text-normal-size);
+    }
 }
 
 /* Appear animation */
@@ -180,45 +276,6 @@
     to {
         opacity: 1;
     }
-}
-
-#summary h1 {
-    text-align: center;
-}
-
-#summary .line {
-    display: flex;
-
-    /* Verticaly align icons */
-    align-items: center;
-}
-
-/* Line icons */
-#summary .line img {
-    /* original size 19px*20px or 13*19px */
-    height: 25px;
-}
-
-/* Line icon container */
-#summary .line div {
-    /* Icon container width */
-    width: 30px;
-
-    /* Space to right text */
-    padding-left: var(--text-spacing);
-    padding-right: var(--text-spacing);
-}
-
-#summary .line-icon {
-    /* Horizontal align */
-    text-align: center;
-}
-
-#summary .line p {
-    flex-grow: 1;
-
-    font-weight: var(--text-normal-weight);
-    font-size: var(--text-normal-size);
 }
 
 /* Squad overlay */
@@ -235,48 +292,51 @@
 
     /* Appear animation when enabled */
     animation: var(--default-animation);
-}
 
-#team .line {
-    background-color: var(--background-color);
+    /* One team member each line */
+    & .line {
+        background-color: var(--background-color);
 
-    display: flex;
+        display: flex;
 
-    /* Vertical align icons and text */
-    align-items: center;
+        /* Vertical align icons and text */
+        align-items: center;
 
-    /* Line spacing between elements */
-    margin-top: 5px;
-}
+        /* Line spacing between elements */
+        margin-top: 5px;
+    }
 
-#team .line:nth-child(1) {
-    /* Do not enable padding between border and first element */
-    margin-top: 0;
-}
+    & .line:nth-child(1) {
+        /* Do not enable padding between div border and first element */
+        margin-top: 0;
+    }
 
-#team .line-icon {
-    /* Avatar size: original 150px */
-    --icon-size: 64px;
+    /* Left team avatar icon */
+    & .line-icon {
+        /* Avatar size: original 150px */
+        --icon-size: 64px;
 
-    width: var(--icon-size);
-    height: var(--icon-size);
+        width: var(--icon-size);
+        height: var(--icon-size);
 
-    /* Space to right text */
-    margin-right: var(--text-spacing);
-    /* Horizontal align */
-    text-align: center;
-}
+        /* Space to right text */
+        margin-right: var(--text-spacing);
+        /* Horizontal align */
+        text-align: center;
+    }
 
-#team .line p {
-    flex-grow: 1;
+    /* Team member name and stats */
+    & .line p {
+        flex-grow: 1;
 
-    font-weight: var(--text-normal-weight);
-    font-size: var(--text-normal-size);
+        font-weight: var(--text-normal-weight);
+        font-size: var(--text-normal-size);
+    }
 }
 
 /* Textual icons for in text styling */
 .icons {
-    /* It's our own font */
+    /* It's our own font, there is no generic one */
     /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
     font-family: Icons;
     font-size: calc(var(--text-normal-size) + 0.5rem);

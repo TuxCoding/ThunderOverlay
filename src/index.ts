@@ -298,13 +298,31 @@ function showNotification(notification: Notification) {
  * @param endSec disappear animation
  */
 function popup(container: HTMLElement, startSec: number, showSec: number, endSec: number) {
+    // reset the last animation position
+    const ammunitionEl = (document.getElementById("ammunition") as HTMLElement);
+    ammunitionEl.style.animation = "none";
+
     // activate show animation and make it visible
     container.style.animation = `slide-in ${startSec}s 1`;
     // keep animation ending
     container.style.animationFillMode = "forwards";
 
+    // start fire animation
+    setTimeout(() => onShow(ammunitionEl), startSec * 1_000 - 500);
+
     // start hide animation after showed it for showSec
     setTimeout(() => hide(container, endSec), showSec * 1_000);
+}
+
+function onShow(ammunitionEl: HTMLElement) {
+    // Trigger re-annimation by changing this element
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    ammunitionEl.offsetHeight;
+    ammunitionEl.style.animation = "slide-right 3s 0s 1";
+    ammunitionEl.style.animationFillMode = "forwards";
+
+    // start firing video
+    (document.getElementById("smoke") as HTMLVideoElement).play();
 }
 
 function hide(container: HTMLElement, hideSec: number) {
