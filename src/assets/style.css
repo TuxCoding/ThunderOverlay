@@ -13,7 +13,7 @@
     --text-base-color: white;
     --text-normal-size: 1.3rem;
     --text-normal-weight: bolder;
-    --font: 'Sans Serif';
+    --font: "wtText";
     --text-spacing: 10px;
 
     /* Backgrounds and borders */
@@ -31,6 +31,18 @@
 
     /* Default animation when activating component */
     --default-animation: fade-in 2s 1;
+}
+
+/* Special symbols for foreign vehicles like ▄M26 provided by wiki */
+@font-face {
+    font-family: wtSymbols;
+    src: url("./fonts/symbols_skyquake.ttf");
+}
+
+/* Normal War Thunder text styling provided by wiki */
+@font-face {
+    font-family: wtText;
+    src: url("./fonts/wt_font.ttf");
 }
 
 /* War thunder icons */
