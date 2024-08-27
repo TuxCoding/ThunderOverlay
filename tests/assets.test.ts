@@ -70,8 +70,8 @@ describe('find vehicle', () => {
     });
 });
 
+// not really a best practice, because it's implementation specific, but it's a automated way to verify this
 describe('Special handling unnecessary', () => {
-    // not really a best practice, because it's implementation specific, but it's a automated way to verify this
     const specialVehicleNames = Object.keys(specialMapping);
 
     function isFoundInDefaultMap(vehicle: string): boolean {
