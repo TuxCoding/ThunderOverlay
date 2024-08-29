@@ -1,6 +1,8 @@
 /* Warning: OBS is not compatible with CSS nesting */
+
+/* Default OBS CSS rules */
 body {
-    /* Default OBS CSS rules */
+    /* transparent background */
     background-color: rgba(0 0 0 0);
 
     /* Remove top and bottom margin but horizontal center it */
@@ -86,6 +88,14 @@ body {
     opacity: 0;
 }
 
+.pop-in {
+    animation-name: slide-in;
+    /* keep animation in end state meaning here visible */
+    animation-fill-mode: forwards;
+
+    animation-iteration-count: 1;
+}
+
 /* Make the component visible and slide it in from below */
 @keyframes slide-in {
     from {
@@ -99,6 +109,17 @@ body {
         opacity: 1;
         margin-top: 0;
     }
+}
+
+.pop-out {
+    animation-name: fade-out;
+    /* keep animation in end state meaning here invisble */
+    animation-fill-mode: forwards;
+
+    /* slow start only */
+    animation-timing-function: ease-in;
+
+    animation-iteration-count: 1;
 }
 
 /* Disappear animation */
@@ -194,6 +215,11 @@ body {
     /* Same position as the tank icon that is centered from the bigger avatar
     -> getting top and bottom margin of the tank icon to the avatar and divide by 2 to remove the bottom margin */
     top: calc(0px - (var(--avatar-size) - var(--vehicle-size-combined)) / 2);
+}
+
+.ammu-firing {
+    animation: slide-right 3s 0s 1;
+    animation-fill-mode: forwards;
 }
 
 /* shot animation to slide from left to right */

@@ -1,6 +1,7 @@
 import { AVATAR_FILE_PATH, FILE_EXT, findVehicleFile } from "./assets";
 import { fetchHUD, type Damage } from "./network";
 import { getSquadAvatar, isSquadRelevant } from "./team";
+import { addErrorHandlerImg, showNotification, type Notification } from "./ui";
 
 /**
  * Trigger next update iteration
@@ -75,36 +76,6 @@ export function init() {
     showNotification(not);
 
     startUpdating();
-}
-
-function addErrorHandlerImg() {
-    // restore visibility
-    function restore(this: HTMLElement) {
-        this.style.opacity = "1";
-    }
-
-    // Disable images if they are not found without showing browser default missing icon
-    function hideImg(this: HTMLImageElement) {
-        console.error(`Failed to load image for: ${this.src}`);
-        this.style.opacity = "0";
-    }
-
-    // document id of flaky images
-    const imgIcons = [
-        "killer-tank",
-        "destroyed-tank",
-        "killer-avatar"
-    ];
-
-    for (const id of imgIcons) {
-        const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener('load', restore);
-            el.onerror = hideImg;
-        } else {
-            console.error(`Couldn't find img element "${id}" for error handling`);
-        }
-    }
 }
 
 async function startUpdating() {
@@ -205,16 +176,19 @@ function logFailedMappings(destroyerTank: string | null, destroyedTank: string |
         console.error(`Killer: ${msg.killer} with ${msg.destroyerTank}->${destroyerTank} to ${msg.killed} ${msg.destroyedTank}->${destroyedTank}`);
     }
 
+    // Squad avatar linking failed maybe the regex included accidentally a space
     if (!killerAvatar && isSquadRelevant(rawMsg) && !getSquadAvatar(msg.killed)) {
-        // Squad avatar linking failed maybe the regex included accidentally a space
+        // if the squad member got killed it should not be logged by now
         console.error(`Cannot find squad avatar (except if member got killed): ${msg.killer}`);
     }
 }
 
 function checkRegexDetection(rawMsg: string) {
+    // trigger words for destroy messages
     if (rawMsg.includes("zerstört") || rawMsg.includes("bomb") || rawMsg.includes("abgeschossen")) {
         // proof check that the regex was valid
         if (!rawMsg.includes("wurde zerstört") && !rawMsg.includes("[ai] Recon Micro")) {
+            // if the message wasn't suicide or against the AI drone
             console.error(`Ignored msg by regex: ${rawMsg}`);
         }
     }
@@ -246,105 +220,7 @@ function notificationLoop() {
 
     console.log(`Showing notification: ${lastNot}`);
     showNotification(lastNot);
-    setTimeout(() => notificationLoop(), 9 * 1_000);
-}
-
-/**
- * Notification displaying from destroy msg
- */
-interface Notification {
-    /** killer name with clan */
-    killer: string,
-    /** avatar location */
-    killerAvatar: string,
-
-    /** killer vehicle location */
-    killerTankIcon: string,
-
-    /** killed player name with clan */
-    killed: string,
-    /** destroyed vehicle location */
-    destroyedTank: string
-}
-
-function showNotification(notification: Notification) {
-    const container = document.getElementById('notification');
-
-    const killerEl = document.getElementById('killer-name');
-    const killedEl = document.getElementById('killed-name');
-
-    const killerAvatar = document.getElementById('killer-avatar') as HTMLImageElement;
-    const killerTank = document.getElementById('killer-tank') as HTMLImageElement;
-
-    const destroyedTank = document.getElementById('destroyed-tank') as HTMLImageElement;
-    if (!container || !killerEl || !killedEl || !killerAvatar || !killerTank || !destroyedTank) {
-        console.error("HTML elements not found");
-        return;
-    }
-
-    // update document
-    killerEl.textContent = notification.killer;
-    killedEl.textContent = notification.killed;
-
-    // images
-    killerAvatar.src = notification.killerAvatar;
-
-    killerTank.src = notification.killerTankIcon;
-    destroyedTank.src = notification.destroyedTank;
-
-    // delay the pop by one ms to load the image first
-    setTimeout(() => popup(container, 2, 8, 2), 1);
-}
-
-/**
- * Start popup animation for the container
- *
- * @param container
- * @param startSec animation showing seconds
- * @param showSec showing seconds without any animation
- * @param endSec disappear animation
- */
-function popup(container: HTMLElement, startSec: number, showSec: number, endSec: number) {
-    // reset the last animation position
-    const ammunitionEl = (document.getElementById("ammunition") as HTMLElement);
-    ammunitionEl.style.animation = "none";
-
-    // activate show animation and make it visible
-    container.style.animation = `slide-in ${startSec}s 1`;
-    // keep animation ending
-    container.style.animationFillMode = "forwards";
-
-    // start fire animation
-    setTimeout(() => onShow(ammunitionEl), startSec * 1_000 - 500);
-
-    // start hide animation after showed it for showSec
-    setTimeout(() => hide(container, endSec), showSec * 1_000);
-}
-
-function onShow(ammunitionEl: HTMLElement) {
-    // Trigger re-annimation by changing this element
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    ammunitionEl.offsetHeight;
-    ammunitionEl.style.animation = "slide-right 3s 0s 1";
-    ammunitionEl.style.animationFillMode = "forwards";
-
-    // start firing video
-    const SmokeVideoEl = document.getElementById("smoke") as HTMLVideoElement;
-    SmokeVideoEl
-        .play()
-        .catch(error => {
-            // Videos would stop playing if the window is not visible for browser energy savings
-            console.log(`Video paused, because window is not in focus ${error}`);
-        });
-}
-
-function hide(container: HTMLElement, hideSec: number) {
-    // add the hide animation and make it invisible after it
-    container.style.animation = `fade-out ${hideSec}s 1`;
-    // slow start
-    container.style.animationTimingFunction = "ease-in";
-    // keep animation ending
-    container.style.animationFillMode = "forwards";
+    setTimeout(() => notificationLoop(), 10 * 1_000);
 }
 
 /* Run update only on the site not for tests */

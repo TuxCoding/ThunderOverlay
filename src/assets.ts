@@ -12,6 +12,7 @@ import heliMapping from './mappings/heli.json';
 
 // mapping that is different from the wiki definition
 // so we don't need to modify the original files
+// content is sorted by values
 import specialMapping from './mappings/specials.json';
 
 /**
