@@ -165,12 +165,7 @@ function handleEvents(events: Damage[]) {
         const msg = parseMessage(event.msg);
         if (!msg) {
             // not a destroy message likely an award?
-            const rawMsg = event.msg;
-            if (rawMsg.includes("zerstört") || rawMsg.includes("bomb") || rawMsg.includes("abgeschossen")) {
-                // proof check that the regex was valid
-                console.error(`Ignored msg by regex: ${rawMsg}`);
-            }
-
+            checkRegexDetection(event.msg);
             continue;
         }
 
@@ -178,19 +173,10 @@ function handleEvents(events: Damage[]) {
 
         const destroyerTank = findVehicleFile(msg.destroyerTank);
         const destroyedTank = findVehicleFile(msg.destroyedTank);
-        if (!killerAvatar) {
-            if (isSquadRelevant(event.msg)) {
-                // Squad avatar linking failed maybe the regex included accidentally a space
-                console.error(`Cannot find squad avatar (except if member got killed): ${msg.killer}`);
-            }
+        logFailedMappings(destroyerTank, destroyedTank, msg, killerAvatar, event.msg);
 
-            // not squad member - ignore
-            continue;
-        }
-
-        if (!destroyerTank || !destroyedTank) {
-            // missing mapping like special cases for Abrams which couldn't be extracted easily from wiki
-            console.error(`Killer: ${msg.killer} with ${msg.destroyerTank}->${destroyerTank} to ${msg.destroyedTank}->${destroyedTank}`);
+        if (!killerAvatar || !destroyerTank || !destroyedTank) {
+            // not squad member - ignore or couldn't find image
             continue;
         }
 
@@ -210,6 +196,27 @@ function handleEvents(events: Damage[]) {
     if (notificationQueue.length > 0) {
         // trigger the notification runtime if not running yet
         startNotificationLoop();
+    }
+}
+
+function logFailedMappings(destroyerTank: string | null, destroyedTank: string | null, msg: DestroyMessage, killerAvatar: string | null, rawMsg: string) {
+    if (!destroyerTank || !destroyedTank) {
+        // missing mapping like special cases for Abrams which couldn't be extracted easily from wiki
+        console.error(`Killer: ${msg.killer} with ${msg.destroyerTank}->${destroyerTank} to ${msg.killed} ${msg.destroyedTank}->${destroyedTank}`);
+    }
+
+    if (!killerAvatar && isSquadRelevant(rawMsg) && !getSquadAvatar(msg.killed)) {
+        // Squad avatar linking failed maybe the regex included accidentally a space
+        console.error(`Cannot find squad avatar (except if member got killed): ${msg.killer}`);
+    }
+}
+
+function checkRegexDetection(rawMsg: string) {
+    if (rawMsg.includes("zerstört") || rawMsg.includes("bomb") || rawMsg.includes("abgeschossen")) {
+        // proof check that the regex was valid
+        if (!rawMsg.includes("wurde zerstört") && !rawMsg.includes("[ai] Recon Micro")) {
+            console.error(`Ignored msg by regex: ${rawMsg}`);
+        }
     }
 }
 
