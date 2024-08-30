@@ -27,7 +27,19 @@
 
             <!-- <span>zerstörte</span> -->
             <video id="smoke">
-                <!-- Only VP9 supports transparant videos -->
+                <!--
+                Only VP9 or older codecs (HEVC, VP8, codecs for MOV container) supports transparant videos,
+                AV1 apparently doesn't, but AVIF does
+
+                Otherwise transparent animated images like GIF (only completly opaque or transparent), APNG or AVIF could work,
+
+                Performance for animated transparent AVIF, seems to be very bad:
+                https://issues.chromium.org/issues/349566435
+
+                This project allows to use AV1 with WebGL masks to make it support alpha channels:
+                https://www.npmjs.com/package/stacked-alpha-video
+
+                -->
                 <source src="./assets/video/smoke.webm" type="video/webm">
             </video>
 
