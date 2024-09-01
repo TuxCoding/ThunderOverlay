@@ -50,7 +50,7 @@ body {
 /* Special symbols for foreign vehicles like ▄M26 provided by wiki */
 @font-face {
     font-family: wtSymbols;
-    src: url("./fonts/symbols_skyquake.ttf");
+    src: url("./font/symbols_skyquake.ttf");
 
     /* Gives the font face an extremely small block period and an infinite swap period. */
     font-display: swap;
@@ -59,7 +59,7 @@ body {
 /* Normal War Thunder text styling provided by wiki */
 @font-face {
     font-family: wtText;
-    src: url("./fonts/wt_font.ttf");
+    src: url("./font/wt_font.ttf");
 
     font-display: swap;
 }
@@ -70,7 +70,7 @@ body {
     font-family: Icons;
 
     /* Extracted from War Thunder client webinterface */
-    src: url("./fonts/icons.ttf");
+    src: url("./font/icons.ttf");
 
     font-display: swap;
 }
@@ -214,7 +214,7 @@ body {
 
     /* Same position as the tank icon that is centered from the bigger avatar
     -> getting top and bottom margin of the tank icon to the avatar and divide by 2 to remove the bottom margin */
-    top: calc(0px - (var(--avatar-size) - var(--vehicle-size-combined)) / 2);
+    top: calc(0px - (var(--avatar-size) - var(--vehicle-size-combined)) / 2 - 20px);
 }
 
 .ammu-firing {
