@@ -98,13 +98,6 @@ describe('Special handling unnecessary', () => {
 });
 
 describe('Vehicle image available', () => {
-    const length = Object.keys(groundMapping).length
-        + Object.keys(heliMapping).length
-        + Object.keys(airMapping).length
-        + Object.keys(specialMapping).length;
-
-    // pre allocate array to prevent memory allocation spam
-
     const vehicleTypes = [
         ["ground", groundMapping],
         // Then lookup heli, because of the smaller size
@@ -113,7 +106,13 @@ describe('Vehicle image available', () => {
         ["", specialMapping]
     ];
 
+    const length = Object.keys(groundMapping).length
+        + Object.keys(heliMapping).length
+        + Object.keys(airMapping).length
+        + Object.keys(specialMapping).length;
+
     // merge into single array with only the paths
+    // pre allocate array to prevent memory allocation spam
     const mergedMap = new Array(length);
 
     let position = 0;
