@@ -65,10 +65,10 @@ export function init() {
     // and demonstrate initialization
     const not: Notification = {
         killer: "^12345^ 1234567890123456",
-        killerAvatar: "./assets/img/avatars/cardicon_fem_06.png",
+        killerAvatar: "./assets/img/avatars/cardicon_fem_06.avif",
 
-        killerTankIcon: "./assets/img/vehicles/ground/ussr_t_44_122.png",
-        destroyedTank: "./assets/img/vehicles/ground/il_aml_90.png",
+        killerTankIcon: "./assets/img/vehicles/ground/ussr_t_44_122.avif",
+        destroyedTank: "./assets/img/vehicles/ground/il_aml_90.avif",
 
         killed: "by CasualTuxCode / games647"
     };
