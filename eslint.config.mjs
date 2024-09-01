@@ -9,6 +9,11 @@ export default tseslint.config(
         // ignored compiled and configs
         ignores: ['jest.config.js', 'src/assets/**'],
     },
+    {
+        rules: {
+            semi: ["warn", "always"],
+        },
+    },
 
     // enable strict configuration
     eslint.configs.recommended,
