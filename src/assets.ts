@@ -41,12 +41,12 @@ export function findVehicleFile(vehicle: Vehicle): string | null {
         // Although it appears to be consistent across both
         // However the ususage is inconsistent across different vehicles like 'A6M2 mod. 11' has a normal space while 'A6M3 mod. 22' had not
         // see: 'Bf 109 F' and only used in aircraft
-        .replace('\u00A0', " ")
+        .replaceAll('\u00A0', " ")
         // RIGHT SINGLE QUOTATION MARK Ra’am Sagol -> Ra'am Sagol
-        .replace('\u2019', "'")
+        .replaceAll('\u2019', "'")
         // Replace common Cyrillic / Slavonic / Slavic chars for example for ussr_t_10m
         // only used for russian vehicles and once for sw_strv_103c
-        .replace('\u0410', "A").replace('\u0421', "C").replace('\u0415', "E").replace('\u041C', "M").replace('\u0422', "T");
+        .replaceAll('\u0410', "A").replaceAll('\u0421', "C").replaceAll('\u0415', "E").replaceAll('\u041C', "M").replaceAll('\u0422', "T");
     const fileName = findMapping(cleanVehicleName);
     if (fileName) {
         // add path data if existing
