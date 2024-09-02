@@ -5,6 +5,7 @@ module.exports = {
 
     // including only test files
     testMatch: ["**/tests/**/*.test.ts"],
+    // Use Typescript test runner
     transform: {
         "^.+.tsx?$": ["ts-jest", {}],
     },

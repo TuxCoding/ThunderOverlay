@@ -8,10 +8,11 @@ describe('Test file parsing', () => {
     async function loadFile(path: string) {
         const resp = await fs.promises.readFile(`./tests/resources/events/${path}`, "utf8");
         const raw = JSON.parse(resp);
+
         return raw as HudEvents;
     }
 
-    test('Equality check', async () => {
+    test('Simple single event', async () => {
         const damage = {
             "id": 1,
             "msg": "-GFF7- Lukasxox (IT-1) zerstört -GFF7- CassualTux (Magach 6M)",
@@ -41,7 +42,7 @@ describe('Test file parsing', () => {
         expect(events).toStrictEqual(expected);
     });
 
-    test('Empty', async () => {
+    test('Multiple events', async () => {
         const events = await loadFile('/multiple.json');
 
         const expected: HudEvents = {
@@ -127,7 +128,7 @@ describe('Message parsing', () => {
         expect(parseMessage("SCHIZAPHRENIK (Class 3 (P)) zerstört [GARD6] ⋇Brotmann89 (Strv 103С)")).toStrictEqual(expected_parenthesis2);
     });
 
-    test('Destroy parsing parenthesis', () => {
+    test('Destroy parsing parenthesis without clan', () => {
         const expect_no_clan: DestroyMessage = {
             killer: "SCHIZAPHRENIK",
             destroyerTank: "Class 3 (P)",

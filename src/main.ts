@@ -3,6 +3,9 @@ import { fetchHUD, type Damage } from "./network";
 import { getSquadAvatar, isSquadRelevant } from "./team";
 import { addErrorHandlerImg, showNotification, type Notification } from "./ui";
 
+const UPDATE_TIME = 1_000;
+const FAIL_UPDATE_TIME = 60 * 1_000;
+
 /**
  * Trigger next update iteration
  *
@@ -21,7 +24,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
         }
 
         // schedule next update
-        setTimeout(() => updateHUD(seenEvent, lastId), 1_000);
+        setTimeout(() => updateHUD(seenEvent, lastId), UPDATE_TIME);
 
         // handle incoming data
         handleEvents(entries);
@@ -34,7 +37,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
                 console.error("Updating after 1min");
 
                 // delay update process if not running
-                setTimeout(() => updateHUD(seenEvent, seenDamange), 60 * 1_000);
+                setTimeout(() => updateHUD(seenEvent, seenDamange), FAIL_UPDATE_TIME);
             } else {
                 console.error(`Unknown error: ${err.name}: ${err.message}`);
             }
@@ -92,9 +95,6 @@ async function startUpdating() {
     updateHUD(0, lastId);
 }
 
-//(.* [\w]+) \(([\w ]+)\) zerstört (.* [\w]+) \(([\w ]+)\)
-//const regexp = /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen|bomb)? ([^(]+) \((.+)\)/g;
-//const regexp = /(.* [\w]+) \((.+)\) (?:zerstört|abgeschossen|bomb)? (.+) \(([\w\- ]+)\)/g;
 /** Regex matching destroyed vehicles from battle log with the following groups
  * 1 complete match
  * 2 killer name with clan
@@ -184,7 +184,7 @@ function logFailedMappings(destroyerTank: string | null, destroyedTank: string |
 }
 
 function checkRegexDetection(rawMsg: string) {
-    // trigger words for destroy messages
+    // trigger words for destroy messages but with spaces to exclude player names
     if (rawMsg.includes(" zerstört ") || rawMsg.includes(" bomb ") || rawMsg.includes(" abgeschossen ")) {
         // proof check that the regex was valid
         if (!rawMsg.includes("wurde zerstört") && !rawMsg.includes("[ai] Recon Micro")) {
@@ -208,6 +208,8 @@ function startNotificationLoop() {
     notificationLoop();
 }
 
+const NOTIFICATION_SHOW_INTERVAL = 10 * 1_000;
+
 function notificationLoop() {
     console.log("Notification loop iteration");
 
@@ -220,7 +222,7 @@ function notificationLoop() {
 
     console.log(`Showing notification: ${lastNot}`);
     showNotification(lastNot);
-    setTimeout(() => notificationLoop(), 10 * 1_000);
+    setTimeout(() => notificationLoop(), NOTIFICATION_SHOW_INTERVAL);
 }
 
 /* Run update only on the site not for tests */

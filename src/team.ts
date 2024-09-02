@@ -52,6 +52,7 @@ export function getSquadAvatar(name: string): string | null {
         const [squadName, avatar] = member;
         if (name.endsWith(squadName)) {
             // use endsWith, because its not necessary to check with different positions
+            // and it excludes clan tags in comparison to startsWith
             return avatar;
         }
     }

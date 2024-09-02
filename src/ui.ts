@@ -16,13 +16,26 @@ export interface Notification {
     destroyedTank: string
 }
 
+// HTML ids
+const NOTIFICATION_CONTAINER_ELEMENT = 'notification';
+const KILLER_TEXT_ELEMENT = 'killer-name';
+const KILLED_TEXT_ELEMENT = 'killed-name';
+
 const KILLER_AVATAR_ELEMENT = 'killer-avatar';
 const KILLER_VEHICLE_ELEMENT = 'killer-tank';
 
 const DESTROYED_VEHICLE_ELEMENT = 'destroyed-tank';
 
+// HTML tags
 const VIDEO_HTML_TAG = "video";
 const IMG_HTML_TAG = "img";
+
+// Timings
+const IN_SECONDS = 2;
+const SHOW_SECONDS = 8;
+const OUT_SECONDS = 2;
+
+const FIRE_START_EARLY = 300;
 
 export function showNotification(notification: Notification) {
     function getImageElement(id: string): HTMLImageElement | null {
@@ -30,10 +43,10 @@ export function showNotification(notification: Notification) {
         return document.getElementsByTagName(IMG_HTML_TAG).namedItem(id);
     }
 
-    const container = document.getElementById('notification');
+    const container = document.getElementById(NOTIFICATION_CONTAINER_ELEMENT);
 
-    const killerEl = document.getElementById('killer-name');
-    const killedEl = document.getElementById('killed-name');
+    const killerEl = document.getElementById(KILLER_TEXT_ELEMENT);
+    const killedEl = document.getElementById(KILLED_TEXT_ELEMENT);
 
     const killerAvatar = getImageElement(KILLER_AVATAR_ELEMENT);
     const killerTank = getImageElement(KILLER_VEHICLE_ELEMENT);
@@ -55,14 +68,17 @@ export function showNotification(notification: Notification) {
     destroyedTank.src = notification.destroyedTank;
 
     // delay the pop by one ms to load the image first
-    setTimeout(() => popup(container, 2, 8, 2), 1);
+    setTimeout(() => popup(container, IN_SECONDS, SHOW_SECONDS, OUT_SECONDS), 1);
 }
 
+// HTML animation classes
 const FIRING_ANIMATION_CLASS = "ammu-firing";
 const POP_IN_ANIMATION_CLASS = "pop-in";
 const POP_OUT_ANIMATION_CLASS = "pop-out";
 
-const FIRE_START_EARLY = 300;
+// HTML Effect ids
+const AMMUNITION_ELEMENT = "ammunition";
+const SMOKE_VIDEO_ELEMENT = "smoke";
 
 /**
  * Start popup animation for the container
@@ -74,7 +90,7 @@ const FIRE_START_EARLY = 300;
  */
 function popup(container: HTMLElement, startSec: number, showSec: number, endSec: number) {
     // reset the last animation position
-    const ammunitionEl = document.getElementById("ammunition");
+    const ammunitionEl = document.getElementById(AMMUNITION_ELEMENT);
     ammunitionEl?.classList.remove(FIRING_ANIMATION_CLASS);
 
     // activate show animation and make it visible
@@ -90,10 +106,11 @@ function popup(container: HTMLElement, startSec: number, showSec: number, endSec
 }
 
 function onShow(ammunitionEl: HTMLElement | null) {
+    // animate shell
     ammunitionEl?.classList.add(FIRING_ANIMATION_CLASS);
 
     // start firing video
-    const smokeVideoEl = document.getElementsByTagName(VIDEO_HTML_TAG).namedItem("smoke");
+    const smokeVideoEl = document.getElementsByTagName(VIDEO_HTML_TAG).namedItem(SMOKE_VIDEO_ELEMENT);
     smokeVideoEl
         ?.play()
         .catch(error => {
