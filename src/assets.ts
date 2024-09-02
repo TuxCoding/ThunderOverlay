@@ -66,7 +66,6 @@ function findMapping(vehicle: Vehicle): string | null {
     const vehicleTypes = [
         ["ground", groundMapping],
         // Then lookup heli, because of the smaller size
-        ["air", heliMapping],
         ["air", airMapping],
         ["", specialMapping]
     ];
