@@ -58,6 +58,8 @@ Only a mockup
     * This data is exposed in the in-game battle log, but not available in the web interface
     * Well, we could use optical character recognition, but this would be overkill and a performance hit
     * We could make a database of standard ammunition per tank, but it would be very time consuming and not always true
+* Vehicle images could be mapped to multiple names and is therefore not precise
+    * The name `T-34` is mapped to multiple vehicles like `ussr_t_34_1941` or `ussr_t_34_1942`
 
 ### The overlay doesn't work with the minimal client
 
