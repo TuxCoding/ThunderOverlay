@@ -173,7 +173,7 @@ function handleEvents(events: Damage[]) {
 function logFailedMappings(destroyerTank: string | null, destroyedTank: string | null, msg: DestroyMessage, killerAvatar: string | null, rawMsg: string) {
     if (!destroyerTank || !destroyedTank) {
         // missing mapping like special cases for Abrams which couldn't be extracted easily from wiki
-        console.error(`Killer: ${msg.killer} with ${msg.destroyerTank}->${destroyerTank} to ${msg.killed} ${msg.destroyedTank}->${destroyedTank}`);
+        console.error(`Killer: ${msg.killer} with '${msg.destroyerTank}'->${destroyerTank} to ${msg.killed} '${msg.destroyedTank}'->${destroyedTank}`);
     }
 
     // Squad avatar linking failed maybe the regex included accidentally a space
@@ -185,7 +185,7 @@ function logFailedMappings(destroyerTank: string | null, destroyedTank: string |
 
 function checkRegexDetection(rawMsg: string) {
     // trigger words for destroy messages
-    if (rawMsg.includes("zerstört") || rawMsg.includes("bomb") || rawMsg.includes("abgeschossen")) {
+    if (rawMsg.includes(" zerstört ") || rawMsg.includes(" bomb ") || rawMsg.includes(" abgeschossen ")) {
         // proof check that the regex was valid
         if (!rawMsg.includes("wurde zerstört") && !rawMsg.includes("[ai] Recon Micro")) {
             // if the message wasn't suicide or against the AI drone
