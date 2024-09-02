@@ -41,8 +41,6 @@ export function findVehicleFile(vehicle: Vehicle): string | null {
     // However the ususage is inconsistent across different vehicles like 'A6M2 mod. 11' has a normal space while 'A6M3 mod. 22' had not
     // see: 'Bf 109 F' and only used in aircraft
     const cleanVehicleName = vehicle
-        // elc for example has trailing spaces
-        .trim()
         // these vehicles are other normal mappings
         .replace("☢", "");
 

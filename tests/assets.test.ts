@@ -29,7 +29,7 @@ describe('find vehicle', () => {
     });
 
     test("Name with divisor", () => {
-        expect(findVehicleFile("VCC-80/30")).toBe("./assets/img/vehicles/ground/it_vcc_80_hitfist_30.avif");
+        expect(findVehicleFile("VCC-80/30 ")).toBe("./assets/img/vehicles/ground/it_vcc_80_hitfist_30.avif");
     });
 
     test("Name with dot", () => {
@@ -60,6 +60,9 @@ describe('find vehicle', () => {
 
     test('Weird spacing after name', () => {
         expect(findVehicleFile("ELC bis ")).toBe("./assets/img/vehicles/ground/fr_amx_elc_bis.avif");
+        expect(findVehicleFile("C2A1 ")).toBe("./assets/img/vehicles/ground/germ_leopard_c2_mexas.avif");
+        expect(findVehicleFile("VCC-80/30 ")).toBe("./assets/img/vehicles/ground/it_vcc_80_hitfist_30.avif");
+        expect(findVehicleFile("B3C ")).toBe("./assets/img/vehicles/air/saab_b3c.avif");
     });
 
     test('Different name mapping from wiki', () => {
