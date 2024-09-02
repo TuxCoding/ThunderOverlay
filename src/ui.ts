@@ -21,16 +21,24 @@ const KILLER_VEHICLE_ELEMENT = 'killer-tank';
 
 const DESTROYED_VEHICLE_ELEMENT = 'destroyed-tank';
 
+const VIDEO_HTML_TAG = "video";
+const IMG_HTML_TAG = "img";
+
 export function showNotification(notification: Notification) {
+    function getImageElement(id: string): HTMLImageElement | null {
+        // drops the usuage of unchecked type casting
+        return document.getElementsByTagName(IMG_HTML_TAG).namedItem(id);
+    }
+
     const container = document.getElementById('notification');
 
     const killerEl = document.getElementById('killer-name');
     const killedEl = document.getElementById('killed-name');
 
-    const killerAvatar = document.getElementById(KILLER_AVATAR_ELEMENT) as HTMLImageElement;
-    const killerTank = document.getElementById(KILLER_VEHICLE_ELEMENT) as HTMLImageElement;
+    const killerAvatar = getImageElement(KILLER_AVATAR_ELEMENT);
+    const killerTank = getImageElement(KILLER_VEHICLE_ELEMENT);
 
-    const destroyedTank = document.getElementById(DESTROYED_VEHICLE_ELEMENT) as HTMLImageElement;
+    const destroyedTank = getImageElement(DESTROYED_VEHICLE_ELEMENT);
     if (!container || !killerEl || !killedEl || !killerAvatar || !killerTank || !destroyedTank) {
         console.error("HTML elements not found");
         return;
@@ -54,6 +62,8 @@ const FIRING_ANIMATION_CLASS = "ammu-firing";
 const POP_IN_ANIMATION_CLASS = "pop-in";
 const POP_OUT_ANIMATION_CLASS = "pop-out";
 
+const FIRE_START_EARLY = 300;
+
 /**
  * Start popup animation for the container
  *
@@ -64,8 +74,8 @@ const POP_OUT_ANIMATION_CLASS = "pop-out";
  */
 function popup(container: HTMLElement, startSec: number, showSec: number, endSec: number) {
     // reset the last animation position
-    const ammunitionEl = (document.getElementById("ammunition") as HTMLElement);
-    ammunitionEl.classList.remove(FIRING_ANIMATION_CLASS);
+    const ammunitionEl = document.getElementById("ammunition");
+    ammunitionEl?.classList.remove(FIRING_ANIMATION_CLASS);
 
     // activate show animation and make it visible
     container.classList.remove(POP_OUT_ANIMATION_CLASS);
@@ -73,19 +83,19 @@ function popup(container: HTMLElement, startSec: number, showSec: number, endSec
     container.style.animationDuration = `${startSec}s`;
 
     // start fire animation
-    setTimeout(() => onShow(ammunitionEl), startSec * 1000 - 300);
+    setTimeout(() => onShow(ammunitionEl), startSec * 1_000 - FIRE_START_EARLY);
 
     // start hide animation after showed it for showSec
-    setTimeout(() => hide(container, endSec), showSec * 1000);
+    setTimeout(() => hide(container, endSec), showSec * 1_000);
 }
 
-function onShow(ammunitionEl: HTMLElement) {
-    ammunitionEl.classList.add(FIRING_ANIMATION_CLASS);
+function onShow(ammunitionEl: HTMLElement | null) {
+    ammunitionEl?.classList.add(FIRING_ANIMATION_CLASS);
 
     // start firing video
-    const SmokeVideoEl = document.getElementById("smoke") as HTMLVideoElement;
-    SmokeVideoEl
-        .play()
+    const smokeVideoEl = document.getElementsByTagName(VIDEO_HTML_TAG).namedItem("smoke");
+    smokeVideoEl
+        ?.play()
         .catch(error => {
             // Videos would stop playing if the window is not visible for browser energy savings
             console.log(`Video paused, because window is not in focus ${error}`);

@@ -19,12 +19,12 @@ import specialMapping from './mappings/specials.json';
  * Types for mapping vehicle name to file name
  * For example: 2C (from battle log) translates to fr_char_2c (that includes nation and is file system friendly)
  */
-type Mapping = Record<string, string>;
+export type Mapping = Record<string, string>;
 
 /**
  * Vehicle name from battle log
  */
-type Vehicle = keyof Mapping;
+export type Vehicle = keyof Mapping;
 
 /**
  * Get file path or null

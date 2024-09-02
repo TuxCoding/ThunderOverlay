@@ -1,4 +1,4 @@
-import { FILE_EXT, findVehicleFile, VEHICLE_FILE_PATH } from "../src/assets";
+import { FILE_EXT, findVehicleFile, Mapping, VEHICLE_FILE_PATH } from "../src/assets";
 import * as fs from 'fs';
 
 import groundMapping from '../src/mappings/ground.json';
@@ -87,7 +87,7 @@ describe('Special handling unnecessary', () => {
         ];
 
         for (const map of vehicleTypes) {
-            const name = (map as Record<string, string>)[vehicle];
+            const name = (map as Mapping)[vehicle];
             if (name) {
                 return true;
             }
@@ -124,7 +124,7 @@ describe('Vehicle image available', () => {
         const [prefix, map] = type;
 
         for (const vehicle of Object.keys(map)) {
-            const file = (map as Record<string, string>)[vehicle];
+            const file = (map as Mapping)[vehicle];
 
             let path = `./src/${VEHICLE_FILE_PATH}`;
             if (prefix) {
