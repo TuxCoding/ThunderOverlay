@@ -34,7 +34,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
             if (err.name == "TypeError") {
                 // happens if application is not running, only minimal client or a web extension blocked it
                 console.error("Unknown error: some browser extension might blocked this request or War Thunder is not running");
-                console.error("Updating after 1min");
+                console.error(`Updating after ${FAIL_UPDATE_TIME / 1_000} minute(s)`);
 
                 // delay update process if not running
                 setTimeout(() => updateHUD(seenEvent, seenDamange), FAIL_UPDATE_TIME);
@@ -105,9 +105,6 @@ async function startUpdating() {
 const regexp = /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen|bomb)? ([^(]+) \((.+)\)/g;
 
 export function parseMessage(msg: string): DestroyMessage | null {
-    // clean up tabs and line breaks
-    msg = msg.replace("\r", "").replace("\n", "");
-
     // convert from iterable to array
     const matches = [...msg.matchAll(regexp)];
     if (matches.length < 1) {
@@ -183,11 +180,18 @@ function logFailedMappings(destroyerTank: string | null, destroyedTank: string |
     }
 }
 
+const DESTROY_ID = " zerstört ";
+const BOMB_ID = " bomb ";
+const AIRKILL_ID = " abgeschossen ";
+
+const SUICIDE_MSG = "wurde zerstört";
+const AI_DRONE_MSG = "[ai] Recon Micro";
+
 function checkRegexDetection(rawMsg: string) {
     // trigger words for destroy messages but with spaces to exclude player names
-    if (rawMsg.includes(" zerstört ") || rawMsg.includes(" bomb ") || rawMsg.includes(" abgeschossen ")) {
+    if (rawMsg.includes(DESTROY_ID) || rawMsg.includes(BOMB_ID) || rawMsg.includes(AIRKILL_ID)) {
         // proof check that the regex was valid
-        if (!rawMsg.includes("wurde zerstört") && !rawMsg.includes("[ai] Recon Micro")) {
+        if (!rawMsg.includes(SUICIDE_MSG) && !rawMsg.includes(AI_DRONE_MSG)) {
             // if the message wasn't suicide or against the AI drone
             console.error(`Ignored msg by regex: ${rawMsg}`);
         }

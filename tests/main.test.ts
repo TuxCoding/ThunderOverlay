@@ -14,17 +14,17 @@ describe('Test file parsing', () => {
 
     test('Simple single event', async () => {
         const damage = {
-            "id": 1,
-            "msg": "-GFF7- Lukasxox (IT-1) zerstört -GFF7- CassualTux (Magach 6M)",
-            "sender": "",
-            "enemy": false,
-            "mode": "",
-            "time": 13
+            id: 1,
+            msg: "-GFF7- Lukasxox (IT-1) zerstört -GFF7- CassualTux (Magach 6M)",
+            sender: "",
+            enemy: false,
+            mode: "",
+            time: 13
         };
 
         const expected: HudEvents = {
-            "events": [],
-            "damage": [damage]
+            events: [],
+            damage: [damage]
         };
 
         const events = await loadFile('/simple.json');
@@ -35,8 +35,8 @@ describe('Test file parsing', () => {
         const events = await loadFile('/empty.json');
 
         const expected: HudEvents = {
-            "events": [],
-            "damage": []
+            events: [],
+            damage: []
         };
 
         expect(events).toStrictEqual(expected);
@@ -46,23 +46,23 @@ describe('Test file parsing', () => {
         const events = await loadFile('/multiple.json');
 
         const expected: HudEvents = {
-            "events": [],
-            "damage": [
+            events: [],
+            damage: [
                 {
-                    "id": 76,
-                    "msg": "=ZV0RU= ⋇MiOKO69 (Typ 90 (B) \"Fuji\") zerstört -HUB- jorken12 (LAV-AD)",
-                    "sender": "",
-                    "enemy": false,
-                    "mode": "",
-                    "time": 232
+                    id: 76,
+                    msg: "=ZV0RU= ⋇MiOKO69 (Typ 90 (B) \"Fuji\") zerstört -HUB- jorken12 (LAV-AD)",
+                    sender: "",
+                    enemy: false,
+                    mode: "",
+                    time: 232
                 },
                 {
-                    "id": 77,
-                    "msg": "=RMTS= ⋇Extaz1kk LT (BMP-2M) zerstört CorporaIRex (Christian II)",
-                    "sender": "",
-                    "enemy": false,
-                    "mode": "",
-                    "time": 234
+                    id: 77,
+                    msg: "=RMTS= ⋇Extaz1kk LT (BMP-2M) zerstört CorporaIRex (Christian II)",
+                    sender: "",
+                    enemy: false,
+                    mode: "",
+                    time: 234
                 }
             ]
         };
@@ -138,17 +138,5 @@ describe('Message parsing', () => {
         };
 
         expect(parseMessage("SCHIZAPHRENIK (Class 3 (P)) zerstört ⋇Brotmann89 (Strv 103С)")).toStrictEqual(expect_no_clan);
-    });
-
-    test('Destroy parsing line break', () => {
-        const expect_line: DestroyMessage = {
-            killer: "╀CroDD╀ NoPrisoners_",
-            destroyerTank: "Q-5A/B",
-
-            destroyedTank: "JaPz.K A2",
-            killed: "⋇Einherjar1910"
-        };
-
-        expect(parseMessage("╀CroDD╀ NoPrisoners_ (Q-5A/B\r\n) zerstört ⋇Einherjar1910 (JaPz.K A2)")).toStrictEqual(expect_line);
     });
 });

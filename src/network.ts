@@ -26,6 +26,9 @@ export interface Damage {
     time: number
 };
 
+const GET_METHOD = "GET";
+const JSON_TYPE = "application/json";
+
 /**
  * Query new json response
  *
@@ -35,9 +38,9 @@ export interface Damage {
 async function query(url: string): Promise<Response> {
     // web server seems to have no support for other cache control like if-not-modified
     const response = await fetch(`${HOST}/${url}`, {
-        method: 'GET',
+        method: GET_METHOD,
         headers: {
-            Accept: 'application/json',
+            Accept: JSON_TYPE,
         },
     });
 

@@ -13,8 +13,12 @@ import (
 )
 
 // where the vehicle assets are stored
-const IMG_HOST = "https://encyclopedia.warthunder.com"
+const HTTPS_PREFIX = "https://"
+
+const IMG_HOST = "encyclopedia.warthunder.com"
 const IMG_PATH = "/i/images/"
+
+const WIKI_HOST = "wiki.warthunder.com"
 
 // the wiki doesn't seem to support avif yet although the game files does
 const VEHICLE_WEB_EXT = ".png"
@@ -22,6 +26,8 @@ const VEHICLE_WEB_EXT = ".png"
 // output files
 const MAPPING_OUTPUT = OUTPUT_DIR + "mappings" + JSON_EXT
 const IMG_OUTPUT = OUTPUT_DIR + "images.list"
+
+const CACHE_FOLDER = "./cache"
 
 // scrape the wiki for images and file mappings
 func Scrape() {
@@ -66,7 +72,7 @@ func onPageHTML(el *colly.HTMLElement, imgLinks *[]string, mappings map[string]s
 		*imgLinks = append(*imgLinks, imgSrc)
 
 		// add to mapping without the host and file extension to reduce size
-		cleanImg := strings.Replace(imgSrc, IMG_HOST+IMG_PATH, "", 1)
+		cleanImg := strings.Replace(imgSrc, HTTPS_PREFIX+IMG_HOST+IMG_PATH, "", 1)
 		cleanImg, _ = strings.CutSuffix(cleanImg, VEHICLE_WEB_EXT)
 		mappings[tankTitle] = cleanImg
 	}
@@ -149,9 +155,9 @@ func writeImgList(queue []string) {
 func createCollector() *colly.Collector {
 	col := colly.NewCollector(
 		// wiki and img hosting site
-		colly.AllowedDomains("wiki.warthunder.com", "encyclopedia.warthunder.com"),
+		colly.AllowedDomains(WIKI_HOST, IMG_HOST),
 		// activate cache for multiple invocations
-		colly.CacheDir("./cache"),
+		colly.CacheDir(CACHE_FOLDER),
 		// we only need one depth from category to vehicle
 		colly.MaxDepth(1),
 	)

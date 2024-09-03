@@ -26,6 +26,8 @@ export type Mapping = Record<string, string>;
  */
 export type Vehicle = keyof Mapping;
 
+const NUKE_SYMBOL = "☢";
+
 /**
  * Get file path or null
  * @param vehicle battle log vehicle name
@@ -41,8 +43,10 @@ export function findVehicleFile(vehicle: Vehicle): string | null {
     // However the ususage is inconsistent across different vehicles like 'A6M2 mod. 11' has a normal space while 'A6M3 mod. 22' had not
     // see: 'Bf 109 F' and only used in aircraft
     const cleanVehicleName = vehicle
+        // clean up crlf that somehow got into game files and are therefore used
+        .replace("\r", "")
         // these vehicles are other normal mappings
-        .replace("☢", "");
+        .replace(NUKE_SYMBOL, "");
 
     const fileName = findMapping(cleanVehicleName);
     if (fileName) {
