@@ -6,7 +6,7 @@ This project models a web source displaying [War Thunder](https://warthunder.com
 [OBS](https://obsproject.com/) or similar streaming software. The primary focus is the integration of a kill feed for squad
 members during match. You can see demonstration here:
 
-[!]()
+![](.webm)
 
 ### Features
 

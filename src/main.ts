@@ -20,7 +20,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
         let lastId = seenDamange;
         if (entries.length > 0) {
             lastId = entries[entries.length - 1].id;
-            console.log(`Updating last id to ${lastId}`);
+            console.debug(`Updating last id to ${lastId}`);
         }
 
         // schedule next update
@@ -33,8 +33,8 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
             const err = error as Error;
             if (err.name == "TypeError") {
                 // happens if application is not running, only minimal client or a web extension blocked it
-                console.error("Unknown error: some browser extension might blocked this request or War Thunder is not running");
-                console.error(`Updating after ${FAIL_UPDATE_TIME / 1_000} minute(s)`);
+                console.warn("Unknown error: some browser extension might blocked this request or War Thunder is not running");
+                console.warn(`Updating after ${FAIL_UPDATE_TIME / 1_000} minute(s)`);
 
                 // delay update process if not running
                 setTimeout(() => updateHUD(seenEvent, seenDamange), FAIL_UPDATE_TIME);
@@ -176,7 +176,7 @@ function logFailedMappings(destroyerTank: string | null, destroyedTank: string |
     // Squad avatar linking failed maybe the regex included accidentally a space
     if (!killerAvatar && isSquadRelevant(rawMsg) && !getSquadAvatar(msg.killed)) {
         // if the squad member got killed it should not be logged by now
-        console.error(`Cannot find squad avatar (except if member got killed): ${msg.killer}`);
+        console.error(`Cannot find squad avatar: ${msg.killer}`);
     }
 }
 
@@ -193,7 +193,7 @@ function checkRegexDetection(rawMsg: string) {
         // proof check that the regex was valid
         if (!rawMsg.includes(SUICIDE_MSG) && !rawMsg.includes(AI_DRONE_MSG)) {
             // if the message wasn't suicide or against the AI drone
-            console.error(`Ignored msg by regex: ${rawMsg}`);
+            console.warn(`Ignored msg by regex: ${rawMsg}`);
         }
     }
 }
@@ -208,14 +208,14 @@ function startNotificationLoop() {
     }
 
     notificationQueueRunning = true;
-    console.log("Starting notification loop");
+    console.debug("Starting notification loop");
     notificationLoop();
 }
 
 const NOTIFICATION_SHOW_INTERVAL = 10 * 1_000;
 
 function notificationLoop() {
-    console.log("Notification loop iteration");
+    console.debug("Notification loop iteration");
 
     const lastNot = notificationQueue.pop();
     if (!lastNot) {
@@ -224,7 +224,7 @@ function notificationLoop() {
         return;
     }
 
-    console.log(`Showing notification: ${lastNot}`);
+    console.debug(`Showing notification: ${lastNot}`);
     showNotification(lastNot);
     setTimeout(() => notificationLoop(), NOTIFICATION_SHOW_INTERVAL);
 }
