@@ -2,6 +2,12 @@
 
 ## Description
 
+This project models a web source displaying [War Thunder](https://warthunder.com/) in-game events to be integrated into
+[OBS](https://obsproject.com/) or similar streaming software. The primary focus is the integration of a kill feed for squad
+members during match. You can see demonstration here:
+
+[!]()
+
 ### Features
 
 * Supports different vehicle types:
@@ -11,9 +17,14 @@
     * Ships
 * Detects nukes too
 
-### Motiviation
+### Goals
 
-## Building
+The goal of this project is solely to provide visual appealing overlay for viewer. For example by displaying the vehicle
+images for people not familiar with the vehicle names or display squad kills in a more prominent way.
+
+This goal of this project is **never** to provide gameplay advantages over the vanilla behavior.
+
+## Building (development)
 
 ```shell
 # Install dependencies
@@ -49,6 +60,11 @@ Only a mockup
 ## Ideas
 
 * Make squadron tag and/or player name toggleable
+* Multi language support
+* Multiple layouts
+    * User selectable
+    * Type based like: vehicle, damage source, etc.
+* Fix names mapped to multiple vehicles based on previous item
 
 ## FAQ
 
@@ -90,5 +106,5 @@ the corresponding image data provided by the wiki.
         * Text font
         * Foreign vehicle prefix
     * Vehicle symbols (i.e. fighter and tank) from the webinterface itself
-* Vehicle images from the wiki or game
+* Vehicle images from the wiki or game client
 * APFDS shell from shooting range video

@@ -9,8 +9,14 @@ scraper/cache/
 scraper/go.sum
 
 # Assets which could be copyrighted, but keep folder structure
-src/assets/img/vehicles/*
-!src/assets/img/vehicles/.gitkeep
+src/assets/img/vehicles/air/*
+!src/assets/img/vehicles/air/.gitkeep
+
+src/assets/img/vehicles/ships/*
+!src/assets/img/vehicles/ships/.gitkeep
+
+src/assets/img/vehicles/ground/*
+!src/assets/img/vehicles/ground/.gitkeep
 
 src/assets/img/avatars/*
 !src/assets/img/avatars/.gitkeep
