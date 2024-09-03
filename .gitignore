@@ -3,7 +3,10 @@ node_modules/
 pnpm-lock.yaml
 
 # Temp projects
-scraper/
+scraper/units.csv
+scraper/out/
+scraper/cache/
+scraper/go.sum
 
 # Assets which could be copyrighted, but keep folder structure
 src/assets/img/vehicles/*
