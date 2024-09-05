@@ -54,7 +54,7 @@ const VEHICLE_TECH_ID = "_0"
 const VEHICLE_LOCAL_ID = "_1"
 const VEHICLE_TYPE_ID = "_2"
 
-const NUKE_ID = "killstreak"
+const NUKE_DRONE_ID = "killstreak"
 
 func createMapping() {
 	// read all at once
@@ -139,8 +139,14 @@ func convertMap(records []UnitRecord) {
 
 func onUserVehicle(byLangMap map[string]map[string]string, vehicleId string, record UnitRecord) {
 	vehicleType := getVehicleType(vehicleId)
+	if len(vehicleType) == 0 {
+		// ignore if no type was found
+		return
+	}
 
 	overridenBefore := false
+
+	// go through each language column
 	for fieldIndex, field := range reflect.VisibleFields(reflect.TypeOf(UnitRecord{})) {
 		fieldName := field.Name
 		if fieldName == "ID" || fieldName == "Comments" || fieldName == "MaxChars" {
@@ -184,14 +190,25 @@ func getVehicleType(vehicleId string) string {
 		"ships",
 	}
 
+	types := []string{}
 	for _, folder := range assetFolders {
 		if assetExists(folder, vehicleId) {
-			return folder + "/"
+			types = append(types, folder)
 		}
 	}
 
-	//log.Printf("Vehicle %s not found\n", trimmedVehicleId)
-	return ""
+	if len(types) == 0 {
+		//log.Printf("Vehicle image for %s not found\n", vehicleId)
+		return ""
+	}
+
+	if len(types) > 1 {
+		// if same file names are used
+		log.Printf("Multiple vehicle types for %s->%v\n", vehicleId, types)
+	}
+
+	// return the first match for now and only log differences
+	return types[0] + "/"
 }
 
 // language specific mappings
@@ -216,8 +233,8 @@ func logRecord(record UnitRecord, vehicleId string) {
 		log.Printf("%s has metadata: comment->'%s' max->'%s'\n", vehicleId, comment, maxChars)
 	}
 
-	if strings.Index(vehicleId, NUKE_ID) > 0 {
-		log.Printf("Nuke: %s %s \n", vehicleId, record.English)
+	if strings.Index(vehicleId, NUKE_DRONE_ID) > 0 {
+		log.Printf("nuke or drone: %s %s \n", vehicleId, record.English)
 	}
 }
 
