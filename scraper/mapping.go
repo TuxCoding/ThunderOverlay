@@ -286,10 +286,18 @@ func writeLangMapping(mapping LanguageMap, lang string) {
 	// sort output by keys
 	keys := sortedKeys(mapping.typedMap)
 
-	sortedMap := make(map[string]map[string]string)
-	for _, key := range keys {
-		sortedMap[key] = mapping.typedMap[key]
+	sortedLangMap := make(map[string]map[string]string)
+	for _, vehicleType := range keys {
+		sortedTypeMap := make(map[string]string)
+
+		// sort inside the vehicle types too
+		typeMap := mapping.typedMap[vehicleType]
+		for _, localName := range sortedKeys(typeMap) {
+			sortedTypeMap[localName] = typeMap[localName]
+		}
+
+		sortedLangMap[vehicleType] = mapping.typedMap[vehicleType]
 	}
 
-	writeJSON(sortedMap, OUTPUT_DIR+lang+JSON_EXT)
+	writeJSON(sortedLangMap, OUTPUT_DIR+lang+JSON_EXT)
 }
