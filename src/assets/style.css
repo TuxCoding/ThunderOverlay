@@ -27,7 +27,7 @@ body {
     --text-base-color: white;
     --text-normal-size: 1.3rem;
     --text-normal-weight: bolder;
-    --font: "wtText";
+    --font: "wtText", sans-serif;
     --text-spacing: 10px;
 
     /* Backgrounds and borders */

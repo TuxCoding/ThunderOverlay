@@ -53,9 +53,9 @@ export interface DestroyMessage {
     killer: string,
 
     /** battle log destroyer vehicle */
-    destroyerTank: string,
+    destroyerVehicle: string,
     /** battle log destroyed vehicle */
-    destroyedTank: string
+    destroyedVehicle: string
 
     /** Killed player name including clan */
     killed: string
@@ -102,11 +102,11 @@ async function startUpdating() {
  * 4 player name with clan
  * 5 vehicle
  */
-const regexp = /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen|bomb)? ([^(]+) \((.+)\)/g;
+const DESTROY_MSG_REGEX = /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen|bomb) ([^(]+) \((.+)\)/g;
 
 export function parseMessage(msg: string): DestroyMessage | null {
     // convert from iterable to array
-    const matches = [...msg.matchAll(regexp)];
+    const matches = [...msg.matchAll(DESTROY_MSG_REGEX)];
     if (matches.length < 1) {
         // are there any matches
         return null;
@@ -121,7 +121,7 @@ export function parseMessage(msg: string): DestroyMessage | null {
     // groups 0 is the complete string
     const [, killer, destroyerTank, killed, destroyedTank] = groups;
     return {
-        killer, destroyerTank, killed, destroyedTank
+        killer, destroyerVehicle: destroyerTank, killed, destroyedVehicle: destroyedTank
     };
 }
 
@@ -139,8 +139,8 @@ function handleEvents(events: Damage[]) {
 
         const killerAvatar = getSquadAvatar(msg.killer);
 
-        const destroyerTank = findVehicleFile(msg.destroyerTank);
-        const destroyedTank = findVehicleFile(msg.destroyedTank);
+        const destroyerTank = findVehicleFile(msg.destroyerVehicle);
+        const destroyedTank = findVehicleFile(msg.destroyedVehicle);
         logFailedMappings(destroyerTank, destroyedTank, msg, killerAvatar, event.msg);
 
         if (!killerAvatar || !destroyerTank || !destroyedTank) {
@@ -170,7 +170,7 @@ function handleEvents(events: Damage[]) {
 function logFailedMappings(destroyerTank: string | null, destroyedTank: string | null, msg: DestroyMessage, killerAvatar: string | null, rawMsg: string) {
     if (!destroyerTank || !destroyedTank) {
         // missing mapping like special cases for Abrams which couldn't be extracted easily from wiki
-        console.error(`Killer: ${msg.killer} with '${msg.destroyerTank}'->${destroyerTank} to ${msg.killed} '${msg.destroyedTank}'->${destroyedTank}`);
+        console.error(`Killer: ${msg.killer} with '${msg.destroyerVehicle}'->${destroyerTank} to ${msg.killed} '${msg.destroyedVehicle}'->${destroyedTank}`);
     }
 
     // Squad avatar linking failed maybe the regex included accidentally a space

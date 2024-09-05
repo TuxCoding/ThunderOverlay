@@ -86,9 +86,9 @@ describe('Message parsing', () => {
 
     const expected: DestroyMessage = {
         killer: "-GFF7- Lukasxox",
-        destroyerTank: "IT-1",
+        destroyerVehicle: "IT-1",
 
-        destroyedTank: "Magach 6M",
+        destroyedVehicle: "Magach 6M",
         killed: "-GFF7- CassualTux"
     };
 
@@ -107,9 +107,9 @@ describe('Message parsing', () => {
     test('Destroy parsing parenthesis', () => {
         const expected_parenthesis: DestroyMessage = {
             killer: "-GFF7- SGTCross96",
-            destroyerTank: "BO 105 PAH-1",
+            destroyerVehicle: "BO 105 PAH-1",
 
-            destroyedTank: "XM1 (GM)",
+            destroyedVehicle: "XM1 (GM)",
             killed: "sevenarchangel"
         };
 
@@ -119,9 +119,9 @@ describe('Message parsing', () => {
     test('Destroy parsing parenthesis', () => {
         const expected_parenthesis2: DestroyMessage = {
             killer: "SCHIZAPHRENIK",
-            destroyerTank: "Class 3 (P)",
+            destroyerVehicle: "Class 3 (P)",
 
-            destroyedTank: "Strv 103С",
+            destroyedVehicle: "Strv 103С",
             killed: "[GARD6] ⋇Brotmann89"
         };
 
@@ -131,9 +131,9 @@ describe('Message parsing', () => {
     test('Destroy parsing parenthesis without clan', () => {
         const expect_no_clan: DestroyMessage = {
             killer: "SCHIZAPHRENIK",
-            destroyerTank: "Class 3 (P)",
+            destroyerVehicle: "Class 3 (P)",
 
-            destroyedTank: "Strv 103С",
+            destroyedVehicle: "Strv 103С",
             killed: "⋇Brotmann89"
         };
 
