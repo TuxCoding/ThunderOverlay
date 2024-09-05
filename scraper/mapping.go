@@ -169,7 +169,23 @@ func convertMap(records []UnitRecord) {
 
 	// write all languages
 	for lang, mapping := range byLangMap {
+		checkCommonKeys(lang, mapping)
 		writeLangMapping(mapping, lang)
+	}
+}
+
+func checkCommonKeys(lang string, mapping LanguageMap) {
+	seenNames := make(map[string]bool)
+
+	for _, typedMap := range mapping.typedMap {
+		for localName, vehicleId := range typedMap {
+			_, found := seenNames[localName]
+			if found {
+				log.Printf("[%s] Found duplicate localized name (%s->%s) across different vehicle types\n", lang, localName, vehicleId)
+			} else {
+				seenNames[localName] = true
+			}
+		}
 	}
 }
 
