@@ -72,7 +72,7 @@ func (langMap LanguageMap) addVehicle(localName string, vehicleType string, vehi
 
 	overriden := langMap.checkedAdd(typeMap, localName, vehicleId)
 	if len(overriden) != 0 {
-		//log.Printf("[%s] Overriding same language key in and type %s (%s): (%s)->(%s)\n", langMap.lang, localName, vehicleType, overriden, vehicleId)
+		log.Printf("[%s] Overriding same language key in and type %s (%s): (%s)->(%s)\n", langMap.lang, localName, vehicleType, overriden, vehicleId)
 	}
 }
 
