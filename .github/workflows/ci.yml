@@ -1,0 +1,61 @@
+# Automatically build, run unit and integration tests to detect errors early (CI provided by GitHub)
+# including making pull requests review easier
+
+# Human-readable name in the actions tab
+name: Project linting and testing
+
+# Build on every pull request regardless of the branch
+# Wiki: https://help.github.com/en/actions/reference/events-that-trigger-workflows
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    # Environment image - always use the newest OS
+    runs-on: ubuntu-latest
+    permissions:
+      # With at least one permission given, all default to read
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+  lint:
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Lint web project
+        run: pnpm lint
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+    steps:
+      - name: test web project
+        run: pnpm test
