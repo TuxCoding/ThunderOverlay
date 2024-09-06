@@ -7,6 +7,8 @@ import shipMapping from '../src/mappings/ships.json';
 
 import specialMapping from '../src/mappings/specials.json';
 
+const VEHICLE_SRC_PATH = `./src/${VEHICLE_FILE_PATH}`;
+
 describe('find vehicle', () => {
     test('Not existing vehicle', () => {
         expect(findVehicleFile('Unknown')).toBeNull();
@@ -140,7 +142,14 @@ describe('Special handling unnecessary', () => {
     });
 });
 
-describe('Vehicle image available', () => {
+let assetExtracted;
+const files = fs.readdirSync(`${VEHICLE_SRC_PATH}/ground`);
+if (files.length > 1) {
+    assetExtracted = true;
+}
+
+const describeCond = assetExtracted ? describe : describe.skip;
+describeCond('Vehicle image available', () => {
     // merge into single array with only the paths
     const vehicleTypes = [
         ["ground", groundMapping],
@@ -164,10 +173,10 @@ describe('Vehicle image available', () => {
         for (const vehicle of Object.keys(map)) {
             const file = (map as Mapping)[vehicle].toLowerCase();
 
-            let path = `./src/${VEHICLE_FILE_PATH}`;
+            let path = VEHICLE_SRC_PATH;
             if (prefix) {
                 // folder path prefix
-                path += `/${prefix}/`;
+                path += `/${prefix}`;
             }
 
             path += `/${file}.${FILE_EXT}`;
