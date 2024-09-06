@@ -30,15 +30,20 @@ jobs:
       - uses: pnpm/action-setup@v4
         name: Install pnpm
         with:
+          # Latest stable
           version: 9
+          # Use caching infrastructure from setup-node
           run_install: false
 
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
+          # Latest stable
           node-version: 22
+          # Cache deps
           cache: 'pnpm'
 
+        # Install deps from lockfile to speed up resolution
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -56,17 +61,22 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup go
+        uses: actions/setup-go@v5
         with:
           go-version: stable
+          # Project is inside a sub folder
           cache-dependency-path: |
              scraper/go.sum
 
-      - run: go mod download
+      - name: Download deps
+        run: go mod download
+        # Works only for scripts not for actions
         working-directory: ./scraper
 
-      - name: golangci-lint
+      - name: Lint go
         uses: golangci/golangci-lint-action@v6
         with:
           working-directory: ./scraper

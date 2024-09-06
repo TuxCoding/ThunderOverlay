@@ -1,4 +1,4 @@
-import { FILE_EXT, findVehicleFile, Mapping, VEHICLE_FILE_PATH } from "../src/assets";
+import { FILE_EXT, findVehicleFile, Mapping, VEHICLE_FILE_PATH, VehicleType } from "../src/assets";
 import * as fs from 'fs';
 
 import groundMapping from '../src/mappings/ground.json';
@@ -121,14 +121,14 @@ describe('Special handling unnecessary', () => {
     const specialVehicleNames = Object.keys(specialMapping);
 
     function isFoundInDefaultMap(vehicle: string): boolean {
-        const vehicleTypes = [
+        const vehicleTypes: Mapping[] = [
             groundMapping,
             shipMapping,
             airMapping,
         ];
 
         for (const map of vehicleTypes) {
-            const name = (map as Mapping)[vehicle];
+            const name = map[vehicle];
             if (name) {
                 return true;
             }
@@ -143,39 +143,43 @@ describe('Special handling unnecessary', () => {
 });
 
 let assetExtracted;
-const files = fs.readdirSync(`${VEHICLE_SRC_PATH}/ground`);
+// check only one folder seems enough
+const files = fs.readdirSync(`${VEHICLE_SRC_PATH}/${VehicleType.Ground}`);
 if (files.length > 1) {
+    // only check for avatars if at least one file except .gitkeep is downloaded
     assetExtracted = true;
 }
 
 const describeCond = assetExtracted ? describe : describe.skip;
 describeCond('Vehicle image available', () => {
     // merge into single array with only the paths
-    const vehicleTypes = [
-        ["ground", groundMapping],
-        ["air", airMapping],
-        ["ships", shipMapping],
+    const vehicleTypes: [string, Mapping][] = [
+        [VehicleType.Ground, groundMapping],
+        [VehicleType.Air, airMapping],
+        [VehicleType.Ship, shipMapping],
         ["", specialMapping]
     ];
 
-    const length = Object.keys(groundMapping).length
-        + Object.keys(airMapping).length
-        + Object.keys(shipMapping).length
-        + Object.keys(specialMapping).length;
+    let length = 0;
+    for (const type of vehicleTypes) {
+        const map = type[1];
+        length += Object.keys(map).length;
+    }
 
     // pre allocate array to prevent memory allocation spam
-    const mergedMap = new Array(length);
+    const mergedMap = new Array<string>(length);
 
     let position = 0;
     for (const type of vehicleTypes) {
         const [prefix, map] = type;
 
         for (const vehicle of Object.keys(map)) {
-            const file = (map as Mapping)[vehicle].toLowerCase();
+            // unix is case-senstive
+            const file = map[vehicle].toLowerCase();
 
             let path = VEHICLE_SRC_PATH;
             if (prefix) {
-                // folder path prefix
+                // vehicle type path prefix
                 path += `/${prefix}`;
             }
 

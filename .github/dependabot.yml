@@ -15,6 +15,7 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    # Otherwise the package.json is already enough
     versioning-strategy: increase-if-necessary
 
     groups:

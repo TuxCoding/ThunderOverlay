@@ -45,7 +45,7 @@ async function query(url: string): Promise<Response> {
     });
 
     if (!response.ok) {
-        throw new Error(`Unexpected response code: ${response.status}`);
+        throw new Error(`Unexpected response code: ${response.status.toLocaleString()}`);
     }
 
     return response;
@@ -63,6 +63,5 @@ export async function fetchHUD(seenEvent: number, seenDamange: number): Promise<
     const resp = await query(`hudmsg?lastEvt=${seenEvent}&lastDmg=${seenDamange}`);
 
     // fetch data
-    const events = await resp.json();
-    return events as HudEvents;
+    return await resp.json() as HudEvents;
 }

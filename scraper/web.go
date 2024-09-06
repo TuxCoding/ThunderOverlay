@@ -42,11 +42,11 @@ func Scrape() {
 
 	// scan page if it's a vehicle page with images
 	col.OnHTML("html", func(el *colly.HTMLElement) {
-		onPageHTML(el, &imgLinks, mappings)
+		visitPageHTML(el, &imgLinks, mappings)
 	})
 
 	// find links from categories sites to other vehicles
-	col.OnHTML(".mw-category-generated a[href]", onVehicleLink)
+	col.OnHTML(".mw-category-generated a[href]", visitVehicleLink)
 
 	startScraping(col)
 
@@ -57,7 +57,7 @@ func Scrape() {
 }
 
 // trigger on complete page loaded for all pages
-func onPageHTML(el *colly.HTMLElement, imgLinks *[]string, mappings map[string]string) {
+func visitPageHTML(el *colly.HTMLElement, imgLinks *[]string, mappings map[string]string) {
 	// tank name
 	tankTitle := el.ChildText(".specs_card_main_info .general_info_name")
 
@@ -79,7 +79,7 @@ func onPageHTML(el *colly.HTMLElement, imgLinks *[]string, mappings map[string]s
 }
 
 // if vehicle link is found
-func onVehicleLink(el *colly.HTMLElement) {
+func visitVehicleLink(el *colly.HTMLElement) {
 	// extract destination
 	link := el.Attr("href")
 
@@ -152,6 +152,7 @@ func writeImgList(queue []string) {
 	}
 }
 
+// create initialized web scraper
 func createCollector() *colly.Collector {
 	col := colly.NewCollector(
 		// wiki and img hosting site

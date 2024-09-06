@@ -1,5 +1,6 @@
 module scraper
 
+// use latest stable
 go 1.23
 
 // web scraper

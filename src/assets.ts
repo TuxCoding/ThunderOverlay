@@ -28,7 +28,8 @@ export type Vehicle = keyof Mapping;
 
 const NUKE_SYMBOL = "☢";
 
-enum VehicleType {
+/** vehicle types with their respective folders */
+export enum VehicleType {
     Ground = "ground",
     Air = "air",
     Ship = "ships"
@@ -70,7 +71,7 @@ export function findVehicleFile(vehicle: Vehicle): string | null {
  */
 function findMapping(vehicle: Vehicle): string | null {
     // search ground vehicles first, because it is mostly played
-    const vehicleTypes = [
+    const vehicleTypes: [string, Mapping][] = [
         [VehicleType.Ground, groundMapping],
         [VehicleType.Air, airMapping],
         [VehicleType.Ship, shipMapping],
@@ -80,7 +81,7 @@ function findMapping(vehicle: Vehicle): string | null {
     for (const vehicleType of vehicleTypes) {
         const [path, map] = vehicleType;
 
-        const name = (map as Mapping)[vehicle];
+        const name = map[vehicle];
         if (name) {
             // UNIX file systems are case-sensitive
             const normalizedFile = name.toLowerCase();

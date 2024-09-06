@@ -7,9 +7,9 @@ import { parseMessage } from '../src/main';
 describe('Test file parsing', () => {
     async function loadFile(path: string) {
         const resp = await fs.promises.readFile(`./tests/resources/events/${path}`, "utf8");
-        const raw = JSON.parse(resp);
+        const raw = JSON.parse(resp) as HudEvents;
 
-        return raw as HudEvents;
+        return raw;
     }
 
     test('Simple single event', async () => {
