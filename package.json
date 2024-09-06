@@ -3,6 +3,7 @@
     "version": "0.5",
     "devDependencies": {
         "@types/jest": "^29.5.12",
+        "@types/node": "^22.5.4",
         "jest": "^29.7.0",
         "stylelint": "^16.9.0",
         "stylelint-config-standard": "^36.0.1",
@@ -14,7 +15,9 @@
     "scripts": {
         "test": "jest --maxWorkers=auto",
         "watchJS": "esbuild src/main.ts --bundle --outfile=./src/assets/js/bundle.js --sourcemap --watch --minify",
-        "lint": "eslint . --cache && stylelint ./src/assets/*.css"
+        "lint:css": "stylelint ./src/assets/*.css",
+        "lint:js": "eslint . --cache ",
+        "lint": "pnpm run lint:js && pnpm run lint:css"
     },
     "dependencies": {
         "esbuild": "^0.23.1"
