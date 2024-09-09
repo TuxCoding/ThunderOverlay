@@ -3,6 +3,7 @@ node_modules/
 
 # Temp projects
 scraper/units.csv
+scraper/menu.csv
 scraper/out/
 scraper/cache/
 
