@@ -26,8 +26,6 @@ export type Mapping = Record<string, string>;
  */
 export type Vehicle = keyof Mapping;
 
-const NUKE_SYMBOL = "☢";
-
 /** vehicle types with their respective folders */
 export enum VehicleType {
     Ground = "ground",
@@ -51,9 +49,7 @@ export function findVehicleFile(vehicle: Vehicle): string | null {
     // see: 'Bf 109 F' and only used in aircraft
     const cleanVehicleName = vehicle
         // clean up crlf that somehow got into game files and are therefore used
-        .replace("\r", "")
-        // these vehicles are other normal mappings
-        .replace(NUKE_SYMBOL, "");
+        .replace("\r", "");
 
     const fileName = findMapping(cleanVehicleName);
     if (fileName) {
