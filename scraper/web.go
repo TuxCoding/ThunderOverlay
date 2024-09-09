@@ -73,7 +73,7 @@ func visitPageHTML(el *colly.HTMLElement, imgLinks *[]string, mappings map[strin
 
 		// add to mapping without the host and file extension to reduce size
 		cleanImg := strings.Replace(imgSrc, HTTPS_PREFIX+IMG_HOST+IMG_PATH, "", 1)
-		cleanImg, _ = strings.CutSuffix(cleanImg, VEHICLE_WEB_EXT)
+		cleanImg = strings.TrimSuffix(cleanImg, VEHICLE_WEB_EXT)
 		mappings[tankTitle] = cleanImg
 	}
 }

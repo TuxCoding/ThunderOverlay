@@ -164,16 +164,18 @@ func convertMap(records []UnitRecord) {
 			continue
 		}
 
+		// only interested it vehicle localized for the battle log format
 		vehicleId, found := strings.CutSuffix(recordId, VEHICLE_LOCAL_ID)
 		if found {
-			// only interested it vehicle localized for the battle log format
-			visitUserVehicle(byLangMap, vehicleId, record)
+			// remove killstreak suffix for nukes or drones
+			trimmedId := strings.TrimSuffix(vehicleId, "_"+NUKE_DRONE_ID)
+			visitUserVehicle(byLangMap, trimmedId, record)
 		}
 	}
 
 	// write all languages
 	for lang, mapping := range byLangMap {
-		checkCommonKeys(lang, mapping)
+		//checkCommonKeys(lang, mapping)
 		writeLangMapping(mapping, lang)
 	}
 }
@@ -212,8 +214,7 @@ func visitUserVehicle(byLangMap map[string]LanguageMap, vehicleId string, record
 
 		normalizedLangName := strings.ToLower(fieldName)
 
-		fieldValue := reflect.ValueOf(record).Field(fieldIndex).Interface()
-		localName := fieldValue.(string)
+		localName := reflect.ValueOf(record).Field(fieldIndex).Interface().(string)
 		if len(localName) == 0 {
 			// skip if no localized name is found like for the footbal an expired event
 			continue
@@ -268,11 +269,11 @@ func getVehicleType(vehicleId string) string {
 func logRecord(record UnitRecord, vehicleId string) {
 	comment := strings.TrimSpace(record.Comments)
 	maxChars := strings.TrimSpace(record.MaxChars)
-	if len(comment) > 0 || len(maxChars) > 0 {
+	if len(comment) != 0 || len(maxChars) != 0 {
 		log.Printf("%s has metadata: comment->'%s' max->'%s'\n", vehicleId, comment, maxChars)
 	}
 
-	if strings.Index(vehicleId, NUKE_DRONE_ID) > 0 {
+	if strings.LastIndex(vehicleId, NUKE_DRONE_ID) != -1 {
 		log.Printf("Nuke/Drone: %s %s \n", vehicleId, record.English)
 	}
 }
@@ -286,7 +287,8 @@ func isUserVehicle(vehicleId string) bool {
 		strings.HasPrefix(vehicleId, "tracked_vehicles/") ||
 		strings.HasPrefix(vehicleId, "ships/") ||
 		strings.HasPrefix(vehicleId, "structures/") ||
-		strings.HasPrefix(vehicleId, "radars/") {
+		strings.HasPrefix(vehicleId, "radars/") ||
+		strings.HasPrefix(vehicleId, "shop/group/") {
 		return false
 	}
 
