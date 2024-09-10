@@ -1,16 +1,16 @@
 [
     {
         "id": 1,
-        "msg": "Augen auf die Karte!<color=#FF50BE46> [a3]</color>",
-        "sender": "Lostarmour",
+        "msg": "Attention to the map!<color=#FF50BE46> [a3]</color>",
+        "sender": "Somebody",
         "enemy": false,
         "mode": "Team",
         "time": 176
     },
     {
         "id": 2,
-        "msg": "Augen auf die Karte!<color=#FF50BE46> [a5]</color>",
-        "sender": "billydarkholme",
+        "msg": "Attention to the map!<color=#FF50BE46> [a5]</color>",
+        "sender": "Somebody",
         "enemy": false,
         "mode": "Team",
         "time": 186
