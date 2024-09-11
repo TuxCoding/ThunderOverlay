@@ -27,10 +27,19 @@ members during match. You can see demonstration here:
     * Awards
     * Other player disconnects from battle/game
     * Other damage events: fire, crit, severe damage
-* Dad
-    * [WTRTI](https://github.com/MeSoftHorny/WTRTI/)
 * Sound effects if not possible with the game client itself
-    * e.g. "Dumb ways to die" if you fly into a wall (`selfkill`)
+    * Realistic sounds like from this awesome video [Battlefield 1](https://www.youtube.com/watch?v=J2JBmYt2Z44)
+        * Detection for events like following are possible would be possible with the webinterface:
+            * lost crew members
+            * marked enemies on map
+            * and more.
+        * However, we are required to re-create or find another source for these type of sounds as those above are copyrighted
+    * "Streamer" sounds
+        * "Dumb ways to die" if you fly into a wall (`selfkill`)
+        * "Wilhelm scream" if you lost a crew member
+    * Drive gear switching sound
+    * etc.
+    * Similar to this great project: [WTRTI](https://github.com/MeSoftHorny/WTRTI/), but for ground vehicles
 
 ### Goals
 
@@ -117,7 +126,7 @@ Only a mockup:
     * A few names are not unique across all vehicle types
         * `English` has only two cases. Namely `Milan`->[`mirage_milan`(air), `fr_destroyer_aigle_class_milan`] and `Ariete`
         * The maximum of those cases across all languages are only `6` however
-        * It's possible to detect the destroyed vehicle type based on destroyed trigger word (e.g. `shot down` or `destroyed`). Although this is not possible for damage source vehicle, because a tank or plane could destroy it and the trigger would be the same.
+        * It's possible to detect the destroyed vehicle type based on destroyed trigger word (e.g. `shot down` or `destroyed`). Although this is not possible for damage source vehicle, because a tank or aircraft could destroy it and the trigger would be the same.
 
 ### The overlay doesn't work with the minimal client
 
