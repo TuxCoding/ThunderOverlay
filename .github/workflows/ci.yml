@@ -41,7 +41,7 @@ jobs:
           # Latest stable
           node-version: 22
           # Cache deps
-          cache: 'pnpm'
+          cache: "pnpm"
 
         # Install deps from lockfile to speed up resolution
       - name: Install dependencies
