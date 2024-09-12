@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/csv"
+	"errors"
 	"io"
 	"log"
 	"os"
@@ -65,24 +66,27 @@ type LanguageMap struct {
 	typedMap map[string]map[string]string
 }
 
-func (langMap LanguageMap) addVehicle(localName string, vehicleType string, vehicleId string) {
+func (langMap LanguageMap) addVehicle(localName, vehicleType, vehicleID string) {
 	typeMap := langMap.typedMap[vehicleType]
 	if typeMap == nil {
 		typeMap = make(map[string]string)
 		langMap.typedMap[vehicleType] = typeMap
 	}
 
-	overriden := langMap.checkedAdd(typeMap, localName, vehicleId)
-	if len(overriden) != 0 {
-		log.Printf("[%s] Overriding same language key in and type %s (%s): (%s)->(%s)\n", langMap.lang, localName, vehicleType, overriden, vehicleId)
+	overridden := langMap.checkedAdd(typeMap, localName, vehicleID)
+	if overridden != "" {
+		log.Printf(
+			"[%s] Overriding same language key in and type %s (%s): (%s)->(%s)\n",
+			langMap.lang, localName, vehicleType, overridden, vehicleID,
+		)
 	}
 }
 
-func (langMap LanguageMap) checkedAdd(collection map[string]string, key string, vehicleId string) string {
+func (LanguageMap) checkedAdd(collection map[string]string, key, vehicleID string) string {
 	// check if we are overriding an existing value because the localized name represents multiple vehicles
 	prevItem, found := collection[key]
 	if found {
-		if prevItem == vehicleId {
+		if prevItem == vehicleID {
 			// same entry ignore
 			return ""
 		}
@@ -90,7 +94,7 @@ func (langMap LanguageMap) checkedAdd(collection map[string]string, key string, 
 		return prevItem
 	}
 
-	collection[key] = vehicleId
+	collection[key] = vehicleID
 	return ""
 }
 
@@ -123,7 +127,7 @@ func parseUnits(fileName string) []UnitRecord {
 	var records []UnitRecord
 	for {
 		var record UnitRecord
-		if err := dec.Decode(&record); err == io.EOF {
+		if err := dec.Decode(&record); errors.Is(err, io.EOF) {
 			// ending
 			break
 		} else if err != nil {
@@ -137,16 +141,16 @@ func parseUnits(fileName string) []UnitRecord {
 }
 
 // check if corresponding image file eixists
-func assetExists(prefix string, file string) bool {
-	// UNIX systems are case-senstive so convert all to lowercase
+func assetExists(prefix, file string) bool {
+	// UNIX systems are case-sensitive so convert all to lowercase
 	file = strings.ToLower(file)
 
 	path := VEHICLE_PATH + prefix + "/" + file + VEHICLE_GAME_EXT
 	if _, err := os.Stat(path); err == nil {
 		return true
-	} else {
-		return false
 	}
+
+	return false
 }
 
 // invert map from vehicleID -> localized name to localized name -> vehicleID
@@ -155,25 +159,28 @@ func convertMap(records []UnitRecord) {
 	byLangMap := make(map[string]LanguageMap)
 
 	// create a new map for each language
-	for _, record := range records {
-		recordId := record.ID
-		logRecord(record, recordId)
+	for idx := range records {
+		// use idx to go over pointers instead of copy-by-value from range operator
+		record := records[idx]
 
-		if !isUserVehicle(recordId) {
+		recordID := record.ID
+		logRecord(&record, recordID)
+
+		if !isUserVehicle(recordID) {
 			// only interested in user vehicles
 			continue
 		}
 
 		// only interested it vehicle localized for the battle log format
-		vehicleId, found := strings.CutSuffix(recordId, VEHICLE_LOCAL_ID)
+		vehicleID, found := strings.CutSuffix(recordID, VEHICLE_LOCAL_ID)
 		if found {
 			// remove killstreak suffix for nukes or drones
-			trimmedId, foundStreak := strings.CutSuffix(vehicleId, "_"+NUKE_DRONE_ID)
-			if foundStreak && containsNationSuffix(trimmedId) {
+			trimmedID, foundStreak := strings.CutSuffix(vehicleID, "_"+NUKE_DRONE_ID)
+			if foundStreak && containsNationSuffix(trimmedID) {
 				continue
 			}
 
-			visitUserVehicle(byLangMap, trimmedId, record)
+			visitUserVehicle(byLangMap, trimmedID, &record)
 		}
 	}
 
@@ -189,7 +196,7 @@ func convertMap(records []UnitRecord) {
 	}
 }
 
-func containsNationSuffix(vehicleId string) bool {
+func containsNationSuffix(vehicleID string) bool {
 	nations := []string{
 		"uk",
 		"italy",
@@ -201,7 +208,7 @@ func containsNationSuffix(vehicleId string) bool {
 	}
 
 	for _, nation := range nations {
-		if strings.HasSuffix(vehicleId, nation) {
+		if strings.HasSuffix(vehicleID, nation) {
 			return true
 		}
 	}
@@ -215,10 +222,10 @@ func checkCommonKeys(lang string, mapping LanguageMap) {
 
 	// this map already accounts for duplicate inside each vehicle type, because they were filtered before on creation
 	for _, typedMap := range mapping.typedMap {
-		for localName, vehicleId := range typedMap {
+		for localName, vehicleID := range typedMap {
 			_, found := seenNames[localName]
 			if found {
-				log.Printf("[%s] Found duplicate localized name (%s->%s) across different vehicle types\n", lang, localName, vehicleId)
+				log.Printf("[%s] Found duplicate localized name (%s->%s) across different vehicle types\n", lang, localName, vehicleID)
 			} else {
 				seenNames[localName] = true
 			}
@@ -226,9 +233,9 @@ func checkCommonKeys(lang string, mapping LanguageMap) {
 	}
 }
 
-func visitUserVehicle(byLangMap map[string]LanguageMap, vehicleId string, record UnitRecord) {
-	vehicleType := getVehicleType(vehicleId)
-	if len(vehicleType) == 0 {
+func visitUserVehicle(byLangMap map[string]LanguageMap, vehicleID string, record *UnitRecord) {
+	vehicleType := getVehicleType(vehicleID)
+	if vehicleType == "" {
 		// ignore if no type was found
 		return
 	}
@@ -243,8 +250,8 @@ func visitUserVehicle(byLangMap map[string]LanguageMap, vehicleId string, record
 
 		normalizedLangName := strings.ToLower(fieldName)
 
-		localName := reflect.ValueOf(record).Field(fieldIndex).Interface().(string)
-		if len(localName) == 0 {
+		localName := reflect.ValueOf(*record).Field(fieldIndex).Interface().(string)
+		if localName == "" {
 			// skip if no localized name is found like for the footbal an expired event
 			continue
 		}
@@ -260,12 +267,12 @@ func visitUserVehicle(byLangMap map[string]LanguageMap, vehicleId string, record
 			byLangMap[normalizedLangName] = langMap
 		}
 
-		langMap.addVehicle(localName, vehicleType, vehicleId)
+		langMap.addVehicle(localName, vehicleType, vehicleID)
 	}
 }
 
 // returns first compatible vehicle type match with retrieved assets
-func getVehicleType(vehicleId string) string {
+func getVehicleType(vehicleID string) string {
 	assetFolders := []string{
 		"ground",
 		"air",
@@ -275,52 +282,52 @@ func getVehicleType(vehicleId string) string {
 
 	types := []string{}
 	for _, folder := range assetFolders {
-		if assetExists(folder, vehicleId) {
+		if assetExists(folder, vehicleID) {
 			types = append(types, folder)
 		}
 	}
 
 	if len(types) == 0 {
 		// likely no longer available vehicles if the asset is no longer available
-		//log.Printf("Vehicle image for %s not found\n", vehicleId)
+		// log.Printf("Vehicle image for %s not found\n", vehicleID)
 		return ""
 	}
 
 	if len(types) > 1 {
 		// if same file names are used
-		log.Printf("Multiple vehicle types for %s->%v\n", vehicleId, types)
+		log.Printf("Multiple vehicle types for %s->%v\n", vehicleID, types)
 	}
 
 	// return the first match for now and only log differences
 	return types[0]
 }
 
-func logRecord(record UnitRecord, vehicleId string) {
+func logRecord(record *UnitRecord, vehicleID string) {
 	comment := strings.TrimSpace(record.Comments)
 	maxChars := strings.TrimSpace(record.MaxChars)
-	if len(comment) != 0 || len(maxChars) != 0 {
-		log.Printf("%s has metadata: comment->'%s' max->'%s'\n", vehicleId, comment, maxChars)
+	if comment != "" || maxChars != "" {
+		log.Printf("%s has metadata: comment->'%s' max->'%s'\n", vehicleID, comment, maxChars)
 	}
 
-	if strings.LastIndex(vehicleId, NUKE_DRONE_ID) != -1 {
-		log.Printf("Nuke/Drone: %s %s \n", vehicleId, record.English)
+	if strings.LastIndex(vehicleID, NUKE_DRONE_ID) != -1 {
+		log.Printf("Nuke/Drone: %s %s \n", vehicleID, record.English)
 	}
 }
 
 // is user controllable vehicle
-func isUserVehicle(vehicleId string) bool {
+func isUserVehicle(vehicleID string) bool {
 	// ignore other vehicle objects that are translated
 	// we are only interested in user controllable vehicles
-	if strings.HasPrefix(vehicleId, "wheeled_vehicles/") ||
-		strings.HasPrefix(vehicleId, "air_defence/") ||
-		strings.HasPrefix(vehicleId, "tracked_vehicles/") ||
-		strings.HasPrefix(vehicleId, "ships/") ||
-		strings.HasPrefix(vehicleId, "structures/") ||
-		strings.HasPrefix(vehicleId, "radars/") ||
-		strings.HasPrefix(vehicleId, "shop/group/") ||
-		strings.LastIndex(vehicleId, "tutorial") != -1 ||
-		strings.LastIndex(vehicleId, "exoskeleton") != -1 ||
-		strings.LastIndex(vehicleId, "event") != -1 {
+	if strings.HasPrefix(vehicleID, "wheeled_vehicles/") ||
+		strings.HasPrefix(vehicleID, "air_defence/") ||
+		strings.HasPrefix(vehicleID, "tracked_vehicles/") ||
+		strings.HasPrefix(vehicleID, "ships/") ||
+		strings.HasPrefix(vehicleID, "structures/") ||
+		strings.HasPrefix(vehicleID, "radars/") ||
+		strings.HasPrefix(vehicleID, "shop/group/") ||
+		strings.LastIndex(vehicleID, "tutorial") != -1 ||
+		strings.LastIndex(vehicleID, "exoskeleton") != -1 ||
+		strings.LastIndex(vehicleID, "event") != -1 {
 		return false
 	}
 
