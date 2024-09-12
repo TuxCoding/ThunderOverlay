@@ -1,6 +1,21 @@
 {
     "name": "thunder_overlay",
-    "version": "0.5",
+    "private": true,
+    "version": "0.6",
+    "license": "MPL-2.0",
+    "description": "War Thunder streaming overlay",
+    "homepage": "https://github.com/games647/WarThunderStreamOverlay",
+    "bugs": {
+        "url": "https://github.com/games647/WarThunderStreamOverlay/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/games647/WarThunderStreamOverlay.git"
+    },
+    "author": {
+        "name": "games647",
+        "url": "https://github.com/games647"
+    },
     "devDependencies": {
         "@types/jest": "^29.5.12",
         "@types/node": "^22.5.4",
