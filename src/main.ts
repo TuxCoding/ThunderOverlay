@@ -1,4 +1,5 @@
 import { AVATAR_FILE_PATH, FILE_EXT, findVehicleFile } from "./assets";
+import { DESTROY_TYPE } from "./lang";
 import { fetchHUD, type Damage } from "./network";
 import { getSquadAvatar, isSquadRelevant } from "./team";
 import { addErrorHandlerImg, showNotification, type Notification } from "./ui";
@@ -47,7 +48,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
                 console.error(`Unknown error: ${err.name}: ${err.message}`);
             }
         } else {
-            console.error(`Unknown error: `, error);
+            console.error("Unknown error: ", error);
         }
     }
 }
@@ -258,6 +259,6 @@ function notificationLoop() {
 }
 
 /* Run update only on the site not for tests */
-if (typeof document !== 'undefined') {
+if (typeof document !== "undefined") {
     init();
 }

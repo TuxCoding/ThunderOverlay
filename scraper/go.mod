@@ -10,7 +10,7 @@ require github.com/gocolly/colly/v2 v2.1.0
 require github.com/jszwec/csvutil v1.10.0
 
 require (
-	github.com/PuerkitoBio/goquery v1.9.2 // indirect
+	github.com/PuerkitoBio/goquery v1.10.0 // indirect
 	github.com/andybalholm/cascadia v1.3.2 // indirect
 	github.com/antchfx/htmlquery v1.3.2 // indirect
 	github.com/antchfx/xmlquery v1.4.1 // indirect

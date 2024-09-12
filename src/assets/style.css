@@ -27,7 +27,7 @@ body {
     --text-base-color: white;
     --text-normal-size: 1.3rem;
     --text-normal-weight: bolder;
-    --font: "wtText", sans-serif;
+    --font: "wt-text", sans-serif;
     --text-spacing: 10px;
 
     /* Backgrounds and borders */
@@ -49,7 +49,7 @@ body {
 
 /* Special symbols for foreign vehicles like ▄M26 provided by wiki */
 @font-face {
-    font-family: wtSymbols;
+    font-family: wt-symbols;
     src: url("./font/symbols_skyquake.ttf");
 
     /* Gives the font face an extremely small block period and an infinite swap period. */
@@ -58,7 +58,7 @@ body {
 
 /* Normal War Thunder text styling provided by wiki */
 @font-face {
-    font-family: wtText;
+    font-family: wt-text;
     src: url("./font/wt_font.ttf");
 
     font-display: swap;

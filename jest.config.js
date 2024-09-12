@@ -1,4 +1,4 @@
-/** @type {import('ts-jest').JestConfigWithTsJest} **/
+/** @type {import("ts-jest").JestConfigWithTsJest} **/
 module.exports = {
     // might switch later to happy-dom for browser test environments
     testEnvironment: "node",

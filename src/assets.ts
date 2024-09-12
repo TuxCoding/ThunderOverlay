@@ -6,14 +6,14 @@ export const AVATAR_FILE_PATH = "./assets/img/avatars";
 export const FILE_EXT = "avif";
 
 // mappings will be loaded into Javascript bundle by using resolveJSON from Typescript
-import groundMapping from './mappings/ground.json';
-import airMapping from './mappings/air.json';
-import shipMapping from './mappings/ships.json';
+import groundMapping from "./mappings/ground.json";
+import airMapping from "./mappings/air.json";
+import shipMapping from "./mappings/ships.json";
 
 // mapping that is different from the wiki definition
 // so we don't need to modify the original files
 // content is sorted by values
-import specialMapping from './mappings/specials.json';
+import specialMapping from "./mappings/specials.json";
 
 /**
  * Types for mapping vehicle name to file name

@@ -1,5 +1,5 @@
 import { getSquadAvatar, isSquadRelevant } from "../src/team";
-import * as fs from 'fs';
+import * as fs from "fs";
 import { AVATAR_FILE_PATH, FILE_EXT } from "../src/assets";
 
 const KNOWN_SQUAD_MEMBERS = [
@@ -11,26 +11,26 @@ const KNOWN_SQUAD_MEMBERS = [
     ["l-IlIllIIlIIllI"]
 ];
 
-describe('Squad member relevance check', () => {
-    test('relevant (squad member involved)', () => {
+describe("Squad member relevance check", () => {
+    test("relevant (squad member involved)", () => {
         expect(isSquadRelevant("-GFF7- TuxCode (Merkava Mk.1B) zerstört [CoyC] DRAGON#28 (BMP-2)")).toBeTruthy();
     });
 
-    test('not relevant (squad member not involved)', () => {
+    test("not relevant (squad member not involved)", () => {
         expect(isSquadRelevant("-GFF7- Somebody (Merkava Mk.1B) zerstört [CoyC] DRAGON#28 (BMP-2)")).toBeFalsy();
     });
 });
 
-describe('find avatar', () => {
-    test('Not a squad member', () => {
+describe("find avatar", () => {
+    test("Not a squad member", () => {
         expect(getSquadAvatar("somebody")).toBeNull();
     });
 
-    test('Console player', () => {
+    test("Console player", () => {
         expect(getSquadAvatar("⋇l-IlIllIIlIIllI")).toBe("cardicon_fem_ru_modern_01");
     });
 
-    test.each(KNOWN_SQUAD_MEMBERS)('Squad member check (%s)', (member) => {
+    test.each(KNOWN_SQUAD_MEMBERS)("Squad member check (%s)", (member) => {
         // verify each player has avatar defined in source
         expect(getSquadAvatar(member)).toBeDefined();
     });
@@ -47,8 +47,8 @@ if (files.length > 1) {
 }
 
 const describeCond = assetExtracted ? describe : describe.skip;
-describeCond('Team avatar available', () => {
-    test.each(KNOWN_SQUAD_MEMBERS)('Squad member avatar exists (%s)', async (member) => {
+describeCond("Team avatar available", () => {
+    test.each(KNOWN_SQUAD_MEMBERS)("Squad member avatar exists (%s)", async (member) => {
         const file = getSquadAvatar(member);
         if (!file) {
             // not defined in source
