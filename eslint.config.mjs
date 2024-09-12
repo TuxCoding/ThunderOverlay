@@ -2,10 +2,12 @@
 
 // add ts type data
 import eslint from "@eslint/js";
-import tseslint from "typescript-eslint";
 
 // plugins
-import stylistic from "@stylistic/eslint-plugin"
+import stylistic from "@stylistic/eslint-plugin";
+import tseslint from "typescript-eslint";
+
+import jsdoc from "eslint-plugin-jsdoc";
 
 export default tseslint.config(
     {
@@ -16,11 +18,14 @@ export default tseslint.config(
         // Add warnings for missing simicolons
         rules: {
             semi: ["warn", "always"],
+
             // plugins
-            "@stylistic/quotes": "warn",
+            "@stylistic/quotes": ["error", "double", { "avoidEscape": true }]
         },
         plugins: {
-            "@stylistic": stylistic
+            jsdoc,
+            "@stylistic": stylistic,
+            "@typescript-eslint": tseslint.plugin
         },
     },
 
@@ -38,4 +43,6 @@ export default tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.recommendedTypeChecked,
     ...tseslint.configs.stylisticTypeChecked,
+    // plugins
+    //jsdoc.configs["flat/recommended-typescript"],
 );
