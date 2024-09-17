@@ -1,33 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
+    <head>
+        <meta charset="utf-8" />
 
-<head>
-    <meta charset="utf-8">
-    <!-- Enable responsive design -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Kill feed</title>
 
-    <link rel="stylesheet" type="text/css" href="./assets/style.css" />
+        <!-- Enable responsive design -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Download the script in parallel making it unnecessary to place it at the end -->
-    <script type="text/javascript" src="./assets/js/bundle.js" defer></script>
-</head>
+        <link rel="stylesheet" type="text/css" href="./assets/style.css" />
 
-<body>
-    <div id="notification" class="container">
-        <div class="avatar">
-            <img id="killer-avatar">
-        </div>
+        <!-- Download the script in parallel making it unnecessary to place it at the end -->
+        <script
+            type="text/javascript"
+            src="./assets/js/bundle.js"
+            defer
+        ></script>
+    </head>
 
-        <div class="tank">
-            <img id="killer-tank">
-        </div>
+    <body>
+        <div id="notification" class="container">
+            <div class="avatar">
+                <img id="killer-avatar" />
+            </div>
 
-        <div id="title" class="title">
-            <span id="killer-name" class="player-name">-GFF7- Somebody</span>
+            <div class="tank">
+                <img id="killer-tank" />
+            </div>
 
-            <!-- <span>zerstörte</span> -->
-            <video id="smoke">
-                <!--
+            <div id="title" class="title">
+                <span id="killer-name" class="player-name"
+                    >-GFF7- Somebody</span
+                >
+
+                <!-- <span>zerstörte</span> -->
+                <video id="smoke">
+                    <!--
                 Only VP9 or older codecs (HEVC, VP8, codecs for MOV container) supports transparant videos,
                 AV1 apparently doesn't, but AVIF does
 
@@ -40,18 +48,17 @@
                 https://www.npmjs.com/package/stacked-alpha-video
 
                 -->
-                <source src="./assets/vid/smoke.webm" type="video/webm">
-            </video>
+                    <source src="./assets/vid/smoke.webm" type="video/webm" />
+                </video>
 
-            <img id="ammunition" src="./assets/img/APFSDS.avif">
+                <img id="ammunition" src="./assets/img/APFSDS.avif" />
 
-            <span id="killed-name" class="player-name">-GFF7- TuxCode</span>
+                <span id="killed-name" class="player-name">-GFF7- TuxCode</span>
+            </div>
+
+            <div class="tank-single">
+                <img id="destroyed-tank" />
+            </div>
         </div>
-
-        <div class="tank-single">
-            <img id="destroyed-tank">
-        </div>
-    </div>
-</body>
-
+    </body>
 </html>

@@ -18,14 +18,18 @@ export default tseslint.config(
         // Add warnings for missing simicolons
         rules: {
             semi: ["warn", "always"],
+            "@typescript-eslint/no-misused-promises": [
+                "error",
+                { checksVoidReturn: false },
+            ],
 
             // plugins
-            "@stylistic/quotes": ["error", "double", { "avoidEscape": true }]
+            "@stylistic/quotes": ["error", "double", { avoidEscape: true }],
         },
         plugins: {
             jsdoc,
             "@stylistic": stylistic,
-            "@typescript-eslint": tseslint.plugin
+            "@typescript-eslint": tseslint.plugin,
         },
     },
 

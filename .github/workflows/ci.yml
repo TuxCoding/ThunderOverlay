@@ -7,76 +7,76 @@ name: Project linting and testing
 # Build on every pull request regardless of the branch
 # Wiki: https://help.github.com/en/actions/reference/events-that-trigger-workflows
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
 
 jobs:
-  web-lint:
-    name: Web lint and test
-    # Environment image - always use the newest OS
-    runs-on: ubuntu-latest
-    permissions:
-      # With at least one permission given, all default to read
-      contents: read
+    web-lint:
+        name: Web lint and test
+        # Environment image - always use the newest OS
+        runs-on: ubuntu-latest
+        permissions:
+            # With at least one permission given, all default to read
+            contents: read
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-        with:
-          # Latest stable
-          version: 9
-          # Use caching infrastructure from setup-node
-          run_install: false
+            - uses: pnpm/action-setup@v4
+              name: Install pnpm
+              with:
+                  # Latest stable
+                  version: 9
+                  # Use caching infrastructure from setup-node
+                  run_install: false
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          # Latest stable
-          node-version: 22
-          # Cache deps
-          cache: "pnpm"
+            - name: Install Node.js
+              uses: actions/setup-node@v4
+              with:
+                  # Latest stable
+                  node-version: 22
+                  # Cache deps
+                  cache: "pnpm"
 
-        # Install deps from lockfile to speed up resolution
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+              # Install deps from lockfile to speed up resolution
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
 
-      - name: Lint web project
-        run: pnpm lint
+            - name: Lint web project
+              run: pnpm lint
 
-      - name: Test web project
-        run: pnpm test
+            - name: Test web project
+              run: pnpm test
 
-  golangci:
-    name: Scraper lint
-    runs-on: ubuntu-latest
-    permissions:
-      # With at least one permission given, all default to read
-      contents: read
+    golangci:
+        name: Scraper lint
+        runs-on: ubuntu-latest
+        permissions:
+            # With at least one permission given, all default to read
+            contents: read
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup go
-        uses: actions/setup-go@v5
-        with:
-          go-version: stable
-          # Project is inside a sub folder
-          cache-dependency-path: |
-             scraper/go.sum
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Setup go
+              uses: actions/setup-go@v5
+              with:
+                  go-version: stable
+                  # Project is inside a sub folder
+                  cache-dependency-path: |
+                      scraper/go.sum
 
-      - name: Download deps
-        run: go mod download
-        # Works only for scripts not for actions
-        working-directory: ./scraper
+            - name: Download deps
+              run: go mod download
+              # Works only for scripts not for actions
+              working-directory: ./scraper
 
-      - name: Lint go
-        uses: golangci/golangci-lint-action@v6
-        with:
-          working-directory: ./scraper
+            - name: Lint go
+              uses: golangci/golangci-lint-action@v6
+              with:
+                  working-directory: ./scraper

@@ -6,24 +6,24 @@ const HOST = "http://localhost:8111";
  */
 export interface HudEvents {
     /** unknown always empty */
-    readonly events: [],
+    readonly events: [];
     /** battle log */
-    readonly damage: Damage[]
+    readonly damage: Damage[];
 }
 
 export interface Damage {
     /** increasing id */
-    readonly id: number,
+    readonly id: number;
     /** battle log message */
-    readonly msg: string,
+    readonly msg: string;
     /** always empty */
-    readonly sender: string,
+    readonly sender: string;
     /** always false */
-    readonly enemy: boolean,
+    readonly enemy: boolean;
     /** represents squad, team, all, etc, but is always empty atm */
-    readonly mode: string,
+    readonly mode: string;
     /** battle log timer in seconds */
-    readonly time: number
+    readonly time: number;
 }
 
 const GET_METHOD = "GET";
@@ -45,10 +45,56 @@ async function query(url: string): Promise<Response> {
     });
 
     if (!response.ok) {
-        throw new Error(`Unexpected response code: ${response.status.toLocaleString()}`);
+        throw new Error(
+            `Unexpected response code: ${response.status.toLocaleString()}`,
+        );
     }
 
     return response;
+}
+
+export interface SquadAvatar {
+    readonly username: string;
+    readonly avatar: string;
+}
+
+export enum EventSource {
+    Me,
+    Squad,
+    Team,
+    Enemy,
+}
+
+export interface SoundSetting {
+    readonly file: string;
+    readonly volume: number;
+}
+
+export interface EventTrigger {
+    readonly event: string;
+    readonly src: EventSource;
+
+    readonly layout?: string;
+    readonly sound?: SoundSetting[];
+}
+
+export interface Settings {
+    readonly lang: string;
+    readonly me: string;
+
+    readonly squad: SquadAvatar[];
+    readonly events: EventTrigger[];
+}
+
+export async function loadLocal(): Promise<Settings> {
+    const resp = await fetch("./settings.json", {
+        method: GET_METHOD,
+        headers: {
+            Accept: JSON_TYPE,
+        },
+    });
+
+    return (await resp.json()) as Settings;
 }
 
 /**
@@ -58,10 +104,15 @@ async function query(url: string): Promise<Response> {
  * @param seenDamange last damage id
  * @returns json response or error
  */
-export async function fetchHUD(seenEvent: number, seenDamange: number): Promise<HudEvents> {
+export async function fetchHUD(
+    seenEvent: number,
+    seenDamange: number,
+): Promise<HudEvents> {
     // connect
-    const resp = await query(`hudmsg?lastEvt=${seenEvent}&lastDmg=${seenDamange}`);
+    const resp = await query(
+        `hudmsg?lastEvt=${seenEvent}&lastDmg=${seenDamange}`,
+    );
 
     // fetch data
-    return await resp.json() as HudEvents;
+    return (await resp.json()) as HudEvents;
 }

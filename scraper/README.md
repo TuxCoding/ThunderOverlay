@@ -27,7 +27,7 @@ The [wt-tools](https://github.com/kotiq/wt-tools) project can be used to extract
 The relevant file for this project is the `units.csv` file. This file is part of `lang.vromfs.bin`. Therefore:
 
 1. Unpack the `vromfs.bin` file
->vromfs_unpacker lang.vromfs.bin
+    > vromfs_unpacker lang.vromfs.bin
 2. Copy the units.csv file into this folder
 3. Then you can run the go scraper to update mappings if necesseary
 

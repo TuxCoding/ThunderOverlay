@@ -14,7 +14,7 @@ body {
 
 :root {
     /* Brand color */
-    --color-accent: #00A3A3;
+    --color-accent: #00a3a3;
     --color-accent-dark: #00c0c0;
 
     /* Blue style that seems fit nice */
@@ -166,7 +166,8 @@ body {
 
     /* format: horizontal vertical blur color */
     /* Text border around chars */
-    text-shadow: 2px 0 black,
+    text-shadow:
+        2px 0 black,
         -2px 0 black,
         0 2px black,
         0 -2px black,
@@ -210,11 +211,16 @@ body {
     /* position */
     --smoke-start-x: 50px;
     /* Shortly after the tank icon that means after avatar with border and the vehicle width */
-    left: calc(var(--avatar-size) + var(--brand-border-width) + var(--vehicle-size-combined) * 2 - var(--smoke-start-x));
+    left: calc(
+        var(--avatar-size) + var(--brand-border-width) +
+            var(--vehicle-size-combined) * 2 - var(--smoke-start-x)
+    );
 
     /* Same position as the tank icon that is centered from the bigger avatar
     -> getting top and bottom margin of the tank icon to the avatar and divide by 2 to remove the bottom margin */
-    top: calc(0px - (var(--avatar-size) - var(--vehicle-size-combined)) / 2 - 20px);
+    top: calc(
+        0px - (var(--avatar-size) - var(--vehicle-size-combined)) / 2 - 20px
+    );
 }
 
 .ammu-firing {

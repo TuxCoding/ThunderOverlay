@@ -13,8 +13,11 @@ module.exports = {
         "^.+.tsx?$": ["ts-jest", {}],
     },
 
-    moduleNameMapper: pathsToModuleNameMapper({
-        "@App/*": ["src/*"],
-        "@Mapping/*": ["src/mappings/*"]
-    }, { prefix: '<rootDir>/' }),
+    moduleNameMapper: pathsToModuleNameMapper(
+        {
+            "@App/*": ["src/*"],
+            "@Mapping/*": ["src/mappings/*"],
+        },
+        { prefix: "<rootDir>/" },
+    ),
 };
