@@ -13,21 +13,25 @@ import (
 )
 
 // where the vehicle assets are stored
-const HTTPS_PREFIX = "https://"
+const HTTPSPrefix = "https://"
 
-const IMG_HOST = "encyclopedia.warthunder.com"
-const IMG_PATH = "/i/images/"
+const (
+	ImgHost = "encyclopedia.warthunder.com"
+	ImgPath = "/i/images/"
+)
 
-const WIKI_HOST = "wiki.warthunder.com"
+const WikiHost = "wiki.warthunder.com"
 
 // the wiki doesn't seem to support avif yet although the game files does
-const VEHICLE_WEB_EXT = ".png"
+const VehicleWebExt = ".png"
 
 // output files
-const MAPPING_OUTPUT = OUTPUT_DIR + "mappings" + JSON_EXT
-const IMG_OUTPUT = OUTPUT_DIR + "images.list"
+const (
+	MappingOut = OutDir + "mappings" + JSONExt
+	ImgOut     = OutDir + "images.list"
+)
 
-const CACHE_FOLDER = "./cache"
+const CacheFolder = "./cache"
 
 // scrape the wiki for images and file mappings
 func scrape() {
@@ -72,8 +76,8 @@ func visitPageHTML(el *colly.HTMLElement, imgLinks *[]string, mappings map[strin
 		*imgLinks = append(*imgLinks, imgSrc)
 
 		// add to mapping without the host and file extension to reduce size
-		cleanImg := strings.Replace(imgSrc, HTTPS_PREFIX+IMG_HOST+IMG_PATH, "", 1)
-		cleanImg = strings.TrimSuffix(cleanImg, VEHICLE_WEB_EXT)
+		cleanImg := strings.Replace(imgSrc, HTTPSPrefix+ImgHost+ImgPath, "", 1)
+		cleanImg = strings.TrimSuffix(cleanImg, VehicleWebExt)
 		mappings[tankTitle] = cleanImg
 	}
 }
@@ -87,9 +91,10 @@ func visitVehicleLink(el *colly.HTMLElement) {
 
 	// queue new visit to full page, relative links wouldn't work here
 	path := el.Request.AbsoluteURL(link)
+
 	err := el.Request.Visit(path)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }
 
@@ -113,19 +118,19 @@ func startScraping(col *colly.Collector) {
 	for _, page := range pages {
 		err := col.Visit(page)
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 }
 
 // write output files
 func writeOut(mappings map[string]string, queue []string) {
-	err := os.MkdirAll(OUTPUT_DIR, OUT_DIR_PERM)
+	err := os.MkdirAll(OutDir, OutDirPerm)
 	if err != nil {
-		log.Fatal("Failed to create output dir\n", err)
+		log.Panic("Failed to create output dir\n", err)
 	}
 
-	writeJSON(mappings, MAPPING_OUTPUT)
+	writeJSON(mappings, MappingOut)
 	writeImgList(queue)
 }
 
@@ -135,9 +140,9 @@ func writeImgList(queue []string) {
 	slices.Sort(queue)
 	queue = slices.Compact(queue)
 
-	file, err := os.Create(IMG_OUTPUT)
+	file, err := os.Create(ImgOut)
 	if err != nil {
-		log.Fatal("Failed to create image links file")
+		log.Panic("Failed to create image links file")
 	}
 
 	defer file.Close()
@@ -148,11 +153,11 @@ func writeImgList(queue []string) {
 	for _, link := range queue {
 		// list of image links separated by new lines
 		if _, err := writer.WriteString(link); err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 
 		if _, err := writer.WriteString("\n"); err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 	}
 }
@@ -161,20 +166,19 @@ func writeImgList(queue []string) {
 func createCollector() *colly.Collector {
 	col := colly.NewCollector(
 		// wiki and img hosting site
-		colly.AllowedDomains(WIKI_HOST, IMG_HOST),
+		colly.AllowedDomains(WikiHost, ImgHost),
 		// activate cache for multiple invocations
-		colly.CacheDir(CACHE_FOLDER),
+		colly.CacheDir(CacheFolder),
 		// we only need one depth from category to vehicle
 		colly.MaxDepth(1),
 	)
 
 	err := col.Limit(&colly.LimitRule{
-		//Parallelism: 2,
+		Parallelism: 2,
 		RandomDelay: 10 * time.Second,
 	})
-
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	col.OnRequest(func(req *colly.Request) {

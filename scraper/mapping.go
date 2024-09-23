@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"reflect"
-	"sort"
 	"strings"
 
 	"github.com/jszwec/csvutil"
@@ -44,63 +43,32 @@ type UnitRecord struct {
 	MaxChars string `csv:"<max_chars>"`
 }
 
+const TotalLanguages = 21
+
 // files
-const UNITS_FILE = "units.csv"
-const JSON_EXT = ".json"
+const (
+	UnitsFile = "units.csv"
+	JSONExt   = ".json"
+)
 
 // project file locations
-const VEHICLE_PATH = "../src/assets/img/vehicles/"
-const VEHICLE_GAME_EXT = ".avif"
+const (
+	VehiclePath    = "../src/assets/img/vehicles/"
+	VehicleGameExt = ".avif"
+)
 
 // _0 seems to represent tech tree, _1 battle log/short name, _2 vehicle type
-const VEHICLE_TECH_ID = "_0"
-const VEHICLE_LOCAL_ID = "_1"
-const VEHICLE_TYPE_ID = "_2"
+const (
+	VehicleTechID  = "_0"
+	VehicleLocalID = "_1"
+	VehicleTypeID  = "_2"
+)
 
-const NUKE_DRONE_ID = "killstreak"
-
-type LanguageMap struct {
-	lang string
-
-	// vehicle type -> (localized name -> vehicle id)
-	typedMap map[string]map[string]string
-}
-
-func (langMap LanguageMap) addVehicle(localName, vehicleType, vehicleID string) {
-	typeMap := langMap.typedMap[vehicleType]
-	if typeMap == nil {
-		typeMap = make(map[string]string)
-		langMap.typedMap[vehicleType] = typeMap
-	}
-
-	overridden := langMap.checkedAdd(typeMap, localName, vehicleID)
-	if overridden != "" {
-		log.Printf(
-			"[%s] Overriding same language key in and type %s (%s): (%s)->(%s)\n",
-			langMap.lang, localName, vehicleType, overridden, vehicleID,
-		)
-	}
-}
-
-func (LanguageMap) checkedAdd(collection map[string]string, key, vehicleID string) string {
-	// check if we are overriding an existing value because the localized name represents multiple vehicles
-	prevItem, found := collection[key]
-	if found {
-		if prevItem == vehicleID {
-			// same entry ignore
-			return ""
-		}
-
-		return prevItem
-	}
-
-	collection[key] = vehicleID
-	return ""
-}
+const NukeDroneID = "killstreak"
 
 func createMapping() {
 	// read all at once
-	records := parseUnits(UNITS_FILE)
+	records := parseUnits(UnitsFile)
 
 	// convert records to array of structs
 	convertMap(records)
@@ -110,7 +78,7 @@ func createMapping() {
 func parseUnits(fileName string) []UnitRecord {
 	file, err := os.Open(fileName)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	defer file.Close()
@@ -121,7 +89,7 @@ func parseUnits(fileName string) []UnitRecord {
 
 	dec, err := csvutil.NewDecoder(csvReader)
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 
 	var records []UnitRecord
@@ -131,7 +99,7 @@ func parseUnits(fileName string) []UnitRecord {
 			// ending
 			break
 		} else if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 		}
 
 		records = append(records, record)
@@ -145,7 +113,7 @@ func assetExists(prefix, file string) bool {
 	// UNIX systems are case-sensitive so convert all to lowercase
 	file = strings.ToLower(file)
 
-	path := VEHICLE_PATH + prefix + "/" + file + VEHICLE_GAME_EXT
+	path := VehiclePath + prefix + "/" + file + VehicleGameExt
 	if _, err := os.Stat(path); err == nil {
 		return true
 	}
@@ -155,8 +123,8 @@ func assetExists(prefix, file string) bool {
 
 // invert map from vehicleID -> localized name to localized name -> vehicleID
 func convertMap(records []UnitRecord) {
-	// map of language -> map of records
-	byLangMap := make(map[string]LanguageMap)
+	// map of language -> map of recordsf
+	byLangMap := make(map[string]LanguageMap, TotalLanguages)
 
 	// create a new map for each language
 	for idx := range records {
@@ -172,10 +140,10 @@ func convertMap(records []UnitRecord) {
 		}
 
 		// only interested it vehicle localized for the battle log format
-		vehicleID, found := strings.CutSuffix(recordID, VEHICLE_LOCAL_ID)
+		vehicleID, found := strings.CutSuffix(recordID, VehicleLocalID)
 		if found {
 			// remove killstreak suffix for nukes or drones
-			trimmedID, foundStreak := strings.CutSuffix(vehicleID, "_"+NUKE_DRONE_ID)
+			trimmedID, foundStreak := strings.CutSuffix(vehicleID, "_"+NukeDroneID)
 			if foundStreak && containsNationSuffix(trimmedID) {
 				continue
 			}
@@ -184,15 +152,17 @@ func convertMap(records []UnitRecord) {
 		}
 	}
 
+	parseKeywords(byLangMap)
+
 	// write all languages
-	err := os.MkdirAll(OUTPUT_DIR, OUT_DIR_PERM)
+	err := os.MkdirAll(OutDir, OutDirPerm)
 	if err != nil {
-		log.Fatal("Failed to create output dir\n", err)
+		log.Panic("Failed to create output dir\n", err)
 	}
 
 	for lang, mapping := range byLangMap {
-		checkCommonKeys(lang, mapping)
-		writeLangMapping(mapping, lang)
+		checkCommonKeys(lang, &mapping)
+		writeLangMapping(&mapping, lang)
 	}
 }
 
@@ -217,11 +187,11 @@ func containsNationSuffix(vehicleID string) bool {
 }
 
 // verify if the localized names are unique across all vehicle types
-func checkCommonKeys(lang string, mapping LanguageMap) {
+func checkCommonKeys(lang string, mapping *LanguageMap) {
 	seenNames := make(map[string]bool)
 
 	// this map already accounts for duplicate inside each vehicle type, because they were filtered before on creation
-	for _, typedMap := range mapping.typedMap {
+	for _, typedMap := range mapping.TypedMap {
 		for localName, vehicleID := range typedMap {
 			_, found := seenNames[localName]
 			if found {
@@ -241,34 +211,9 @@ func visitUserVehicle(byLangMap map[string]LanguageMap, vehicleID string, record
 	}
 
 	// go through each language column
-	for fieldIndex, field := range reflect.VisibleFields(reflect.TypeOf(UnitRecord{})) {
-		fieldName := field.Name
-		if fieldName == "ID" || fieldName == "Comments" || fieldName == "MaxChars" {
-			// skip meta data
-			continue
-		}
-
-		normalizedLangName := strings.ToLower(fieldName)
-
-		localName := reflect.ValueOf(*record).Field(fieldIndex).Interface().(string)
-		if localName == "" {
-			// skip if no localized name is found like for the footbal an expired event
-			continue
-		}
-
-		langMap := byLangMap[normalizedLangName]
-		if reflect.ValueOf(langMap).IsZero() {
-			// create new map
-			langMap = LanguageMap{
-				lang:     fieldName,
-				typedMap: map[string]map[string]string{},
-			}
-
-			byLangMap[normalizedLangName] = langMap
-		}
-
+	fillEachLang(byLangMap, record, func(langMap *LanguageMap, localName string) {
 		langMap.addVehicle(localName, vehicleType, vehicleID)
-	}
+	})
 }
 
 // returns first compatible vehicle type match with retrieved assets
@@ -309,7 +254,7 @@ func logRecord(record *UnitRecord, vehicleID string) {
 		log.Printf("%s has metadata: comment->'%s' max->'%s'\n", vehicleID, comment, maxChars)
 	}
 
-	if strings.LastIndex(vehicleID, NUKE_DRONE_ID) != -1 {
+	if strings.LastIndex(vehicleID, NukeDroneID) != -1 {
 		log.Printf("Nuke/Drone: %s %s \n", vehicleID, record.English)
 	}
 }
@@ -319,12 +264,14 @@ func isUserVehicle(vehicleID string) bool {
 	// ignore other vehicle objects that are translated
 	// we are only interested in user controllable vehicles
 	if strings.HasPrefix(vehicleID, "wheeled_vehicles/") ||
+		//nolint:misspell // misspelling comes from game client itself
 		strings.HasPrefix(vehicleID, "air_defence/") ||
 		strings.HasPrefix(vehicleID, "tracked_vehicles/") ||
 		strings.HasPrefix(vehicleID, "ships/") ||
 		strings.HasPrefix(vehicleID, "structures/") ||
 		strings.HasPrefix(vehicleID, "radars/") ||
 		strings.HasPrefix(vehicleID, "shop/group/") ||
+
 		strings.LastIndex(vehicleID, "tutorial") != -1 ||
 		strings.LastIndex(vehicleID, "exoskeleton") != -1 ||
 		strings.LastIndex(vehicleID, "event") != -1 {
@@ -334,32 +281,80 @@ func isUserVehicle(vehicleID string) bool {
 	return true
 }
 
-// get sorted list of map
-func sortedKeys[V any](m map[string]V) []string {
-	var keys []string
-	for key := range m {
-		keys = append(keys, key)
+const (
+	KilledPlane  = "NET_UNIT_KILLED_FM"
+	KilledGround = "NET_UNIT_KILLED_GM"
+)
+
+const (
+	NukeSuccessAward = "streaks/killStreak_bomber_nuclear_success"
+	FirstBloodAward  = "streaks/first_blood"
+)
+
+func parseKeywords(byLangMap map[string]LanguageMap) {
+	uiRecords := parseUnits("ui.csv")
+
+	for idx := range uiRecords {
+		record := uiRecords[idx]
+
+		switch record.ID {
+		case KilledPlane:
+			fillEachLang(byLangMap, &record, func(langMap *LanguageMap, localName string) {
+				langMap.FlightDestroyed = localName
+			})
+
+		case KilledGround:
+			fillEachLang(byLangMap, &record, func(langMap *LanguageMap, localName string) {
+				langMap.GroundDestroyed = localName
+			})
+		}
 	}
 
-	sort.Strings(keys)
-	return keys
+	awardRecords := parseUnits("unlocks_streaks.csv")
+	for idx := range awardRecords {
+		record := awardRecords[idx]
+
+		switch record.ID {
+		case NukeSuccessAward:
+			fillEachLang(byLangMap, &record, func(langMap *LanguageMap, localName string) {
+				langMap.NukeDeployed = localName
+			})
+		case FirstBloodAward:
+			fillEachLang(byLangMap, &record, func(langMap *LanguageMap, localName string) {
+				langMap.FirstBlood = localName
+			})
+		}
+	}
 }
 
-// write mapping to filesystem
-func writeLangMapping(mapping LanguageMap, lang string) {
-	// sort by type keys and inside each type
-	sortedLangMap := make(map[string]map[string]string)
-	for _, vehicleType := range sortedKeys(mapping.typedMap) {
-		sortedTypeMap := make(map[string]string)
+type langFunc func(langMap *LanguageMap, localName string)
 
-		// sort inside the vehicle types too
-		typeMap := mapping.typedMap[vehicleType]
-		for _, localName := range sortedKeys(typeMap) {
-			sortedTypeMap[localName] = typeMap[localName]
+func fillEachLang(byLangMap map[string]LanguageMap, record *UnitRecord, langFunc langFunc) {
+	for fieldIndex, field := range reflect.VisibleFields(reflect.TypeOf(UnitRecord{})) {
+		fieldName := field.Name
+		if fieldName == "ID" || fieldName == "Comments" || fieldName == "MaxChars" {
+			// skip meta data
+			continue
 		}
 
-		sortedLangMap[vehicleType] = mapping.typedMap[vehicleType]
-	}
+		normalizedLangName := strings.ToLower(fieldName)
 
-	writeJSON(sortedLangMap, OUTPUT_DIR+lang+JSON_EXT)
+		localName := reflect.ValueOf(*record).Field(fieldIndex).Interface().(string)
+		if localName == "" {
+			// skip if no localized name is found like for the footbal an expired event
+			continue
+		}
+
+		langMap, found := byLangMap[normalizedLangName]
+		if !found {
+			// create new map
+			langMap.Lang = fieldName
+			langMap.TypedMap = make(map[string]map[string]string, 3)
+		}
+
+		langFunc(&langMap, localName)
+
+		// update the value inside the map
+		byLangMap[normalizedLangName] = langMap
+	}
 }
