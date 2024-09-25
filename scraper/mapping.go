@@ -43,7 +43,10 @@ type UnitRecord struct {
 	MaxChars string `csv:"<max_chars>"`
 }
 
-const TotalLanguages = 21
+const (
+	TotalLanguages    = 21
+	TotalVehicleTypes = 3
+)
 
 // files
 const (
@@ -111,9 +114,9 @@ func parseUnits(fileName string) []UnitRecord {
 // check if corresponding image file eixists
 func assetExists(prefix, file string) bool {
 	// UNIX systems are case-sensitive so convert all to lowercase
-	file = strings.ToLower(file)
+	normalizedFile := strings.ToLower(file)
 
-	path := VehiclePath + prefix + "/" + file + VehicleGameExt
+	path := VehiclePath + prefix + "/" + normalizedFile + VehicleGameExt
 	if _, err := os.Stat(path); err == nil {
 		return true
 	}
@@ -190,12 +193,16 @@ func containsNationSuffix(vehicleID string) bool {
 func checkCommonKeys(lang string, mapping *LanguageMap) {
 	seenNames := make(map[string]bool)
 
-	// this map already accounts for duplicate inside each vehicle type, because they were filtered before on creation
+	// this map already accounts for duplicate inside each vehicle type,
+	// because they were filtered before on creation
 	for _, typedMap := range mapping.TypedMap {
 		for localName, vehicleID := range typedMap {
 			_, found := seenNames[localName]
 			if found {
-				log.Printf("[%s] Found duplicate localized name (%s->%s) across different vehicle types\n", lang, localName, vehicleID)
+				log.Printf(
+					"[%s] Found duplicate localized name (%s->%s) across different vehicle types\n",
+					lang, localName, vehicleID,
+				)
 			} else {
 				seenNames[localName] = true
 			}
@@ -225,7 +232,7 @@ func getVehicleType(vehicleID string) string {
 		"ships",
 	}
 
-	types := []string{}
+	var types []string
 	for _, folder := range assetFolders {
 		if assetExists(folder, vehicleID) {
 			types = append(types, folder)
@@ -250,6 +257,7 @@ func getVehicleType(vehicleID string) string {
 func logRecord(record *UnitRecord, vehicleID string) {
 	comment := strings.TrimSpace(record.Comments)
 	maxChars := strings.TrimSpace(record.MaxChars)
+
 	if comment != "" || maxChars != "" {
 		log.Printf("%s has metadata: comment->'%s' max->'%s'\n", vehicleID, comment, maxChars)
 	}
@@ -263,19 +271,33 @@ func logRecord(record *UnitRecord, vehicleID string) {
 func isUserVehicle(vehicleID string) bool {
 	// ignore other vehicle objects that are translated
 	// we are only interested in user controllable vehicles
-	if strings.HasPrefix(vehicleID, "wheeled_vehicles/") ||
-		//nolint:misspell // misspelling comes from game client itself
-		strings.HasPrefix(vehicleID, "air_defence/") ||
-		strings.HasPrefix(vehicleID, "tracked_vehicles/") ||
-		strings.HasPrefix(vehicleID, "ships/") ||
-		strings.HasPrefix(vehicleID, "structures/") ||
-		strings.HasPrefix(vehicleID, "radars/") ||
-		strings.HasPrefix(vehicleID, "shop/group/") ||
+	// this reduces the errors reported when finding the vehicle asset
+	ignoredPrefix := []string{
+		"wheeled_vehicles/",
+		"air_defence/",
+		"tracked_vehicles/",
+		"ships/",
+		"structures/",
+		"radars/",
+		"shop/ground/",
+	}
 
-		strings.LastIndex(vehicleID, "tutorial") != -1 ||
-		strings.LastIndex(vehicleID, "exoskeleton") != -1 ||
-		strings.LastIndex(vehicleID, "event") != -1 {
-		return false
+	for _, prefix := range ignoredPrefix {
+		if strings.HasPrefix(vehicleID, prefix) {
+			return false
+		}
+	}
+
+	ignoredTypes := []string{
+		"tutorial",
+		"exoskeleton",
+		"event",
+	}
+
+	for _, id := range ignoredTypes {
+		if strings.LastIndex(vehicleID, id) != -1 {
+			return false
+		}
 	}
 
 	return true
@@ -319,6 +341,7 @@ func parseKeywords(byLangMap map[string]LanguageMap) {
 			fillEachLang(byLangMap, &record, func(langMap *LanguageMap, localName string) {
 				langMap.NukeDeployed = localName
 			})
+
 		case FirstBloodAward:
 			fillEachLang(byLangMap, &record, func(langMap *LanguageMap, localName string) {
 				langMap.FirstBlood = localName
@@ -330,6 +353,7 @@ func parseKeywords(byLangMap map[string]LanguageMap) {
 type langFunc func(langMap *LanguageMap, localName string)
 
 func fillEachLang(byLangMap map[string]LanguageMap, record *UnitRecord, langFunc langFunc) {
+	//nolint:exhaustruct // we are checking only the type
 	for fieldIndex, field := range reflect.VisibleFields(reflect.TypeOf(UnitRecord{})) {
 		fieldName := field.Name
 		if fieldName == "ID" || fieldName == "Comments" || fieldName == "MaxChars" {
@@ -339,8 +363,8 @@ func fillEachLang(byLangMap map[string]LanguageMap, record *UnitRecord, langFunc
 
 		normalizedLangName := strings.ToLower(fieldName)
 
-		localName := reflect.ValueOf(*record).Field(fieldIndex).Interface().(string)
-		if localName == "" {
+		localName, ok := reflect.ValueOf(*record).Field(fieldIndex).Interface().(string)
+		if !ok || localName == "" {
 			// skip if no localized name is found like for the footbal an expired event
 			continue
 		}
@@ -349,7 +373,7 @@ func fillEachLang(byLangMap map[string]LanguageMap, record *UnitRecord, langFunc
 		if !found {
 			// create new map
 			langMap.Lang = fieldName
-			langMap.TypedMap = make(map[string]map[string]string, 3)
+			langMap.TypedMap = make(map[string]map[string]string, TotalVehicleTypes)
 		}
 
 		langFunc(&langMap, localName)
