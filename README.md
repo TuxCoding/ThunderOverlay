@@ -58,7 +58,7 @@ pnpm install
 pnpm test
 # Optional (Development): linting
 pnpm lint
-# Compile TypeScript
+# Compile TypeScript to build the project
 pnpm watchJS
 ```
 
@@ -239,8 +239,12 @@ The web server from the game client is only provided by the full client version.
 ### How does it work?
 
 It extracts the data from the battle log. This log is pulled from the the web server `http://localhost:9111` provided
-by the War Thunder client itself. It parses the corresponding raw data to player and vehicle names and then looks up
-the corresponding image data provided by the game files or wiki.
+by the War Thunder client itself. It parses the corresponding textual data about player and vehicle names. Then, the localized vehicle
+names are translated back to vehicle identifiers using name mappings from the game client. This allows us to find the correct vehicle image,
+because the game files uses those identifiers. Squad membership and player avatars are unfortunatly manually configurred, but are less likely to change.
+
+The kill notification is then displayed using CSS animations on a transparant background. The smoke effect is shown with a video where
+the green background is keyed out to add an alpha channel in order to make it transparant as well.
 
 ## Credits
 
