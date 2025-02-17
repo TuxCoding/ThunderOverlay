@@ -4,7 +4,10 @@
 
 This project models a web source displaying [War Thunder](https://warthunder.com/) in-game events to be integrated into
 [OBS](https://obsproject.com/) or similar streaming software. The primary focus is the integration of a visual kill feed
-for squad members during match. You can see demonstration here:
+for squad members during matches. This could include an image of the vehicle helping people who are not familiar with all
+the vehicle names.
+
+You can see demonstration here (low quality to be hosted on GitHub):
 
 [Kill overlay.webm](https://github.com/user-attachments/assets/f61f20fa-680b-49d0-852d-6f0a91345aa2)
 
@@ -14,9 +17,11 @@ for squad members during match. You can see demonstration here:
     -   Tanks
     -   Planes
     -   Helicopter
-    -   Ships
+    -   Navy
     -   Nukes and drones too ;)
 -   Multi language support
+-   Sound effects
+    -   Like [this](https://www.youtube.com/watch?v=e-ZLycuRLwc) for nukes
 
 #### Further ideas
 
@@ -31,17 +36,16 @@ for squad members during match. You can see demonstration here:
             -   marked enemies on map
             -   and more.
         -   However, we are required to re-create or find another source for these type of sounds as those above are copyrighted
-    -   "Streamer" sounds
+    -   `Streamer` sounds
         -   "Dumb ways to die" if you fly into a wall (`selfkill`)
         -   "Wilhelm scream" if you lost a crew member
     -   Drive gear switching sound
-    -   etc.
     -   Similar to this great project: [WTRTI](https://github.com/MeSoftHorny/WTRTI/), but for ground vehicles
 
 ### Goals
 
-The goal of this project is solely to provide visual appealing overlay for viewer. For example by displaying the vehicle
-images for people not familiar with the vehicle names or display squad kills in a more prominent way.
+The goal of this project is solely to provide visual appealing overlay for viewers. For example by displaying the vehicle
+images for people not familiar with the vehicle names or displaying kills from squad members in a more prominent way.
 
 This goal of this project is **never** to provide gameplay advantages over the vanilla behavior to the player.
 
@@ -60,15 +64,84 @@ pnpm watchJS
 
 ## Installation
 
-Warning: the overlay needs to refreshed after starting War Thunder at the moment.
+Warning: the overlay needs to be refreshed after starting War Thunder at the moment.
 
-### Notification feed
+1. Download the project
+2. Open `src/settings.json` in a text editor and edit
+<details>
+<summary>
+settings.json
+</summary>
+
+```json
+{
+    // required to read the battle log, available language identifiers can be retrieved from "src/mappings" folder based on the file names
+    "lang": "german",
+    // your own username without squadron prefix to filter events
+    "me": "TuxCode",
+    // list of your squad and you and the corresponding avatar names
+    "squad": [
+        {
+            // again username without squadron
+            "username": "TuxCode",
+            // Avatar name can be extracted from: https://warthunder.com/de/community/userinfo?nick=TuxCode
+            // and opening getting the image url like opening it in a new tab
+            "avatar": "cardicon_esport_drops"
+        },
+        {
+            "username": "Wingman",
+            "avatar": "cardicon_bundeswehr_infantryman"
+        }
+    ],
+    // what should happen for certain game events
+    "events": [
+        {
+            // <kill|firstblood|nuke>
+            "event": "kill",
+            // Either one of those <me|squad|all>
+            "src": "squad",
+            // what visual representation should be displayed
+            "layout": "xyz"
+        },
+        {
+            "event": "firstblood",
+            "src": "me",
+            "sound": [
+                {
+                    // sound file from src/assets/sound
+                    "file": "xyz.opus",
+                    // percentage value from 0-100%
+                    "volume": 10
+                }
+            ]
+        },
+        {
+            "event": "nuke",
+            "src": "all",
+            "sound": [
+                // if multiple sounds are given, a random one will be played
+                {
+                    "file": "xyz.opus",
+                    "volume": 10
+                },
+                {
+                    "file": "xyz.opus",
+                    "volume": 10
+                }
+            ]
+        }
+    ]
+}
+```
+</details>
+
+### Kill feed
 
 1. Add browser source pointing to local file `NotificationFeed`
 2. Set browser size to: `1200x400`
 3. Move it to the correct position
-    - I found horizontal centered and height `150px` a good fit below mission object and above a kill notification
-4. Cut out at the bottom `200px` using transformation to make it slide out of nowhere
+    - I found horizontal centered and height `150px` a good fit below the mission objective and above a kill notification
+4. Cut out at the bottom `200px` using transformation to make it slide out
 
 ### Videos/GIF kill feed
 
@@ -128,12 +201,13 @@ Only a mockup:
 ### What doesn't work?
 
 -   Squad members cannot be extracted automatically and have to be added manually
-    -   The data from the webinterface indicates that this feature is only available for game chat (`mode` field)
--   Count kill assists reliably
-    -   There is a streak award, but it would only be printed for > 2 kills in a row
-    -   We can detect critical damage from the battle log, but it could be unreliable to assume assists later. Maybe you could proove it otherwise?
+    -   The data from the webinterface indicates that this feature is only available for game chat (`mode` field).
+        For kill activity the field is empty.
+-   Count kill assists
+    -   There is a streak award, but it would only be printed for `> 2` kills in a row
+    -   We can detect critical damage from the battle log, but it could be unreliable to assume assists later.
 -   Avatars cannot be downloaded on the fly i.e. for enemies
-    -   Avatars selection is limited
+    -   There is only a limited set of avatars available
     -   However, we found no way to find out which of those is selected
     -   There is:
         -   The stats site, but it's bot protected [Stats](https://warthunder.com/de/community/userinfo?nick=TuxCode)
@@ -142,13 +216,14 @@ Only a mockup:
 -   Which kind of ammunition was used
     -   This data is exposed in the in-game battle log, but not available in the web interface
     -   Well, we could use optical character recognition, but this would be overkill and a performance hit
-    -   We could make a database of standard ammunition per tank, but it would be very time consuming and not always true
+    -   We could make a database of standard ammunition per tank, but it would be very time consuming and not always match the reality
 -   Vehicle images could be mapped to multiple names and is therefore not precise
     -   The name `T-34` is mapped to multiple vehicles like `ussr_t_34_1941` or `ussr_t_34_1942`, so only a single image is used
     -   A few names are not unique across all vehicle types
         -   `English` has only two cases. Namely `Milan`->[`mirage_milan`(air), `fr_destroyer_aigle_class_milan`] and `Ariete`
         -   However, the maximum of those cases across all languages are only `6`
-        -   It's possible to detect the destroyed vehicle type based on destroyed trigger word (e.g. `shot down` or `destroyed`), although this is not possible for damage source vehicle.
+        -   It's possible to detect the destroyed vehicle type based on destroyed trigger word (e.g. `shot down` or `destroyed`), but this is dependend on
+        damage source vehicle and won't help to verify the type of the destroyed vehicle
 
 ### The overlay doesn't work with the minimal client
 
