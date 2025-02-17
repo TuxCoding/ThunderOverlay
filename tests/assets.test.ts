@@ -188,6 +188,11 @@ describe("find vehicles with special names", () => {
 describe("Special handling unnecessary", () => {
     const specialVehicleNames = Object.keys(specialMapping);
 
+    /**
+     * Check if the file is found in any mapping
+     * @param vehicle vehicle identifier like the file is named
+     * @returns true if found anywhere
+     */
     function isFoundInDefaultMap(vehicle: string): boolean {
         const vehicleTypes: Mapping[] = [
             groundMapping,

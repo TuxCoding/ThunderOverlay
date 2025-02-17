@@ -31,7 +31,6 @@ const JSON_TYPE = "application/json";
 
 /**
  * Query new json response
- *
  * @param url URL location behind host name
  * @returns json or error
  */
@@ -86,7 +85,11 @@ export interface Settings {
     readonly events: EventTrigger[];
 }
 
-export async function loadLocal(): Promise<Settings> {
+/**
+ * Load current settings file
+ * @returns current settings
+ */
+export async function loadLocale(): Promise<Settings> {
     const resp = await fetch("./settings.json", {
         method: GET_METHOD,
         headers: {
@@ -99,7 +102,6 @@ export async function loadLocal(): Promise<Settings> {
 
 /**
  * Fetch new hud event message
- *
  * @param seenEvent last event id
  * @param seenDamange last damage id
  * @returns json response or error

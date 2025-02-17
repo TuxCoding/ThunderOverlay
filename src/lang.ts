@@ -9,6 +9,7 @@ export enum DESTROY_TYPE {
     PLANE_DESTROYED = "abgeschossen",
     // NET_UNIT_KILLED_GM
     GROUND_DESTROYED = "zerstört",
+    // TODO: was used once?
     BOMB_DESTROYED = "bomb",
     // NET_PLAYER_GM_HAS_DESTROYED
     SELFKILL_GROUND = "NET_PLAYER_GM_HAS_DESTROYED",
@@ -17,6 +18,8 @@ export enum DESTROY_TYPE {
 }
 
 /**
+ *
+ *
  * ui.csv
  */
 export enum Types {

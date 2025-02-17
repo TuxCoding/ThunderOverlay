@@ -3,13 +3,18 @@ import type { HudEvents } from "@App/network";
 import * as fs from "fs";
 
 describe("Test file parsing", () => {
+    /**
+     * Load file async and parse it
+     * @param path file name in events folder
+     * @returns loaded file
+     */
     async function loadFile(path: string) {
         const resp = await fs.promises.readFile(
             `./tests/resources/events/${path}`,
             "utf8",
         );
-        const raw = JSON.parse(resp) as HudEvents;
 
+        const raw = JSON.parse(resp) as HudEvents;
         return raw;
     }
 
@@ -28,12 +33,12 @@ describe("Test file parsing", () => {
             damage: [damage],
         };
 
-        const events = await loadFile("/simple.json");
+        const events = await loadFile("simple.json");
         expect(events).toStrictEqual(expected);
     });
 
     test("Empty", async () => {
-        const events = await loadFile("/empty.json");
+        const events = await loadFile("empty.json");
 
         const expected: HudEvents = {
             events: [],
@@ -44,7 +49,7 @@ describe("Test file parsing", () => {
     });
 
     test("Multiple events", async () => {
-        const events = await loadFile("/multiple.json");
+        const events = await loadFile("multiple.json");
 
         const expected: HudEvents = {
             events: [],

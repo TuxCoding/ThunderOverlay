@@ -23,7 +23,7 @@ body {
     /* Box background shadow color */
     --color-shadow: black;
 
-    /* Text styling */
+    /* Text styling #428bca looks great too */
     --text-base-color: white;
     --text-normal-size: 1.3rem;
     --text-normal-weight: bolder;
