@@ -20,9 +20,7 @@ linters:
     # No forbidden deps
     - depguard
     # Deprecated
-    - exportloopref
-    - execinquery
-    - gomnd
+    - tenv
 
 # Specific linter settings
 linters-settings:
