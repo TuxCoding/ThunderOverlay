@@ -66,8 +66,8 @@ pnpm watchJS
 
 * OBS 31+
     * Project uses CSS nesting which the browser inside OBS in older version doesn't support
-* Use the full game client -> don't have game quality set to minimal
-    * Otherwise the web server from War Thunder accessible under `http://localhost:9111` doesn't run
+* Use the full game client (don't have game quality set to minimal)
+    * The web server accessible under `http://localhost:9111` from the game client is only provided by the full client version.
 
 ## Installation
 
@@ -84,12 +84,10 @@ settings.json
 {
     // required to read the battle log, available language identifiers can be retrieved from "src/mappings" folder based on the file names
     "lang": "german",
-    // your own username without squadron prefix to filter events
-    "me": "TuxCode",
     // list of your squad and you and the corresponding avatar names
     "squad": [
         {
-            // again username without squadron
+            // again username without squadron tag
             "username": "TuxCode",
             // Avatar name can be extracted from: https://warthunder.com/de/community/userinfo?nick=TuxCode
             // and opening getting the image url like opening it in a new tab
@@ -150,6 +148,16 @@ settings.json
     - I found horizontal centered and height `150px` a good fit below the mission objective and above a kill notification
 4. Cut out at the bottom `200px` using transformation to make it slide out
 
+<details>
+<summary>
+Earlier variants
+</summary>
+
+![2Avatars.avif](https://github.com/user-attachments/assets/e64fcdfb-8f27-4b25-b041-009b55e90593)
+
+![Single line.avif](https://github.com/user-attachments/assets/e6c15087-ea43-4655-b6cf-b57c008c4ab9)
+</details>
+
 ### Videos/GIF kill feed
 
 For example for special events like bomb kills.
@@ -163,17 +171,7 @@ Only a mockup:
 
 </details>
 
-<details>
-<summary>
-Earlier variants
-</summary>
-
-![2Avatars.avif](https://github.com/user-attachments/assets/e64fcdfb-8f27-4b25-b041-009b55e90593)
-
-![Single line.avif](https://github.com/user-attachments/assets/e6c15087-ea43-4655-b6cf-b57c008c4ab9)
-</details>
-
-### Team
+### Team (idea only)
 
 <details>
 <summary>
@@ -184,7 +182,7 @@ Only a mockup:
 
 </details>
 
-### Summary
+### Summary (idea only)
 
 <details>
 <summary>
@@ -195,13 +193,16 @@ Only a mockup:
 
 </details>
 
-## Ideas
+### Have any issues?
 
--   Make squadron tag and/or player name toggleable
--   Multi language support
--   Multiple layouts
-    -   User selectable
-    -   Type based like: vehicle, damage source, etc.
+If you have any issues, you could check the logs for any errors.
+
+Either:
+1. Open the overlay in a standard webbrowser
+    * Then open the developer tools - Press F12
+    * Click on `console` to check for any errors.
+2. Check the OBS logs
+    * by opening OBS in a terminal or find the `obs-studio/logs` folder
 
 ## FAQ
 
@@ -231,10 +232,6 @@ Only a mockup:
         -   However, the maximum of those cases across all languages are only `6`
         -   It's possible to detect the destroyed vehicle type based on destroyed trigger word (e.g. `shot down` or `destroyed`), but this is dependend on
         damage source vehicle and won't help to verify the type of the destroyed vehicle
-
-### The overlay doesn't work with the minimal client
-
-The web server from the game client is only provided by the full client version.
 
 ### How does it work?
 
