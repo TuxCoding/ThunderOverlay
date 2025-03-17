@@ -1,6 +1,6 @@
 /* Warning: OBS is not compatible with CSS nesting */
 
-/* Default OBS CSS rules */
+/* Default OBS CSS rules for use in browser testing */
 body {
     /* transparent background */
     background-color: rgba(0 0 0 0);
@@ -396,5 +396,7 @@ body {
     /* It's our own font, there is no generic one */
     /* stylelint-disable-next-line font-family-no-missing-generic-family-keyword */
     font-family: Icons;
+
+    /* Make it slightly large to align more with text */
     font-size: calc(var(--text-normal-size) + 0.5rem);
 }

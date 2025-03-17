@@ -10,6 +10,7 @@ export default tseslint.config(
         ignores: ['jest.config.js', 'src/assets/**'],
     },
     {
+        // Add warnings for missing simicolons
         rules: {
             semi: ["warn", "always"],
         },

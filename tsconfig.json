@@ -19,8 +19,6 @@
 
     // we are bundling the project
     "moduleResolution": "Bundler",                     /* Specify how TypeScript looks up a file from a given module specifier. */
-    "outDir": "./build",                               /* Specify an output folder for all emitted files. */
-
     "noEmit": true,                                    /* Disable emitting files from a compilation. */
 
     // strictness
@@ -54,6 +52,7 @@
     //"allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
 
     /* Completeness */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
+    "skipDefaultLibCheck": true
   }
 }

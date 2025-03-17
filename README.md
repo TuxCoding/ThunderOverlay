@@ -79,5 +79,5 @@ the corresponding image data provided by the wiki.
         * Text font
         * Foreign vehicle prefix
     * Vehicle symbols (i.e. fighter and tank) from the webinterface itself
-* Vehicle images from the wiki
+* Vehicle images from the wiki or game
 * APFDS shell from shooting range video

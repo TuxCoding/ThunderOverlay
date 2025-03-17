@@ -70,7 +70,7 @@ describe('find vehicle', () => {
         expect(findVehicleFile("T-62")).toBe("./assets/img/vehicles/ground/ussr_t_62.avif");
     });
 
-    test('Different name mapping from wiki', () => {
+    test('if vehicle found with non-break spaces', () => {
         expect(findVehicleFile("Fw 190 D")).toBe("./assets/img/vehicles/air/fw-190d-13.avif");
     });
 });
@@ -102,6 +102,7 @@ describe('Special handling unnecessary', () => {
 });
 
 describe('Vehicle image available', () => {
+    // merge into single array with only the paths
     const vehicleTypes = [
         ["ground", groundMapping],
         // Then lookup heli, because of the smaller size
@@ -115,7 +116,6 @@ describe('Vehicle image available', () => {
         + Object.keys(airMapping).length
         + Object.keys(specialMapping).length;
 
-    // merge into single array with only the paths
     // pre allocate array to prevent memory allocation spam
     const mergedMap = new Array(length);
 
@@ -128,11 +128,11 @@ describe('Vehicle image available', () => {
 
             let path = `./src/${VEHICLE_FILE_PATH}`;
             if (prefix) {
-                path += `/${prefix}/${file}.${FILE_EXT}`;
-            } else {
-                path += `/${prefix}/${file}.${FILE_EXT}`;
+                // folder path prefix
+                path += `/${prefix}/`;
             }
 
+            path += `/${file}.${FILE_EXT}`;
             mergedMap[position++] = path;
         }
     }

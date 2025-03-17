@@ -12,6 +12,7 @@ src/assets/img/vehicles/*
 src/assets/img/avatars/*
 !src/assets/img/avatars/.gitkeep
 
+# War Thunder icons
 src/assets/img/13px-Rp_icon.png
 src/assets/img/19px-Ge_icon.png
 src/assets/img/19px-Sl_icon.png
