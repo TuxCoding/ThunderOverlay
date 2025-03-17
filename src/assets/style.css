@@ -116,7 +116,7 @@ body {
     /* keep animation in end state meaning here invisble */
     animation-fill-mode: forwards;
 
-    /* slow start only */
+    /* slow start only, to leave earlier once not readable anymore */
     animation-timing-function: ease-in;
 
     animation-iteration-count: 1;

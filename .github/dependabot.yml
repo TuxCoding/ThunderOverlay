@@ -18,8 +18,15 @@ updates:
       # Otherwise the package.json is already enough
       versioning-strategy: increase-if-necessary
 
+      # Group multiple dependencies into prod or dev
       groups:
           production-dependencies:
               dependency-type: "production"
           development-dependencies:
               dependency-type: "development"
+
+    # Scraper project
+    - package-ecosystem: "gomod"
+      directory: "/scraper"
+      schedule:
+        interval: "monthly"
