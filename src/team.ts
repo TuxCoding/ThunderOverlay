@@ -7,12 +7,13 @@ const KNOWN_SQUAD_MEMBERS = [
     ["SGTCross96", "cardicon_general_06"],
     ["Icefruit", "cardicon_armored_apex_woman"],
     ["l-IlIllIIlIIllI", "cardicon_fem_ru_modern_01"],
-    ["Frevbucksmaster", "cardicon_tanker_il_01"]
+    ["Frevbucksmaster", "cardicon_tanker_il_01"],
+    ["GA x Krabbe", "cardicon_strikemaster_pilot"]
 ]
 
 export function isSquadRelevant(msg: DestroyMessage): boolean {
     for (const member of KNOWN_SQUAD_MEMBERS) {
-        if (msg.killer.includes(member[0]) || msg.killed.includes(member[0])) {
+        if (msg.killer.endsWith(member[0]) || msg.killed.endsWith(member[0])) {
             return true;
         }
     }
@@ -22,7 +23,7 @@ export function isSquadRelevant(msg: DestroyMessage): boolean {
 
 export function getSquadAvatar(name: string) {
     for (const member of KNOWN_SQUAD_MEMBERS) {
-        if (name.includes(member[0])) {
+        if (name.endsWith(member[0])) {
             return member[1];
         }
     }
