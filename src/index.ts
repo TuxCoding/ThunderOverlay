@@ -58,7 +58,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
         // schedule next update
         setTimeout(() => updateHUD(seenEvent, lastId), 2000);
 
-        showNotifications(entries);
+        handleEvents(entries);
     } catch (error) {
         if (error instanceof Error) {
             const err = error as Error;
@@ -118,15 +118,41 @@ export function parseMessage(msg: string): DestroyMessage | null {
     }
 
     //(.* [\w]+) \(([\w ]+)\) zerstört (.* [\w]+) \(([\w ]+)\)
+    const regexp = /(.* [\w]+) \(([\w\- ]+)\) zerstört (.* [\w]+) \(([\w\- ]+)\)/g;
+    const matches = [...msg.matchAll(regexp)];
+
+    if (matches.length < 5) {
+        console.error("not enough matches")
+        return null;
+    }
+
+    const match = matches[0];
+
     return {
-        killer: "",
-        destroyerTank: "",
-        destroyedTank: "",
-        killed: ""
+        // match 0 is the complete string
+        killer: match[1],
+        destroyerTank: match[2],
+
+        killed: match[3],
+        destroyedTank: match[4],
     }
 }
 
-function showNotifications(events: Damage[]) {
+function handleEvents(events: Damage[]) {
+    let notifications = [];
+    for (const event of events) {
+        const msg = parseMessage(event.msg);
+        if (!msg) {
+            continue;
+        }
+
+        notifications.push();
+    }
+}
+
+var notificationQueueRunning = false;
+
+function notificationLoop() {
 
 }
 
@@ -170,7 +196,7 @@ function popup(container: HTMLElement, showSec: number, hideSec: number) {
     container.style.animation = `slide-in ${showSec}s 1`;
     container.style.display = 'flex';
 
-    setTimeout(() => hide(container, hideSec), showSec * 1000);
+    setTimeout(() => hide(container, hideSec), showSec * 1000 + 500);
 }
 
 function hide(container: HTMLElement, hideSec: number) {
