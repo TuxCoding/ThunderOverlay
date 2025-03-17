@@ -20,7 +20,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
         }
 
         // schedule next update
-        setTimeout(() => updateHUD(seenEvent, lastId), 1000);
+        setTimeout(() => updateHUD(seenEvent, lastId), 1_000);
 
         // handle incoming data
         handleEvents(entries);
@@ -33,7 +33,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
                 console.error("Updating after 1min");
 
                 // delay update process if not running
-                setTimeout(() => updateHUD(seenEvent, seenDamange), 60 * 1000);
+                setTimeout(() => updateHUD(seenEvent, seenDamange), 60 * 1_000);
             } else {
                 console.error(`Unknown error: ${err.name}: ${err.message}`)
             }
@@ -239,7 +239,7 @@ function notificationLoop() {
 
     console.log(`Showing notification: ${lastNot}`);
     showNotification(lastNot);
-    setTimeout(() => notificationLoop(), 8 * 1000);
+    setTimeout(() => notificationLoop(), 9 * 1_000);
 }
 
 /**
@@ -286,7 +286,7 @@ function showNotification(notification: Notification) {
     destroyedTank.src = notification.destroyedTank;
 
     // delay the pop by one ms to load the image first
-    setTimeout(() => popup(container, 2, 4, 2), 1);
+    setTimeout(() => popup(container, 2, 8, 2), 1);
 }
 
 /**
@@ -304,7 +304,7 @@ function popup(container: HTMLElement, startSec: number, showSec: number, endSec
     container.style.animationFillMode = "forwards";
 
     // start hide animation after showed it for showSec
-    setTimeout(() => hide(container, endSec), showSec * 1000);
+    setTimeout(() => hide(container, endSec), showSec * 1_000);
 }
 
 function hide(container: HTMLElement, hideSec: number) {
