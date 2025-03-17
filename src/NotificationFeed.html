@@ -124,9 +124,11 @@
       <script>var exports = {};</script>
       <script src="./assets/javascript/bundle.js"></script>
       <script>
-        document.getElementById("killer-tank").onerror="this.style.display='none'";
+        document.getElementById("killer-tank").onerror = () => {
+            document.getElementById("killer-tank").src = "./assets/img/transparent.png";
+        };
         document.getElementById("destroyed-tank").onerror = () => {
-            document.getElementById("destroyed-tank").src = "";
+            document.getElementById("destroyed-tank").src = "./assets/img/transparent.png";
         };
       </script>
   </body>
