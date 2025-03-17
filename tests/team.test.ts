@@ -36,12 +36,13 @@ describe('find avatar', () => {
     });
 });
 
-// check if avatar is downloaded if defined
+// check whether avatar are downloaded if defined
 const AVATAR_SRC_PATH = `./src/${AVATAR_FILE_PATH}`;
 
 let assetExtracted;
 const files = fs.readdirSync(AVATAR_SRC_PATH);
 if (files.length > 1) {
+    // only check for avatars if at least one file except .gitkeep is downloaded
     assetExtracted = true;
 }
 

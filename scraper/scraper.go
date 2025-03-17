@@ -16,7 +16,7 @@ func main() {
 	//scrape()
 }
 
-// write mappings as json
+// write content as json
 func writeJSON(content any, file string) {
 	// use formatted json
 	bytes, err := json.MarshalIndent(content, "", "    ")

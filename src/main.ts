@@ -3,6 +3,7 @@ import { fetchHUD, type Damage } from "./network";
 import { getSquadAvatar, isSquadRelevant } from "./team";
 import { addErrorHandlerImg, showNotification, type Notification } from "./ui";
 
+// time in ms
 const UPDATE_TIME = 1_000;
 const FAIL_UPDATE_TIME = 60 * 1_000;
 
@@ -24,25 +25,29 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
         }
 
         // schedule next update
-        setTimeout(() => updateHUD(seenEvent, lastId), UPDATE_TIME);
+        setTimeout(() => {
+            updateHUD(seenEvent, lastId).catch(err => console.error(err));
+        }, UPDATE_TIME);
 
         // handle incoming data
         handleEvents(entries);
     } catch (error) {
         if (error instanceof Error) {
-            const err = error as Error;
+            const err: Error = error;
             if (err.name == "TypeError") {
                 // happens if application is not running, only minimal client or a web extension blocked it
                 console.warn("Unknown error: some browser extension might blocked this request or War Thunder is not running");
                 console.warn(`Updating after ${FAIL_UPDATE_TIME / 60 / 1_000} minute(s)`);
 
                 // delay update process if not running
-                setTimeout(() => updateHUD(seenEvent, seenDamange), FAIL_UPDATE_TIME);
+                setTimeout(() => {
+                    updateHUD(seenEvent, seenDamange).catch(err => console.error(err));
+                }, UPDATE_TIME);
             } else {
                 console.error(`Unknown error: ${err.name}: ${err.message}`);
             }
         } else {
-            console.error(`Unknown error: ${error}`);
+            console.error(`Unknown error: `, error);
         }
     }
 }
@@ -78,7 +83,9 @@ export function init() {
 
     showNotification(not);
 
-    startUpdating();
+    startUpdating().catch((err) => {
+        console.error("Failed to start updating", err);
+    });
 }
 
 async function startUpdating() {
@@ -92,10 +99,32 @@ async function startUpdating() {
         console.log(`Setting first id to ${lastId}`);
     }
 
-    updateHUD(0, lastId);
+    updateHUD(0, lastId).catch(console.error);
 }
 
-/** Regex matching destroyed vehicles from battle log with the following groups
+// plane -> plane: shot down
+// plane -> tank: destroyed
+// heli -> tank: destroyed (rocket)
+
+// tank -> tank: destroyed
+// tank -> plane: shot down
+
+// bomb? plane -> tank:
+// bomb? plane -> plane:
+
+// ship -> ship: destroyed
+// ship -> plane: shot down
+enum DESTROY_TYPE {
+    // NET_UNIT_KILLED_FM
+    PLANE_DESTROYED = "abgeschossen",
+    // NET_UNIT_KILLED_GM
+    GROUND_DESTROYED = "zerstört",
+    BOMB_DESTROYED = "bomb"
+}
+
+/**
+ * Regex matching destroyed vehicles from battle log with the following groups
+ *
  * 1 complete match
  * 2 killer name with clan
  * 3 vehicle
@@ -119,9 +148,9 @@ export function parseMessage(msg: string): DestroyMessage | null {
     }
 
     // groups 0 is the complete string
-    const [, killer, destroyerTank, killed, destroyedTank] = groups;
+    const [, killer, destroyerVehicle, killed, destroyedVehicle] = groups;
     return {
-        killer, destroyerVehicle: destroyerTank, killed, destroyedVehicle: destroyedTank
+        killer, destroyerVehicle, killed, destroyedVehicle
     };
 }
 
@@ -141,7 +170,7 @@ function handleEvents(events: Damage[]) {
 
         const destroyerTank = findVehicleFile(msg.destroyerVehicle);
         const destroyedTank = findVehicleFile(msg.destroyedVehicle);
-        logFailedMappings(destroyerTank, destroyedTank, msg, killerAvatar, event.msg);
+        logFailedMappings(destroyerTank, destroyedTank, killerAvatar, msg, event.msg);
 
         if (!killerAvatar || !destroyerTank || !destroyedTank) {
             // not squad member - ignore or couldn't find image
@@ -167,7 +196,10 @@ function handleEvents(events: Damage[]) {
     }
 }
 
-function logFailedMappings(destroyerTank: string | null, destroyedTank: string | null, msg: DestroyMessage, killerAvatar: string | null, rawMsg: string) {
+function logFailedMappings(
+    destroyerTank: string | null, destroyedTank: string | null, killerAvatar: string | null,
+    msg: DestroyMessage, rawMsg: string
+) {
     if (!destroyerTank || !destroyedTank) {
         // missing mapping like special cases for Abrams which couldn't be extracted easily from wiki
         console.error(`Killer: ${msg.killer} with '${msg.destroyerVehicle}'->${destroyerTank} to ${msg.killed} '${msg.destroyedVehicle}'->${destroyedTank}`);
@@ -180,16 +212,12 @@ function logFailedMappings(destroyerTank: string | null, destroyedTank: string |
     }
 }
 
-const DESTROY_ID = " zerstört ";
-const BOMB_ID = " bomb ";
-const AIRKILL_ID = " abgeschossen ";
-
 const SUICIDE_MSG = "wurde zerstört";
 const AI_DRONE_MSG = "[ai] Recon Micro";
 
 function checkRegexDetection(rawMsg: string) {
     // trigger words for destroy messages but with spaces to exclude player names
-    if (rawMsg.includes(DESTROY_ID) || rawMsg.includes(BOMB_ID) || rawMsg.includes(AIRKILL_ID)) {
+    if (rawMsg.includes(` ${DESTROY_TYPE.GROUND_DESTROYED} `) || rawMsg.includes(` ${DESTROY_TYPE.BOMB_DESTROYED} `) || rawMsg.includes(` ${DESTROY_TYPE.PLANE_DESTROYED} `)) {
         // proof check that the regex was valid
         if (!rawMsg.includes(SUICIDE_MSG) && !rawMsg.includes(AI_DRONE_MSG)) {
             // if the message wasn't suicide or against the AI drone

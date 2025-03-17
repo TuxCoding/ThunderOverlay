@@ -12,6 +12,7 @@ import (
 	"github.com/jszwec/csvutil"
 )
 
+// csv record from units.csv
 type UnitRecord struct {
 	// explicitly add the tags so the parser could detect it as full tag
 	ID string `csv:"<ID|readonly|noverify>"`
@@ -42,6 +43,7 @@ type UnitRecord struct {
 	MaxChars string `csv:"<max_chars>"`
 }
 
+// files
 const UNITS_FILE = "units.csv"
 const JSON_EXT = ".json"
 
@@ -49,7 +51,7 @@ const JSON_EXT = ".json"
 const VEHICLE_PATH = "../src/assets/img/vehicles/"
 const VEHICLE_GAME_EXT = ".avif"
 
-// _0 seems to represent tech tree, _1 battle log, _2 vehicle type
+// _0 seems to represent tech tree, _1 battle log/short name, _2 vehicle type
 const VEHICLE_TECH_ID = "_0"
 const VEHICLE_LOCAL_ID = "_1"
 const VEHICLE_TYPE_ID = "_2"
@@ -59,7 +61,7 @@ const NUKE_DRONE_ID = "killstreak"
 type LanguageMap struct {
 	lang string
 
-	// localized name -> vehicle id
+	// vehicle type -> (localized name -> vehicle id)
 	typedMap map[string]map[string]string
 }
 
@@ -78,8 +80,8 @@ func (langMap LanguageMap) addVehicle(localName string, vehicleType string, vehi
 
 func (langMap LanguageMap) checkedAdd(collection map[string]string, key string, vehicleId string) string {
 	// check if we are overriding an existing value because the localized name represents multiple vehicles
-	prevItem, ok := collection[key]
-	if ok {
+	prevItem, found := collection[key]
+	if found {
 		if prevItem == vehicleId {
 			// same entry ignore
 			return ""
@@ -147,6 +149,7 @@ func assetExists(prefix string, file string) bool {
 	}
 }
 
+// invert map from vehicleID -> localized name to localized name -> vehicleID
 func convertMap(records []UnitRecord) {
 	// map of language -> map of records
 	byLangMap := make(map[string]LanguageMap)
@@ -157,13 +160,14 @@ func convertMap(records []UnitRecord) {
 		logRecord(record, recordId)
 
 		if !isUserVehicle(recordId) {
+			// only interested in user vehicles
 			continue
 		}
 
 		vehicleId, found := strings.CutSuffix(recordId, VEHICLE_LOCAL_ID)
 		if found {
 			// only interested it vehicle localized for the battle log format
-			onUserVehicle(byLangMap, vehicleId, record)
+			visitUserVehicle(byLangMap, vehicleId, record)
 		}
 	}
 
@@ -174,9 +178,11 @@ func convertMap(records []UnitRecord) {
 	}
 }
 
+// verify if the localized names are unique across all vehicle types
 func checkCommonKeys(lang string, mapping LanguageMap) {
 	seenNames := make(map[string]bool)
 
+	// this map already accounts for duplicate inside each vehicle type, because they were filtered before on creation
 	for _, typedMap := range mapping.typedMap {
 		for localName, vehicleId := range typedMap {
 			_, found := seenNames[localName]
@@ -189,7 +195,7 @@ func checkCommonKeys(lang string, mapping LanguageMap) {
 	}
 }
 
-func onUserVehicle(byLangMap map[string]LanguageMap, vehicleId string, record UnitRecord) {
+func visitUserVehicle(byLangMap map[string]LanguageMap, vehicleId string, record UnitRecord) {
 	vehicleType := getVehicleType(vehicleId)
 	if len(vehicleType) == 0 {
 		// ignore if no type was found
@@ -245,6 +251,7 @@ func getVehicleType(vehicleId string) string {
 	}
 
 	if len(types) == 0 {
+		// likely no longer available vehicles if the asset is no longer available
 		//log.Printf("Vehicle image for %s not found\n", vehicleId)
 		return ""
 	}
@@ -266,7 +273,7 @@ func logRecord(record UnitRecord, vehicleId string) {
 	}
 
 	if strings.Index(vehicleId, NUKE_DRONE_ID) > 0 {
-		log.Printf("nuke or drone: %s %s \n", vehicleId, record.English)
+		log.Printf("Nuke/Drone: %s %s \n", vehicleId, record.English)
 	}
 }
 
@@ -299,11 +306,9 @@ func sortedKeys[V any](m map[string]V) []string {
 
 // write mapping to filesystem
 func writeLangMapping(mapping LanguageMap, lang string) {
-	// sort output by keys
-	keys := sortedKeys(mapping.typedMap)
-
+	// sort by type keys and inside each type
 	sortedLangMap := make(map[string]map[string]string)
-	for _, vehicleType := range keys {
+	for _, vehicleType := range sortedKeys(mapping.typedMap) {
 		sortedTypeMap := make(map[string]string)
 
 		// sort inside the vehicle types too
