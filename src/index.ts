@@ -58,7 +58,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
         // schedule next update
         setTimeout(() => updateHUD(seenEvent, lastId), 2000);
 
-        showNotification(entries);
+        showNotifications(entries);
     } catch (error) {
         if (error instanceof Error) {
             const err = error as Error;
@@ -86,6 +86,15 @@ export type DestroyMessage = {
 }
 
 export function main() {
+    const not: Notification = {
+        killer: "xyz",
+        killerAvatar: "./assets/img/avatars/cardicon_fem_06.png",
+        killerTankIcon: "./assets/img/vehicles/ussr_t_55a.png",
+        destroyedTank: "./assets/img/vehicles/ussr_t_44_122.png",
+        killed: "abc"
+    }
+
+    showNotification(not);
     start();
 }
 
@@ -117,6 +126,57 @@ export function parseMessage(msg: string): DestroyMessage | null {
     }
 }
 
-function showNotification(events: Damage[]) {
+function showNotifications(events: Damage[]) {
 
+}
+
+type Notification = {
+    killer: string,
+    killerAvatar: string,
+    killerTankIcon: string,
+
+    killed: string,
+    destroyedTank: string
+}
+
+function showNotification(notification: Notification) {
+    const container = document.getElementById('notification');
+
+    const killerEl = document.getElementById('killer-name');
+    const killedEl = document.getElementById('killed-name');
+
+    const killerAvatar = document.getElementById('killer-avatar') as HTMLImageElement;
+    const killerTank = document.getElementById('killer-tank') as HTMLImageElement;
+
+    const destroyedTank = document.getElementById('destroyed-tank') as HTMLImageElement;
+    if (!container || !killerEl || !killedEl || !killerAvatar || !killerTank || !destroyedTank) {
+        console.error("HTML elements not found");
+        return;
+    }
+
+    killerEl.textContent = notification.killer;
+    killedEl.textContent = notification.killed;
+
+    // images
+    killerAvatar.src = notification.killerAvatar;
+    killerTank.src = notification.killerTankIcon;
+    destroyedTank.src = notification.destroyedTank;
+
+    popup(container, 3, 2);
+}
+
+function popup(container: HTMLElement, showSec: number, hideSec: number) {
+    // activate show animation and make it visible
+    container.style.animation = `slide-in ${showSec}s 1`;
+    container.style.display = 'flex';
+
+    setTimeout(() => hide(container, hideSec), showSec * 1000);
+}
+
+function hide(container: HTMLElement, hideSec: number) {
+    // add the hide animation and make it invisible after it
+    container.style.animation = `fade-out ${hideSec}s 1`;
+    setTimeout(() => {
+        container.style.display = "none";
+    }, hideSec * 1000);
 }

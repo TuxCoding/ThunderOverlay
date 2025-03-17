@@ -18,13 +18,12 @@
     }
 
     #notification {
-        display: flex;
+        /* By default hide it */
+        display: none;
 
         max-width: 1200px;
 
         align-items: center;
-
-        animation: slide-in 3s 1;
     }
 
     @keyframes slide-in {
@@ -33,6 +32,15 @@
         }
         to {
             margin-top: 0%;
+        }
+    }
+
+    @keyframes fade-out {
+        from   {
+            opacity: 100%;
+        }
+        to {
+            opacity: 0%;
         }
     }
 
@@ -80,31 +88,31 @@
         margin: auto;
     }
 
-    .killer-name, .killed-name {
+    #killer-name, #killed-name {
         color: var(--color-accent);
     }
   </style>
   <body>
     <div id="notification" class="container" disabled="true">
         <div class="avatar">
-            <img src="./assets/img/avatars/cardicon_bundeswehr_infantryman.png">
+            <img id="killer-avatar" src="./assets/img/avatars/cardicon_bundeswehr_infantryman.png">
         </div>
 
         <div class="tank">
-            <img src="./assets/img/vehicles/il_merkava_mk_2b_early.png">
+            <img id="killer-tank" src="./assets/img/vehicles/il_merkava_mk_2b_early.png">
         </div>
 
         <div id="title">
             <p class="title">
                 <span class="icon-eye"></span>
-                <span class="player-name killer-name">-GFF7- Lukasxox</span>
+                <span id="killer-name" class="player-name">-GFF7- Lukasxox</span>
                 zerstörte
-                <span class="player-name killed-name">-GFF7- CassualTux</span>!
+                <span id="killed-name" class="player-name">-GFF7- CassualTux</span>!
             </p>
         </div>
 
         <div class="tank-single">
-            <img src="./assets/img/vehicles/sw_kungstiger.png">
+            <img id="destroyed-tank" src="./assets/img/vehicles/sw_kungstiger.png">
         </div>
 <!--
         <div class="avatar">
@@ -117,5 +125,8 @@
       <script src="./assets/javascript/src/index.js"></script>
       <!-- Run update only on the site -->
       <script>main();</script>
+      <script>
+
+      </script>
   </body>
 </html>
