@@ -49,10 +49,10 @@ const JSON_EXT = ".json"
 const VEHICLE_PATH = "../src/assets/img/vehicles/"
 const VEHICLE_GAME_EXT = ".avif"
 
-// _1 seems to represent tech tree, _2 battle log, _3 vehicle type
-const VEHICLE_TECH_ID = "_1"
-const VEHICLE_LOCAL_ID = "_2"
-const VEHICLE_TYPE_ID = "_3"
+// _0 seems to represent tech tree, _1 battle log, _2 vehicle type
+const VEHICLE_TECH_ID = "_0"
+const VEHICLE_LOCAL_ID = "_1"
+const VEHICLE_TYPE_ID = "_2"
 
 const NUKE_ID = "killstreak"
 
