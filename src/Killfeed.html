@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8">
+    <!-- Enable responsive design -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="./assets/style.css" />
+    <style>
+        body {
+            margin: 0 auto;
+        }
+
+        video {
+            height: 256px;
+            width: 455px;
+
+            border: var(--brand-border-width) solid var(--color-accent);
+        }
+
+        #title p {
+            margin: 0;
+        }
+
+        #kill {
+            animation: popup 9s 1;
+            animation-fill-mode: forwards;
+            animation-timing-function: linear;
+
+            opacity: 0;
+        }
+
+        @keyframes popup {
+            from {
+                opacity: 0;
+            }
+
+            2.5% {
+                opacity: 0.4;
+            }
+
+            5% {
+                opacity: 1;
+            }
+
+            95% {
+                opacity: 1;
+            }
+
+            to {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="kill">
+        <video autoplay>
+            <source src="./assets/video/bomb.mkv">
+        </video>
+        <div id="title">
+            <p>
+                Grüße von oben:
+                <span id="killer-name">
+                    ^GFF7^ 1234567890123456
+                </span>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
