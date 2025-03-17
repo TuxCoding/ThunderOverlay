@@ -100,6 +100,11 @@ describe('find vehicles with special names', () => {
         expect(findVehicleFile("☢Canberra B")).toBe("./assets/img/vehicles/air/canberra_bimk6.avif");
         expect(findVehicleFile("☢Canberra B Mk 6")).toBe("./assets/img/vehicles/air/canberra_bimk6.avif");
     });
+
+    test('if duplicate mapping', () => {
+        expect(findVehicleFile("Milan")).toBe("./assets/img/vehicles/air/mirage_milan.avif");
+        //expect(findVehicleFile("Milan")).toBe("./assets/img/vehicles/ships/fr_destroyer_aigle_class_milan.avif");
+    });
 });
 
 // not really a best practice, because it's implementation specific, but it's a automated way to verify this
