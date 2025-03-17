@@ -2,9 +2,9 @@
     "A-4E Früh": "air/a_4e_early_iaf",
     "AMX A-1": "air/amx_a_1a_brazil",
     "AV-8B": "air/av_8b_plus",
-    "Bf 109 F": "air/bf-109f-4",
-    "Bf 109 G": "air/bf-109g-10",
-    "Bf 109 K": "air/bf-109k-4",
+    "Bf 109 F": "air/bf-109f-4",
+    "Bf 109 G": "air/bf-109g-10",
+    "Bf 109 K": "air/bf-109k-4",
     "Bf 110 G": "air/bf-110g-2",
     "◐Bf 110 G": "air/bf_110g_4_hungary",
     "Do 335 B": "air/do_335b_2",
@@ -55,7 +55,6 @@
 
     "␗M113A1": "ground/cn_m113a1_tow",
     "␗T-34-85": "ground/cn_t_34_85_d_5t",
-    "Т-62": "ground/cn_t_62",
     "Marder 1A1": "ground/germ_marder_1a1",
     "Panzerbefehlswagen VI (P)": "ground/germ_panzerbefelhswagen_vi_p",
     "Tiger (P) Ferdinand": "ground/germ_panzerjager_tiger_p_ferdinand",
@@ -69,7 +68,6 @@
     "Sd.Kfz. 251/21": "ground/germ_sdkfz_251_21",
     "Sturmgeschütz III Ausf. G": "ground/germ_stug_iii_ausf_g",
     "VK 30.02 (M)": "ground/germ_vk_3002m",
-    "Ra’am Sagol": "ground/il_merkava_mk_3_raam_segol",
     "Sherman VC": "ground/it_sherman_vc_firefly",
     "▅M4A3": "ground/jp_m4a3e8_76w_sherman",
     "Chi-Ha LS": "ground/jp_navy_120mm_spg",
@@ -105,13 +103,8 @@
     "Objekt 292": "ground/ussr_object_292",
     "Objekt 435": "ground/ussr_object_435",
     "Objekt 775": "ground/ussr_object_775",
-    "Т-10М": "ground/ussr_t_10m",
     "T-34": "ground/ussr_t_34_1941",
-    "Т-34-85": "ground/ussr_t_34_85_zis_53",
-    "Т-44-100": "ground/ussr_t_44_100",
     "T-54": "ground/ussr_t_54_1951",
-    "Т-55А": "ground/ussr_t_55a",
-
     "Rooivalk Mk1F": "heli/ah_2_rooivalk",
     "MH-60L": "heli/mh_60l_dap"
 }
