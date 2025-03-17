@@ -49,12 +49,17 @@ body {
 @font-face {
     font-family: wtSymbols;
     src: url("./fonts/symbols_skyquake.ttf");
+
+    /* Gives the font face an extremely small block period and an infinite swap period. */
+    font-display: swap;
 }
 
 /* Normal War Thunder text styling provided by wiki */
 @font-face {
     font-family: wtText;
     src: url("./fonts/wt_font.ttf");
+
+    font-display: swap;
 }
 
 /* War thunder icons */
@@ -64,6 +69,8 @@ body {
 
     /* Extracted from War Thunder client webinterface */
     src: url("./fonts/icons.ttf");
+
+    font-display: swap;
 }
 
 /* Kill notification overlay */
