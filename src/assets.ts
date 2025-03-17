@@ -31,21 +31,20 @@ export type Vehicle = keyof Mapping;
  * @returns file name with extension and path or null if not existing
  */
 export function findVehicleFile(vehicle: Vehicle): string | null {
-    // some vehicles are translated to the local language
-    const cleanVehicleName = vehicle.trim()
-        .replace("Typ", "Type")
-        .replace("Objekt", "Object")
-        .replace("Vickers Mk. ", "Vickers Mk.")
-        // Somehow War Thunder uses NO-BREAK SPACE in localhost and wiki
-        // Although it appears to be consistent across both
-        // However the ususage is inconsistent across different vehicles like 'A6M2 mod. 11' has a normal space while 'A6M3 mod. 22' had not
-        // see: 'Bf 109 F' and only used in aircraft
-        .replaceAll('\u00A0', " ")
-        // RIGHT SINGLE QUOTATION MARK Ra’am Sagol -> Ra'am Sagol
-        .replaceAll('\u2019', "'")
-        // Replace common Cyrillic / Slavonic / Slavic chars for example for ussr_t_10m
-        // only used for russian vehicles and once for sw_strv_103c
-        .replaceAll('\u0410', "A").replaceAll('\u0421', "C").replaceAll('\u0415', "E").replaceAll('\u041C', "M").replaceAll('\u0422', "T");
+    // vehicles are translated to local languages
+    // some vehicles (i.e. russian) use cyrillic characters however they should not be cleaned, because then we would have duplicates
+    // see T-34-85
+    // RIGHT SINGLE QUOTATION MARK Ra’am Sagol -> Ra'am Sagol
+    // Somehow the game uses NO-BREAK SPACE in localhost and wiki
+    // Although it appears to be consistent across both
+    // However the ususage is inconsistent across different vehicles like 'A6M2 mod. 11' has a normal space while 'A6M3 mod. 22' had not
+    // see: 'Bf 109 F' and only used in aircraft
+    const cleanVehicleName = vehicle
+        // elc for example has trailing spaces
+        .trim()
+        // these vehicles are other normal mappings
+        .replace("☢", "");
+
     const fileName = findMapping(cleanVehicleName);
     if (fileName) {
         // add path data if existing

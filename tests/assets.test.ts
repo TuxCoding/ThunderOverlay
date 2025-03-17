@@ -23,10 +23,6 @@ describe('find vehicle', () => {
         expect(findVehicleFile('T-80B')).toBe("./assets/img/vehicles/ground/ussr_t_80b.avif");
     });
 
-    test("Name with quote symbol", () => {
-        expect(findVehicleFile("Ra'am Sagol")).toBe("./assets/img/vehicles/ground/il_merkava_mk_3_raam_segol.avif");
-    });
-
     test("Name with parenthis", () => {
         expect(findVehicleFile("T-72AV (TURMS-T)")).toBe("./assets/img/vehicles/ground/ussr_t_72av_turms.avif");
     });
@@ -64,13 +60,40 @@ describe('find vehicle', () => {
     test('Different name mapping from wiki', () => {
         expect(findVehicleFile("Abrams")).toBe("./assets/img/vehicles/ground/us_m1_abrams.avif");
     });
+});
 
-    test('Different name mapping from wiki', () => {
-        expect(findVehicleFile("T-62")).toBe("./assets/img/vehicles/ground/ussr_t_62.avif");
-    });
-
+describe('find vehicles with special names', () => {
     test('if vehicle found with non-break spaces', () => {
         expect(findVehicleFile("Fw 190 D")).toBe("./assets/img/vehicles/air/fw-190d-13.avif");
+    });
+
+    test('if localized name is found', () => {
+        expect(findVehicleFile("Typ 90")).toBe("./assets/img/vehicles/ground/jp_type_90.avif");
+        expect(findVehicleFile("Objekt 292")).toBe("./assets/img/vehicles/ground/ussr_object_292.avif");
+    });
+
+    test('if spaces trimmed', () => {
+        expect(findVehicleFile("Vickers Mk. 3")).toBe("./assets/img/vehicles/ground/uk_vickers_mbt_mk_3.avif");
+    });
+
+    test('if quote is normalized', () => {
+        expect(findVehicleFile("Ra’am Sagol")).toBe("./assets/img/vehicles/ground/il_merkava_mk_3_raam_segol.avif");
+    });
+
+    test('if cyrillic vehicle are found', () => {
+        expect(findVehicleFile("Т-10М")).toBe("./assets/img/vehicles/ground/ussr_t_10m.avif");
+    });
+
+    test('if nuke vehicles are found', () => {
+        expect(findVehicleFile("☢Jaguar A")).toBe("./assets/img/vehicles/air/jaguar_a.avif");
+        expect(findVehicleFile("☢Tu-4")).toBe("./assets/img/vehicles/air/tu_4.avif");
+        expect(findVehicleFile("☢IL-28")).toBe("./assets/img/vehicles/air/il_28.avif");
+        expect(findVehicleFile("☢B-29A")).toBe("./assets/img/vehicles/air/b-29.avif");
+        expect(findVehicleFile("☢Su-7BKL")).toBe("./assets/img/vehicles/air/su-7bkl.avif");
+
+        // yes really both exist
+        expect(findVehicleFile("☢Canberra B")).toBe("./assets/img/vehicles/air/canberra_bimk6.avif");
+        expect(findVehicleFile("☢Canberra B Mk 6")).toBe("./assets/img/vehicles/air/canberra_bimk6.avif");
     });
 });
 
