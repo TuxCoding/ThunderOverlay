@@ -13,6 +13,7 @@
     --font: 'Sans Serif';
 }
 
+/* War thunder icons */
 @font-face {
     font-family: Icons;
     src: url("./icons.ttf");
