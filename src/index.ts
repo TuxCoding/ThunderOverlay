@@ -203,25 +203,21 @@ function showNotification(notification: Notification) {
     killerTank.src = notification.killerTankIcon;
     destroyedTank.src = notification.destroyedTank;
 
-    popup(container, 3, 2);
+    popup(container, 2, 3);
 }
 
 function popup(container: HTMLElement, showSec: number, hideSec: number) {
-    // add the animation in pause state to not start it automatically before setting our display
-    container.style.animationPlayState = "paused";
-
+    // activate show animation and make it visible
     container.style.animation = `slide-in ${showSec}s 1`;
-
-    container.style.animationPlayState = "start";
     container.style.animationFillMode = "forwards";
 
-    // activate show animation and make it visible
-    setTimeout(() => hide(container, hideSec), showSec * 1000 + 500);
+    setTimeout(() => hide(container, hideSec), showSec * 1000);
 }
 
 function hide(container: HTMLElement, hideSec: number) {
     // add the hide animation and make it invisible after it
     container.style.animation = `fade-out ${hideSec}s 1`;
+    container.style.animationTimingFunction = "linear";
     container.style.animationFillMode = "forwards";
 }
 
