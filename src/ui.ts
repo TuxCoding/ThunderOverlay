@@ -17,14 +17,14 @@ export interface Notification {
 }
 
 // HTML ids
-const NOTIFICATION_CONTAINER_ELEMENT = 'notification';
-const KILLER_TEXT_ELEMENT = 'killer-name';
-const KILLED_TEXT_ELEMENT = 'killed-name';
+const NOTIFICATION_CONTAINER_ELEMENT = "notification";
+const KILLER_TEXT_ELEMENT = "killer-name";
+const KILLED_TEXT_ELEMENT = "killed-name";
 
-const KILLER_AVATAR_ELEMENT = 'killer-avatar';
-const KILLER_VEHICLE_ELEMENT = 'killer-tank';
+const KILLER_AVATAR_ELEMENT = "killer-avatar";
+const KILLER_VEHICLE_ELEMENT = "killer-tank";
 
-const DESTROYED_VEHICLE_ELEMENT = 'destroyed-tank';
+const DESTROYED_VEHICLE_ELEMENT = "destroyed-tank";
 
 // HTML tags
 const VIDEO_HTML_TAG = "video";
@@ -147,7 +147,7 @@ export function addErrorHandlerImg() {
     for (const id of imgIcons) {
         const el = document.getElementById(id);
         if (el) {
-            el.addEventListener('load', restore);
+            el.addEventListener("load", restore);
             el.onerror = hideImg;
         } else {
             console.warn(`Couldn't find img element "${id}" for error handling`);
