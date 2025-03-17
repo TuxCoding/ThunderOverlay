@@ -57,6 +57,9 @@ describe('find vehicle', () => {
 
     test('Different name mapping from wiki', () => {
         expect(findVehicleFile("Abrams")).toBe("./assets/img/vehicles/ground/us_m1_abrams.png");
-        expect(findVehicleFile("Т-62")).toBe("./assets/img/vehicles/ground/cn_t_62.png");
     });
-})
+
+    test('Different name mapping from wiki', () => {
+        expect(findVehicleFile("Т-62")).toBe("./assets/img/vehicles/ground/cn_t_62.png");
+    })
+});

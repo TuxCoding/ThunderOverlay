@@ -51,7 +51,7 @@ function findMapping(vehicle: Vehicle): string | null {
         ["ground", groundMapping],
         // Then lookup heli, because of the smaller size
         ["heli", heliMapping],
-        ["ground", airMapping],
+        ["air", airMapping],
         ["", specialMapping]
     ];
 
@@ -60,7 +60,7 @@ function findMapping(vehicle: Vehicle): string | null {
 
         const name = (map as Mapping)[vehicle];
         if (name) {
-            return `${path}/${name}`;
+            return path ? `${path}/${name}` : name;
         }
     }
 

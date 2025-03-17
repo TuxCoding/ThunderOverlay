@@ -1,9 +1,13 @@
 import { getSquadAvatar, isSquadRelevant } from "../src/team";
 
 describe('Squad member check', () => {
-    test('Not relevant', () => {
+    test('relevant', () => {
         expect(isSquadRelevant("-GFF7- TuxCode (Merkava Mk.1B) zerstört [CoyC] DRAGON#28 (BMP-2)")).toBeTruthy();
-    })
+    });
+
+    test('not relevant', () => {
+        expect(isSquadRelevant("-GFF7- Somebody (Merkava Mk.1B) zerstört [CoyC] DRAGON#28 (BMP-2)")).toBeFalsy();
+    });
 });
 
 describe('find avatar', () => {

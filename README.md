@@ -16,7 +16,7 @@ pnpm lint
 
 ## Installation
 
-Warning: the overlay needs to refresh after starting War Thunder at the moment.
+Warning: the overlay needs to refreshed after starting War Thunder at the moment.
 
 ### Notification feed
 
@@ -65,3 +65,8 @@ The web server from the game client is only provided by the full client version.
 It extracts the data from the battle log. This log is pulled from the the web server `http://localhost:9111` provided
 by the War Thunder client itself. It parses the corresponding raw data to player names and vehicles and then looks up
 the corresponding image data provided by the wiki.
+
+
+## Credits
+
+* Smoke video from: https://www.vecteezy.com/video/24454182-frosty-fog-effects-smoke-elements-loop-animation-video-transparent-background-with-alpha-channel

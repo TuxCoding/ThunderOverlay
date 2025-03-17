@@ -134,6 +134,7 @@ async function startUpdating() {
 const regexp = /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen|bomb)? ([^(]+) \((.+)\)/g;
 
 export function parseMessage(msg: string): DestroyMessage | null {
+    // clean up tabs and line breaks
     msg = msg.replace("\r", "").replace("\n", "");
 
     // convert from iterable to array
