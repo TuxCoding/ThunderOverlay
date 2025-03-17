@@ -5,9 +5,8 @@
 ## Description
 
 This project models a web source displaying [War Thunder](https://warthunder.com/) in-game events to be integrated into
-[OBS](https://obsproject.com/) or similar streaming software. The primary focus is the integration of a visual kill feed
-for squad members during matches. This could include an image of the vehicle helping people who are not familiar with all
-the vehicle names.
+[OBS](https://obsproject.com/) or similar streaming software. The goal is to provide a visual kill feed of squad members for viewers during matches.
+This could include an image of the vehicle helping people who are not familiar with all the vehicle names.
 
 You can see demonstration here (low quality to be hosted on GitHub):
 
