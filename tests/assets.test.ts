@@ -50,4 +50,12 @@ describe('find vehicle', () => {
         // italy
         expect(findVehicleFile("◔Mi-24D")).toBe("./assets/img/vehicles/heli/mi_24d_hungary.png");
     });
+
+    test('Weird spacing after name', () => {
+        expect(findVehicleFile("ELC bis ")).toBe("./assets/img/vehicles/ground/fr_amx_elc_bis.png");
+    });
+
+    test('Different name mapping from wiki', () => {
+        expect(findVehicleFile("Abrams")).toBe("./assets/img/vehicles/ground/us_m1_abrams.png");
+    });
 })
