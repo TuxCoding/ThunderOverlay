@@ -53,7 +53,7 @@ export function showNotification(notification: Notification) {
 
     const destroyedTank = getImageElement(DESTROYED_VEHICLE_ELEMENT);
     if (!container || !killerEl || !killedEl || !killerAvatar || !killerTank || !destroyedTank) {
-        console.error("HTML elements not found");
+        console.warn("HTML elements not found");
         return;
     }
 
@@ -115,7 +115,7 @@ function onShow(ammunitionEl: HTMLElement | null) {
         ?.play()
         .catch(error => {
             // Videos would stop playing if the window is not visible for browser energy savings
-            console.log(`Video paused, because window is not in focus ${error}`);
+            console.debug(`Video paused, because window is not in focus ${error}`);
         });
 }
 
@@ -150,7 +150,7 @@ export function addErrorHandlerImg() {
             el.addEventListener('load', restore);
             el.onerror = hideImg;
         } else {
-            console.error(`Couldn't find img element "${id}" for error handling`);
+            console.warn(`Couldn't find img element "${id}" for error handling`);
         }
     }
 }
