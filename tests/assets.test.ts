@@ -1,5 +1,11 @@
 import { findVehicleFile } from "../src/assets";
 
+import groundMapping from '../src/mappings/ground.json';
+import airMapping from '../src/mappings/air.json';
+import heliMapping from '../src/mappings/heli.json';
+
+import specialMapping from '../src/mappings/specials.json';
+
 describe('find vehicle', () => {
     test('Not existing vehicle', () => {
         expect(findVehicleFile('Unknown')).toBeNull();
@@ -64,4 +70,28 @@ describe('find vehicle', () => {
     });
 });
 
+describe('Special handling unnecessary', () => {
+    // not really a best practice, because it's implementation specific, but it's a automated way to verify this
+    const specialVehicleNames = Object.keys(specialMapping);
+
+    function isFoundInDefaultMap(vehicle: string): boolean {
+        const vehicleTypes = [
+            groundMapping,
+            heliMapping,
+            airMapping,
+        ];
+
+        for (const map of vehicleTypes) {
+            const name = (map as Record<string, string>)[vehicle];
+            if (name) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    test.each(specialVehicleNames)('if special case handling is now uncessary (%s)', (specialVehicleName) => {
+        expect(isFoundInDefaultMap(specialVehicleName)).toBeFalsy();
+    });
 });

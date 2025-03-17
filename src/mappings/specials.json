@@ -2,7 +2,7 @@
     "Abrams": "ground/us_m1_abrams",
     "M18": "ground/us_m18_hellcat",
     "Т-62": "ground/cn_t_62",
-    "Type 87 RCV": "ground/jp_type_87_rcv",
+    "Typ 87 RCV": "ground/jp_type_87_rcv",
 
     "Tiger Ausf. E": "ground/germ_pzkpfw_vi_ausf_e_tiger",
     "Tiger Ausf. H1": "ground/germ_pzkpfw_vi_ausf_h1_tiger",
@@ -13,7 +13,7 @@
     "I-185": "air/i_185_m71_standard",
     "Do 335 B": "air/do_335b_2",
     "Fw 190 A": "air/fw-190a-1",
-    "▄Ju 88 A-4": "air/ju-88a-4_finland",
+    "▄Ju 88 A": "air/ju-88a-4_finland",
 
     "Pz.IV/70": "ground/germ_pz_iv_l70_a",
     "Panzerbefehlswagen VI (P)": "germ_panzerbefelhswagen_vi_p",
