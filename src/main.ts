@@ -19,14 +19,14 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
         const entries = result.damage;
 
         let lastId = seenDamange;
-        if (entries.length > 0) {
+        if (entries.length != 0) {
             lastId = entries[entries.length - 1].id;
             console.debug(`Updating last id to ${lastId}`);
         }
 
         // schedule next update
         setTimeout(() => {
-            updateHUD(seenEvent, lastId).catch(err => console.error(err));
+            updateHUD(seenEvent, lastId).catch(console.error);
         }, UPDATE_TIME);
 
         // handle incoming data
@@ -41,7 +41,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
 
                 // delay update process if not running
                 setTimeout(() => {
-                    updateHUD(seenEvent, seenDamange).catch(err => console.error(err));
+                    updateHUD(seenEvent, seenDamange).catch(console.error);
                 }, UPDATE_TIME);
             } else {
                 console.error(`Unknown error: ${err.name}: ${err.message}`);
@@ -83,7 +83,7 @@ export function init() {
 
     showNotification(not);
 
-    startUpdating().catch((err) => {
+    startUpdating().catch(err => {
         console.error("Failed to start updating", err);
     });
 }
@@ -94,7 +94,7 @@ async function startUpdating() {
 
     let lastId = 0;
     const entries = events.damage;
-    if (entries.length > 0) {
+    if (entries.length != 0) {
         lastId = entries[entries.length - 1].id;
         console.log(`Setting first id to ${lastId}`);
     }
@@ -190,7 +190,7 @@ function handleEvents(events: Damage[]) {
         notificationQueue.push(notification);
     }
 
-    if (notificationQueue.length > 0) {
+    if (notificationQueue.length != 0) {
         // trigger the notification runtime if not running yet
         startNotificationLoop();
     }
@@ -254,7 +254,7 @@ function notificationLoop() {
 
     console.debug("Showing notification: ", lastNot);
     showNotification(lastNot);
-    setTimeout(() => notificationLoop(), NOTIFICATION_SHOW_INTERVAL);
+    setTimeout(notificationLoop, NOTIFICATION_SHOW_INTERVAL);
 }
 
 /* Run update only on the site not for tests */
