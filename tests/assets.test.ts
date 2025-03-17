@@ -119,7 +119,7 @@ describe('Vehicle image available', () => {
         const [prefix, map] = type;
 
         for (const vehicle of Object.keys(map)) {
-            const file = (map as Mapping)[vehicle];
+            const file = (map as Mapping)[vehicle].toLowerCase();
 
             let path = `./src/${VEHICLE_FILE_PATH}`;
             if (prefix) {
