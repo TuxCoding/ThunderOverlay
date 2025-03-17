@@ -120,13 +120,14 @@ export function parseMessage(msg: string): DestroyMessage | null {
     //(.* [\w]+) \(([\w ]+)\) zerstört (.* [\w]+) \(([\w ]+)\)
     const regexp = /(.* [\w]+) \(([\w\- ]+)\) zerstört (.* [\w]+) \(([\w\- ]+)\)/g;
     const matches = [...msg.matchAll(regexp)];
-
-    if (matches.length < 5) {
-        console.error("not enough matches")
+    if (matches.length < 1) {
         return null;
     }
 
     const match = matches[0];
+    if (match.length < 5) {
+        return null;
+    }
 
     return {
         // match 0 is the complete string
