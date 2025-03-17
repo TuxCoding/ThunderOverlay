@@ -168,16 +168,40 @@ func convertMap(records []UnitRecord) {
 		vehicleId, found := strings.CutSuffix(recordId, VEHICLE_LOCAL_ID)
 		if found {
 			// remove killstreak suffix for nukes or drones
-			trimmedId := strings.TrimSuffix(vehicleId, "_"+NUKE_DRONE_ID)
+			trimmedId, foundStreak := strings.CutSuffix(vehicleId, "_"+NUKE_DRONE_ID)
+			if foundStreak && containsNationSuffix(trimmedId) {
+				continue
+			}
+
 			visitUserVehicle(byLangMap, trimmedId, record)
 		}
 	}
 
 	// write all languages
 	for lang, mapping := range byLangMap {
-		//checkCommonKeys(lang, mapping)
+		checkCommonKeys(lang, mapping)
 		writeLangMapping(mapping, lang)
 	}
+}
+
+func containsNationSuffix(vehicleId string) bool {
+	nations := []string{
+		"uk",
+		"italy",
+		"france",
+		"germany",
+		"iaf",
+		"sweden",
+		"usa",
+	}
+
+	for _, nation := range nations {
+		if strings.HasSuffix(vehicleId, nation) {
+			return true
+		}
+	}
+
+	return false
 }
 
 // verify if the localized names are unique across all vehicle types
@@ -274,7 +298,7 @@ func logRecord(record UnitRecord, vehicleId string) {
 	}
 
 	if strings.LastIndex(vehicleId, NUKE_DRONE_ID) != -1 {
-		log.Printf("Nuke/Drone: %s %s \n", vehicleId, record.English)
+		//log.Printf("Nuke/Drone: %s %s \n", vehicleId, record.English)
 	}
 }
 
@@ -288,7 +312,10 @@ func isUserVehicle(vehicleId string) bool {
 		strings.HasPrefix(vehicleId, "ships/") ||
 		strings.HasPrefix(vehicleId, "structures/") ||
 		strings.HasPrefix(vehicleId, "radars/") ||
-		strings.HasPrefix(vehicleId, "shop/group/") {
+		strings.HasPrefix(vehicleId, "shop/group/") ||
+		strings.LastIndex(vehicleId, "tutorial") != -1 ||
+		strings.LastIndex(vehicleId, "exoskeleton") != -1 ||
+		strings.LastIndex(vehicleId, "event") != -1 {
 		return false
 	}
 
