@@ -16,7 +16,7 @@ const OUTPUT_DIR = "./out/"
 
 func main() {
 	createMapping()
-	//scrape()
+	// scrape()
 }
 
 // write content as json

@@ -30,7 +30,7 @@ const IMG_OUTPUT = OUTPUT_DIR + "images.list"
 const CACHE_FOLDER = "./cache"
 
 // scrape the wiki for images and file mappings
-func Scrape() {
+func scrape() {
 	// vehicle image download links
 	imgLinks := []string{}
 
@@ -64,7 +64,7 @@ func visitPageHTML(el *colly.HTMLElement, imgLinks *[]string, mappings map[strin
 	// img source to transparent vehicle file
 	imgSrc := el.ChildAttr(".specs_card_main_slider_system > div > img", "src")
 
-	if len(tankTitle) == 0 || len(imgSrc) == 0 {
+	if tankTitle == "" || imgSrc == "" {
 		// not found
 		fmt.Printf("Empty content for %q\n", el.Request.URL)
 	} else {
