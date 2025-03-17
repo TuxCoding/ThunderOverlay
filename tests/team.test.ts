@@ -7,7 +7,7 @@ describe('Squad member check', () => {
 });
 
 describe('find avatar', () => {
-    test('Not relevant', () => {
+    test('Not a squad member', () => {
         expect(getSquadAvatar("somebody")).toBeNull();
     })
 
