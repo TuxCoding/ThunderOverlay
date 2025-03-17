@@ -62,6 +62,13 @@ pnpm lint
 pnpm watchJS
 ```
 
+## Requirements
+
+* OBS 31+
+    * Project uses CSS nesting which the browser inside OBS in older version doesn't support
+* Use the full game client -> don't have game quality set to minimal
+    * Otherwise the web server from War Thunder accessible under `http://localhost:9111` doesn't run
+
 ## Installation
 
 Warning: the overlay needs to be refreshed after starting War Thunder at the moment.
