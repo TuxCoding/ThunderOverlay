@@ -108,6 +108,10 @@ describe('find vehicles with special names', () => {
         expect(findVehicleFile("Milan")).toBe("./assets/img/vehicles/air/mirage_milan.avif");
         //expect(findVehicleFile("Milan")).toBe("./assets/img/vehicles/ships/fr_destroyer_aigle_class_milan.avif");
     });
+
+    test('Q-5A/B', () => {
+        expect(findVehicleFile("Q-5A/B\r\n")).toBe("./assets/img/vehicles/air/q_5a.avif");
+    });
 });
 
 // not really a best practice, because it's implementation specific, but it's a automated way to verify this

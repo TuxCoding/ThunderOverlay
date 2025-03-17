@@ -15,7 +15,11 @@ members during match. You can see demonstration here:
     * Planes
     * Helicopter
     * Ships
-* Detects nukes too
+* Detects nukes
+* Clean up quirky file names like
+    * carriage returns
+    * cyrillic names
+    * etc.
 
 ### Goals
 

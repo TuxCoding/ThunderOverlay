@@ -54,6 +54,8 @@ const VEHICLE_TECH_ID = "_1"
 const VEHICLE_LOCAL_ID = "_2"
 const VEHICLE_TYPE_ID = "_3"
 
+const NUKE_ID = "killstreak"
+
 func createMapping() {
 	// read all at once
 	records := parseUnits(UNITS_FILE)
@@ -124,6 +126,7 @@ func convertMap(records []UnitRecord) {
 
 		vehicleId, found := strings.CutSuffix(recordId, VEHICLE_LOCAL_ID)
 		if found {
+			// only interested it vehicle localized for the battle log format
 			onUserVehicle(byLangMap, vehicleId, record)
 		}
 	}
@@ -172,19 +175,23 @@ func onUserVehicle(byLangMap map[string]map[string]string, vehicleId string, rec
 	}
 }
 
+// returns first compatible vehicle type match with retrieved assets
 func getVehicleType(vehicleId string) string {
-	if assetExists("ground", vehicleId) {
-		return "ground/"
-	} else if assetExists("air", vehicleId) {
-		return "air/"
-	} else if assetExists("heli", vehicleId) {
-		return "heli/"
-	} else if assetExists("ships", vehicleId) {
-		return "ships/"
-	} else {
-		//log.Printf("Vehicle %s not found\n", trimmedVehicleId)
-		return ""
+	assetFolders := []string{
+		"ground",
+		"air",
+		"heli",
+		"ships",
 	}
+
+	for _, folder := range assetFolders {
+		if assetExists(folder, vehicleId) {
+			return folder + "/"
+		}
+	}
+
+	//log.Printf("Vehicle %s not found\n", trimmedVehicleId)
+	return ""
 }
 
 // language specific mappings
@@ -209,7 +216,7 @@ func logRecord(record UnitRecord, vehicleId string) {
 		log.Printf("%s has metadata: comment->'%s' max->'%s'\n", vehicleId, comment, maxChars)
 	}
 
-	if strings.Index(vehicleId, "killstreak") > 0 {
+	if strings.Index(vehicleId, NUKE_ID) > 0 {
 		log.Printf("Nuke: %s %s \n", vehicleId, record.English)
 	}
 }
