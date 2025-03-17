@@ -61,16 +61,16 @@ func scrape() {
 }
 
 // trigger on complete page loaded for all pages
-func visitPageHTML(el *colly.HTMLElement, imgLinks *[]string, mappings map[string]string) {
+func visitPageHTML(element *colly.HTMLElement, imgLinks *[]string, mappings map[string]string) {
 	// tank name
-	tankTitle := el.ChildText(".specs_card_main_info .general_info_name")
+	tankTitle := element.ChildText(".specs_card_main_info .general_info_name")
 
 	// img source to transparent vehicle file
-	imgSrc := el.ChildAttr(".specs_card_main_slider_system > div > img", "src")
+	imgSrc := element.ChildAttr(".specs_card_main_slider_system > div > img", "src")
 
 	if tankTitle == "" || imgSrc == "" {
 		// not found
-		fmt.Printf("Empty content for %q\n", el.Request.URL)
+		fmt.Printf("Empty content for %q\n", element.Request.URL)
 	} else {
 		fmt.Printf("Data found: %s, %s\n", tankTitle, imgSrc)
 		*imgLinks = append(*imgLinks, imgSrc)
@@ -83,16 +83,16 @@ func visitPageHTML(el *colly.HTMLElement, imgLinks *[]string, mappings map[strin
 }
 
 // if vehicle link is found
-func visitVehicleLink(el *colly.HTMLElement) {
+func visitVehicleLink(element *colly.HTMLElement) {
 	// extract destination
-	link := el.Attr("href")
+	link := element.Attr("href")
 
 	fmt.Printf("Reference found: %s\n", link)
 
 	// queue new visit to full page, relative links wouldn't work here
-	path := el.Request.AbsoluteURL(link)
+	path := element.Request.AbsoluteURL(link)
 
-	err := el.Request.Visit(path)
+	err := element.Request.Visit(path)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -136,9 +136,11 @@ func writeOut(mappings map[string]string, queue []string) {
 
 // write out image links
 func writeImgList(queue []string) {
+	sortedQueue := queue
+
 	// some vehicles have the same img so remove duplicates
-	slices.Sort(queue)
-	queue = slices.Compact(queue)
+	slices.Sort(sortedQueue)
+	sortedQueue = slices.Compact(sortedQueue)
 
 	file, err := os.Create(ImgOut)
 	if err != nil {
@@ -150,7 +152,7 @@ func writeImgList(queue []string) {
 	writer := bufio.NewWriter(file)
 	defer writer.Flush()
 
-	for _, link := range queue {
+	for _, link := range sortedQueue {
 		// list of image links separated by new lines
 		if _, err := writer.WriteString(link); err != nil {
 			log.Panic(err)
@@ -161,6 +163,11 @@ func writeImgList(queue []string) {
 		}
 	}
 }
+
+const (
+	Threads  = 2
+	DelaySec = 10
+)
 
 // create initialized web scraper
 func createCollector() *colly.Collector {
@@ -173,9 +180,10 @@ func createCollector() *colly.Collector {
 		colly.MaxDepth(1),
 	)
 
+	//nolint:exhaustruct // leave other values to the default
 	err := col.Limit(&colly.LimitRule{
-		Parallelism: 2,
-		RandomDelay: 10 * time.Second,
+		Parallelism: Threads,
+		RandomDelay: DelaySec * time.Second,
 	})
 	if err != nil {
 		log.Panic(err)

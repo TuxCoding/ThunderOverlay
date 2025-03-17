@@ -15,8 +15,8 @@ const OutDirPerm = 0o700
 const OutDir = "./out/"
 
 func main() {
-	createMapping()
 	// scrape()
+	createMapping()
 }
 
 // write content as json
