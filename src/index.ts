@@ -176,9 +176,14 @@ function handleEvents(events: Damage[]) {
 
         const destroyerTank = findVehicleFile(msg.destroyerTank);
         const destroyedTank = findVehicleFile(msg.destroyedTank);
-        if (!killerAvatar && isSquadRelevant(event.msg)) {
-            // Squad avatar linking failed maybe the regex included accidentally a space
-            console.error(`Cannot find squad avatar: ${msg.killer}`);
+        if (!killerAvatar) {
+            if (isSquadRelevant(event.msg)) {
+                // Squad avatar linking failed maybe the regex included accidentally a space
+                console.error(`Cannot find squad avatar (except if member got killed): ${msg.killer}`);
+            }
+
+            // not squad member - ignore
+            continue;
         }
 
         if (!destroyerTank || !destroyedTank) {

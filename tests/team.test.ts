@@ -2,7 +2,7 @@ import { getSquadAvatar, isSquadRelevant } from "../src/team";
 
 describe('Squad member check', () => {
     test('Not relevant', () => {
-        expect(isSquadRelevant("-GFF7- CassualTux (Merkava Mk.1B) zerstört [CoyC] DRAGON#28 (BMP-2)")).toBeTruthy();
+        expect(isSquadRelevant("-GFF7- TuxCode (Merkava Mk.1B) zerstört [CoyC] DRAGON#28 (BMP-2)")).toBeTruthy();
     })
 });
 
@@ -16,7 +16,7 @@ describe('find avatar', () => {
     })
 
     const KNOWN_SQUAD_MEMBERS = [
-        ["CassualTux"],
+        ["TuxCode"],
         ["Lukasxox"],
         ["nudel28"],
         ["SGTCross96"],
