@@ -61,5 +61,7 @@ describe('find vehicle', () => {
 
     test('Different name mapping from wiki', () => {
         expect(findVehicleFile("Т-62")).toBe("./assets/img/vehicles/ground/cn_t_62.png");
-    })
+    });
+});
+
 });

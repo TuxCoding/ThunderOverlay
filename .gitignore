@@ -17,5 +17,8 @@ src/assets/img/19px-Ge_icon.png
 src/assets/img/19px-Sl_icon.png
 
 # Compiled and bundled Typescript
-src/assets/javascript/*
-!src/assets/javascript/.gitkeep
+src/assets/js/*
+!src/assets/js/.gitkeep
+
+# Cache
+.eslintcache

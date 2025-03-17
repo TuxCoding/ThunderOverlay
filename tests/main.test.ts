@@ -1,0 +1,153 @@
+import * as fs from 'fs';
+import type { HudEvents } from './network';
+
+import { DestroyMessage } from '../src/main';
+import { parseMessage } from '../src/main';
+
+describe('Test file parsing', () => {
+    async function loadFile(path: string) {
+        const resp = await fs.promises.readFile(`./tests/resources/events/${path}`, "utf8");
+        const raw = JSON.parse(resp);
+        return raw as HudEvents;
+    }
+
+    test('Equality check', async () => {
+        const damage = {
+            "id": 1,
+            "msg": "-GFF7- Lukasxox (IT-1) zerstört -GFF7- CassualTux (Magach 6M)",
+            "sender": "",
+            "enemy": false,
+            "mode": "",
+            "time": 13
+        };
+
+        const expected: HudEvents = {
+            "events": [],
+            "damage": [damage]
+        };
+
+        const events = await loadFile('/simple.json');
+        expect(events).toStrictEqual(expected);
+    });
+
+    test('Empty', async () => {
+        const events = await loadFile('/empty.json');
+
+        const expected: HudEvents = {
+            "events": [],
+            "damage": []
+        };
+
+        expect(events).toStrictEqual(expected);
+    });
+
+    test('Empty', async () => {
+        const events = await loadFile('/multiple.json');
+
+        const expected: HudEvents = {
+            "events": [],
+            "damage": [
+                {
+                    "id": 76,
+                    "msg": "=ZV0RU= ⋇MiOKO69 (Typ 90 (B) \"Fuji\") zerstört -HUB- jorken12 (LAV-AD)",
+                    "sender": "",
+                    "enemy": false,
+                    "mode": "",
+                    "time": 232
+                },
+                {
+                    "id": 77,
+                    "msg": "=RMTS= ⋇Extaz1kk LT (BMP-2M) zerstört CorporaIRex (Christian II)",
+                    "sender": "",
+                    "enemy": false,
+                    "mode": "",
+                    "time": 234
+                }
+            ]
+        };
+
+        expect(events).toStrictEqual(expected);
+    });
+});
+
+describe('Message parsing', () => {
+    test('Ignore suicide', () => {
+        expect(parseMessage("╀CroDD╀ NoPrisoners_ (Q-5A/B) wurde zerstört")).toBeNull();
+    });
+
+    test('Ignore test drive', () => {
+        expect(parseMessage("-GFF7- Lukasxox (IT-1) zerstört Magach 6M")).toBeNull();
+    });
+
+    test('Ignore non destroy messages', () => {
+        expect(parseMessage("=VNPAi= babyTurtle (Christian II) in Brand gesetzt [MVolk] Sam9841 (Objekt 292)")).toBeNull();
+    });
+
+    const expected: DestroyMessage = {
+        killer: "-GFF7- Lukasxox",
+        destroyerTank: "IT-1",
+
+        destroyedTank: "Magach 6M",
+        killed: "-GFF7- CassualTux"
+    };
+
+    test('Destroy ground message parsing', () => {
+        expect(parseMessage("-GFF7- Lukasxox (IT-1) zerstört -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
+    });
+
+    test('Destroy air message parsing', () => {
+        expect(parseMessage("-GFF7- Lukasxox (IT-1) abgeschossen -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
+    });
+
+    test('Destroy bomb message parsing', () => {
+        expect(parseMessage("-GFF7- Lukasxox (IT-1) bomb -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
+    });
+
+    test('Destroy parsing parenthesis', () => {
+        const expected_parenthesis: DestroyMessage = {
+            killer: "-GFF7- SGTCross96",
+            destroyerTank: "BO 105 PAH-1",
+
+            destroyedTank: "XM1 (GM)",
+            killed: "sevenarchangel"
+        };
+
+        expect(parseMessage("-GFF7- SGTCross96 (BO 105 PAH-1) zerstört sevenarchangel (XM1 (GM))")).toStrictEqual(expected_parenthesis);
+    });
+
+    test('Destroy parsing parenthesis', () => {
+        const expected_parenthesis2: DestroyMessage = {
+            killer: "SCHIZAPHRENIK",
+            destroyerTank: "Class 3 (P)",
+
+            destroyedTank: "Strv 103С",
+            killed: "[GARD6] ⋇Brotmann89"
+        };
+
+        expect(parseMessage("SCHIZAPHRENIK (Class 3 (P)) zerstört [GARD6] ⋇Brotmann89 (Strv 103С)")).toStrictEqual(expected_parenthesis2);
+    });
+
+    test('Destroy parsing parenthesis', () => {
+        const expect_no_clan: DestroyMessage = {
+            killer: "SCHIZAPHRENIK",
+            destroyerTank: "Class 3 (P)",
+
+            destroyedTank: "Strv 103С",
+            killed: "⋇Brotmann89"
+        };
+
+        expect(parseMessage("SCHIZAPHRENIK (Class 3 (P)) zerstört ⋇Brotmann89 (Strv 103С)")).toStrictEqual(expect_no_clan);
+    });
+
+    test('Destroy parsing line break', () => {
+        const expect_line: DestroyMessage = {
+            killer: "╀CroDD╀ NoPrisoners_",
+            destroyerTank: "Q-5A/B",
+
+            destroyedTank: "JaPz.K A2",
+            killed: "⋇Einherjar1910"
+        };
+
+        expect(parseMessage("╀CroDD╀ NoPrisoners_ (Q-5A/B\r\n) zerstört ⋇Einherjar1910 (JaPz.K A2)")).toStrictEqual(expect_line);
+    });
+});

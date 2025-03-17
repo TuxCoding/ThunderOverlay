@@ -12,8 +12,8 @@
     },
     "scripts": {
         "test": "jest --maxWorkers=auto",
-        "watch": "esbuild src/index.ts --bundle --outfile=./src/assets/javascript/bundle.js --sourcemap --watch --minify",
-        "lint": "eslint . && stylelint ./src/assets/*.css"
+        "watchJS": "esbuild src/main.ts --bundle --outfile=./src/assets/js/bundle.js --sourcemap --watch --minify",
+        "lint": "eslint . --cache && stylelint ./src/assets/*.css"
     },
     "dependencies": {
         "esbuild": "^0.23.0"
