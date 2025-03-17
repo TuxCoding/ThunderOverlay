@@ -1,3 +1,4 @@
+/* Warning: OBS is not compatible with CSS nesting */
 body {
     /* Default OBS CSS rules */
     background-color: rgba(0 0 0 0);
@@ -151,22 +152,22 @@ body {
 
     /* Add left-right margin automatically to be centered */
     margin: auto;
+}
 
-    /* Title children */
-    & span {
-        /* Disable inherited flex layout and display items below each other */
-        display: block;
-    }
+/* Title children */
+#title span {
+    /* Disable inherited flex layout and display items below each other */
+    display: block;
+}
 
-    /* Ammunition image */
-    & #ammunition {
-        /* original size: 3107x414 */
-        height: 48px;
-        width: 360px;
+/* Ammunition image */
+#title #ammunition {
+    /* original size: 3107x414 */
+    height: 48px;
+    width: 360px;
 
-        /* hide by default */
-        opacity: 0;
-    }
+    /* hide by default */
+    opacity: 0;
 }
 
 /* Firing smoke video */
@@ -219,12 +220,12 @@ body {
 
     /* Display ammunition under the tank */
     z-index: 42;
+}
 
-    & img {
-        /* Similar size as the avatar for the left side */
-        height: var(--vehicle-size-single);
-        width: calc(var(--vehicle-size-single) * 2);
-    }
+.tank-single img {
+    /* Similar size as the avatar for the left side */
+    height: var(--vehicle-size-single);
+    width: calc(var(--vehicle-size-single) * 2);
 }
 
 /* Game summary overlay */
@@ -245,49 +246,49 @@ body {
 
     /* Appear animation when enabled */
     animation: var(--default-animation);
+}
 
-    /* Title of the summary */
-    & h1 {
-        text-align: center;
-    }
+/* Title of the summary */
+#summary h1 {
+    text-align: center;
+}
 
-    /* List item */
-    & .line {
-        display: flex;
+/* List item */
+#summary .line {
+    display: flex;
 
-        /* Verticaly align icons */
-        align-items: center;
-    }
+    /* Verticaly align icons */
+    align-items: center;
+}
 
-    /* Line icons */
-    & .line img {
-        /* original size 19px*20px or 13*19px */
-        height: 25px;
-    }
+/* Line icons */
+#summary .line img {
+    /* original size 19px*20px or 13*19px */
+    height: 25px;
+}
 
-    /* Line icon container */
-    & .line div {
-        /* Icon container width */
-        width: 30px;
+/* Line icon container */
+#summary .line div {
+    /* Icon container width */
+    width: 30px;
 
-        /* Space to right text */
-        padding-left: var(--text-spacing);
-        padding-right: var(--text-spacing);
-    }
+    /* Space to right text */
+    padding-left: var(--text-spacing);
+    padding-right: var(--text-spacing);
+}
 
-    /* Symbolic title icon for that line */
-    & .line-icon {
-        /* Horizontal align */
-        text-align: center;
-    }
+/* Symbolic title icon for that line */
+#summary .line-icon {
+    /* Horizontal align */
+    text-align: center;
+}
 
-    /* Values */
-    & .line p {
-        flex-grow: 1;
+/* Values */
+#summary .line p {
+    flex-grow: 1;
 
-        font-weight: var(--text-normal-weight);
-        font-size: var(--text-normal-size);
-    }
+    font-weight: var(--text-normal-weight);
+    font-size: var(--text-normal-size);
 }
 
 /* Appear animation */
@@ -315,46 +316,46 @@ body {
 
     /* Appear animation when enabled */
     animation: var(--default-animation);
+}
 
-    /* One team member each line */
-    & .line {
-        background-color: var(--background-color);
+/* One team member each line */
+#team .line {
+    background-color: var(--background-color);
 
-        display: flex;
+    display: flex;
 
-        /* Vertical align icons and text */
-        align-items: center;
+    /* Vertical align icons and text */
+    align-items: center;
 
-        /* Line spacing between elements */
-        margin-top: 5px;
-    }
+    /* Line spacing between elements */
+    margin-top: 5px;
+}
 
-    & .line:nth-child(1) {
-        /* Do not enable padding between div border and first element */
-        margin-top: 0;
-    }
+#team .line:nth-child(1) {
+    /* Do not enable padding between div border and first element */
+    margin-top: 0;
+}
 
-    /* Left team avatar icon */
-    & .line-icon {
-        /* Avatar size: original 150px */
-        --icon-size: 64px;
+/* Left team avatar icon */
+#team .line-icon {
+    /* Avatar size: original 150px */
+    --icon-size: 64px;
 
-        width: var(--icon-size);
-        height: var(--icon-size);
+    width: var(--icon-size);
+    height: var(--icon-size);
 
-        /* Space to right text */
-        margin-right: var(--text-spacing);
-        /* Horizontal align */
-        text-align: center;
-    }
+    /* Space to right text */
+    margin-right: var(--text-spacing);
+    /* Horizontal align */
+    text-align: center;
+}
 
-    /* Team member name and stats */
-    & .line p {
-        flex-grow: 1;
+/* Team member name and stats */
+#team .line p {
+    flex-grow: 1;
 
-        font-weight: var(--text-normal-weight);
-        font-size: var(--text-normal-size);
-    }
+    font-weight: var(--text-normal-weight);
+    font-size: var(--text-normal-size);
 }
 
 /* Textual icons for in text styling */
