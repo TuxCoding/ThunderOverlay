@@ -89,4 +89,19 @@ describe('Message parsing', () => {
     test('Destroy parsing parenthesis', () => {
         expect(parseMessage("SCHIZAPHRENIK (Class 3 (P)) zerstört ⋇Brotmann89 (Strv 103С)")).toStrictEqual(expect_no_clan);
     });
+
+    const expect_line: DestroyMessage = {
+        killer: "╀CroDD╀ NoPrisoners_",
+        destroyerTank: "Q-5A/B",
+
+        destroyedTank: "JaPz.K A2",
+        killed: "⋇Einherjar1910"
+    };
+    test('Destroy parsing line break', () => {
+        expect(parseMessage("╀CroDD╀ NoPrisoners_ (Q-5A/B\r\n) zerstört ⋇Einherjar1910 (JaPz.K A2)")).toStrictEqual(expect_line);
+    });
+
+    test('Destroy suicide', () => {
+        expect(parseMessage("╀CroDD╀ NoPrisoners_ (Q-5A/B) wurde zerstört")).toBeNull();
+    });
 });

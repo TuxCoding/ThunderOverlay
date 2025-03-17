@@ -134,6 +134,8 @@ async function startUpdating() {
 const regexp = /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen|bomb)? ([^(]+) \((.+)\)/g;
 
 export function parseMessage(msg: string): DestroyMessage | null {
+    msg = msg.replace("\r", "").replace("\n", "");
+
     // convert from iterable to array
     const matches = [...msg.matchAll(regexp)];
     if (matches.length < 1) {
@@ -225,6 +227,8 @@ function startNotificationLoop() {
 }
 
 function notificationLoop() {
+    console.log("Notification loop iteration");
+
     const lastNot = notificationQueue.pop();
     if (!lastNot) {
         // do not schedule another iteration if there are no new entries
@@ -281,7 +285,7 @@ function showNotification(notification: Notification) {
     destroyedTank.src = notification.destroyedTank;
 
     // delay the pop by one ms to load the image first
-    setTimeout(() => popup(container, 1, 4, 2), 1);
+    setTimeout(() => popup(container, 2, 4, 2), 1);
 }
 
 /**
