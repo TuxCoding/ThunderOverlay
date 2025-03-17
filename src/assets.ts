@@ -6,9 +6,13 @@ export const AVATAR_FILE_PATH = "./assets/img/avatars";
 export const FILE_EXT = "png";
 
 // mappings will be loaded into Javascript bundle by using resolveJSON from Typescript
-import groundMapping from './mappings/mappings_ground.json';
-import airMapping from './mappings/mappings_air.json';
-import heliMapping from './mappings/mappings_heli.json';
+import groundMapping from './mappings/ground.json';
+import airMapping from './mappings/air.json';
+import heliMapping from './mappings/heli.json';
+
+// mapping that is different from the wiki definition
+// so we don't need to modify the original files
+import specialMapping from './mappings/specials.json';
 
 /**
  * Types for mapping vehicle name to file name
@@ -43,20 +47,21 @@ export function findVehicleFile(vehicle: Vehicle): string | null {
  */
 function findMapping(vehicle: Vehicle): string | null {
     // search ground vehicles first, because it is mostly played
-    const groundName = (groundMapping as Mapping)[vehicle];
-    if (groundName) {
-        return `ground/${groundName}`;
-    }
+    const vehicleTypes = [
+        ["ground", groundMapping],
+        // Then lookup heli, because of the smaller size
+        ["heli", heliMapping],
+        ["ground", airMapping],
+        ["", specialMapping]
+    ];
 
-    // Then lookup heli, because of the smaller size
-    const heliName = (heliMapping as Mapping)[vehicle];
-    if (heliName) {
-        return `heli/${heliName}`;
-    }
+    for (const vehicleType of vehicleTypes) {
+        const [path, map] = vehicleType;
 
-    const airName = (airMapping as Mapping)[vehicle];
-    if (airName) {
-        return `air/${airName}`;
+        const name = (map as Mapping)[vehicle];
+        if (name) {
+            return `${path}/${name}`;
+        }
     }
 
     return null;

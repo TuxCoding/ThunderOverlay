@@ -147,13 +147,10 @@ export function parseMessage(msg: string): DestroyMessage | null {
         return null;
     }
 
+    // groups 0 is the complete string
+    const [, killer, destroyerTank, killed, destroyedTank] = groups;
     return {
-        // match 0 is the complete string
-        killer: groups[1],
-        destroyerTank: groups[2],
-
-        killed: groups[3],
-        destroyedTank: groups[4],
+        killer, destroyerTank, killed, destroyedTank
     }
 }
 

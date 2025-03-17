@@ -33,7 +33,8 @@ export function isSquadRelevant(msg: string): boolean {
     for (const member of KNOWN_SQUAD_MEMBERS) {
         // use includes check to be more aggressive if message includes spaces and we could
         // check against the complete log message
-        if (msg.includes(member[0])) {
+        const squadName = member[0];
+        if (msg.includes(squadName)) {
             return true;
         }
     }
@@ -48,9 +49,10 @@ export function isSquadRelevant(msg: string): boolean {
  */
 export function getSquadAvatar(name: string): string | null {
     for (const member of KNOWN_SQUAD_MEMBERS) {
-        if (name.endsWith(member[0])) {
+        const [squadName, avatar] = member;
+        if (name.endsWith(squadName)) {
             // use endsWith, because its not necessary to check with different positions
-            return member[1];
+            return avatar;
         }
     }
 
