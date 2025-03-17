@@ -34,7 +34,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
             if (err.name == "TypeError") {
                 // happens if application is not running, only minimal client or a web extension blocked it
                 console.warn("Unknown error: some browser extension might blocked this request or War Thunder is not running");
-                console.warn(`Updating after ${FAIL_UPDATE_TIME / 1_000} minute(s)`);
+                console.warn(`Updating after ${FAIL_UPDATE_TIME / 60 / 1_000} minute(s)`);
 
                 // delay update process if not running
                 setTimeout(() => updateHUD(seenEvent, seenDamange), FAIL_UPDATE_TIME);
@@ -157,7 +157,7 @@ function handleEvents(events: Damage[]) {
             killed: msg.killed,
         };
 
-        console.log(`New notification: ${notification}`);
+        console.log("New notification:", notification);
         notificationQueue.push(notification);
     }
 
@@ -224,7 +224,7 @@ function notificationLoop() {
         return;
     }
 
-    console.debug(`Showing notification: ${lastNot}`);
+    console.debug("Showing notification: ", lastNot);
     showNotification(lastNot);
     setTimeout(() => notificationLoop(), NOTIFICATION_SHOW_INTERVAL);
 }

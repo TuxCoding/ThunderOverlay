@@ -115,7 +115,7 @@ function onShow(ammunitionEl: HTMLElement | null) {
         ?.play()
         .catch(error => {
             // Videos would stop playing if the window is not visible for browser energy savings
-            console.debug(`Video paused, because window is not in focus ${error}`);
+            console.debug("Video paused, because window is not in focus ", error);
         });
 }
 
