@@ -47,11 +47,11 @@ export function main() {
     addErrorHandlerImg();
 
     const not: Notification = {
-        killer: "xyz",
+        killer: "^12345^ 1234567890123456",
         killerAvatar: "./assets/img/avatars/cardicon_fem_06.png",
-        killerTankIcon: "./assets/img/vehicles/ground/ussr_t_55b.png",
+        killerTankIcon: "./assets/img/vehicles/ground/ussr_t_55a.png",
         destroyedTank: "./assets/img/vehicles/ground/ussr_t_44_122.png",
-        killed: "abc"
+        killed: "^12345^ 1234567890123456"
     }
 
     showNotification(not);
