@@ -126,11 +126,22 @@
       <script>var exports = {};</script>
       <script src="./assets/javascript/bundle.js"></script>
       <script>
-        document.getElementById("killer-tank").onerror = () => {
-            document.getElementById("killer-tank").src = "./assets/img/transparent.png";
+        document.getElementById("killer-tank").onload = () => {
+            document.getElementById("killer-tank").style.opacity = "1";
         };
+
+        document.getElementById("killer-tank").onerror = () => {
+            document.getElementById("killer-tank").src = "";
+            document.getElementById("killer-tank").style.opacity = "0";
+        };
+
+        document.getElementById("destroyed-tank").onload = () => {
+            document.getElementById("destroyed-tank").style.opacity = "1";
+        };
+
         document.getElementById("destroyed-tank").onerror = () => {
-            document.getElementById("destroyed-tank").src = "./assets/img/transparent.png";
+            document.getElementById("destroyed-tank").src = "";
+            document.getElementById("destroyed-tank").style.opacity = "0";
         };
       </script>
   </body>
