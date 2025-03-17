@@ -3,7 +3,6 @@ import * as fs from 'fs';
 
 import groundMapping from '../src/mappings/ground.json';
 import airMapping from '../src/mappings/air.json';
-import heliMapping from '../src/mappings/heli.json';
 
 import specialMapping from '../src/mappings/specials.json';
 
@@ -82,7 +81,6 @@ describe('Special handling unnecessary', () => {
     function isFoundInDefaultMap(vehicle: string): boolean {
         const vehicleTypes = [
             groundMapping,
-            heliMapping,
             airMapping,
         ];
 
@@ -105,14 +103,11 @@ describe('Vehicle image available', () => {
     // merge into single array with only the paths
     const vehicleTypes = [
         ["ground", groundMapping],
-        // Then lookup heli, because of the smaller size
-        ["air", heliMapping],
         ["air", airMapping],
         ["", specialMapping]
     ];
 
     const length = Object.keys(groundMapping).length
-        + Object.keys(heliMapping).length
         + Object.keys(airMapping).length
         + Object.keys(specialMapping).length;
 
