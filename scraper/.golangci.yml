@@ -1,7 +1,7 @@
 run:
   # Set to container quota
   concurrency: 0
-  timeout: 10s
+  timeout: 60s
   allow-parallel-runners: true
 
 linters:
