@@ -15,7 +15,8 @@ on:
       - main
 
 jobs:
-  lint-test:
+  web-lint:
+    name: Web lint and test
     # Environment image - always use the newest OS
     runs-on: ubuntu-latest
     permissions:
@@ -44,5 +45,28 @@ jobs:
       - name: Lint web project
         run: pnpm lint
 
-      - name: test web project
+      - name: Test web project
         run: pnpm test
+
+  golangci:
+    name: Scraper lint
+    runs-on: ubuntu-latest
+    permissions:
+      # With at least one permission given, all default to read
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache-dependency-path: |
+             scraper/go.sum
+
+      - run: go mod download
+        working-directory: ./scraper
+
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          working-directory: ./scraper
