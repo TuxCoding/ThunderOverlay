@@ -73,7 +73,7 @@ function popup(container: HTMLElement, startSec: number, showSec: number, endSec
     container.style.animationDuration = `${startSec}s`;
 
     // start fire animation
-    setTimeout(() => onShow(ammunitionEl), startSec * 1000 - 500);
+    setTimeout(() => onShow(ammunitionEl), startSec * 1000 - 300);
 
     // start hide animation after showed it for showSec
     setTimeout(() => hide(container, endSec), showSec * 1000);
