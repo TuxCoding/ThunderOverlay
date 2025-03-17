@@ -1,3 +1,14 @@
+body {
+    /* Default OBS CSS rules */
+    background-color: rgba(0 0 0 0);
+
+    /* Remove top and bottom margin but horizontal center it */
+    margin: 0 auto;
+
+    /* Hide overflowing text */
+    overflow: hidden;
+}
+
 :root {
     /* Brand color */
     --color-accent: #00A3A3;
