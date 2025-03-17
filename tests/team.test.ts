@@ -46,7 +46,7 @@ describe('Team avatar available', () => {
             return;
         }
 
-        const path = `./src/${AVATAR_FILE_PATH}/${file}.${FILE_EXT}`
+        const path = `./src/${AVATAR_FILE_PATH}/${file}.${FILE_EXT}`;
         const exists = await fs.promises.stat(path);
 
         expect(exists.isFile()).toBeTruthy();
