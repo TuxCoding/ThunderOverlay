@@ -207,19 +207,22 @@ function showNotification(notification: Notification) {
 }
 
 function popup(container: HTMLElement, showSec: number, hideSec: number) {
-    // activate show animation and make it visible
-    container.style.animation = `slide-in ${showSec}s 1`;
-    container.style.display = 'flex';
+    // add the animation in pause state to not start it automatically before setting our display
+    container.style.animationPlayState = "paused";
 
+    container.style.animation = `slide-in ${showSec}s 1`;
+
+    container.style.animationPlayState = "start";
+    container.style.animationFillMode = "forwards";
+
+    // activate show animation and make it visible
     setTimeout(() => hide(container, hideSec), showSec * 1000 + 500);
 }
 
 function hide(container: HTMLElement, hideSec: number) {
     // add the hide animation and make it invisible after it
     container.style.animation = `fade-out ${hideSec}s 1`;
-    setTimeout(() => {
-        container.style.display = "none";
-    }, hideSec * 1000);
+    container.style.animationFillMode = "forwards";
 }
 
 /* Run update only on the site */
