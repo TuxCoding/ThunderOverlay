@@ -2,6 +2,15 @@
 
 ## Description
 
+### Features
+
+* Supports different vehicle types:
+    * Tanks
+    * Planes
+    * Helicopter
+    * Ships
+* Detects nukes too
+
 ### Motiviation
 
 ## Building
