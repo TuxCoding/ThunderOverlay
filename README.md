@@ -8,7 +8,7 @@
 # Install dependencies
 pnpm install
 # Compile typescript
-pnpm exec tsc
+pnpm exec esbuild
 # Optional: run the test suit
 pnpm exec jest
 
