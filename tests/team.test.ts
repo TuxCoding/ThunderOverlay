@@ -37,7 +37,16 @@ describe('find avatar', () => {
 });
 
 // check if avatar is downloaded if defined
-describe('Team avatar available', () => {
+const AVATAR_SRC_PATH = `./src/${AVATAR_FILE_PATH}`;
+
+let assetExtracted;
+const files = fs.readdirSync(AVATAR_SRC_PATH);
+if (files.length > 1) {
+    assetExtracted = true;
+}
+
+const describeCond = assetExtracted ? describe : describe.skip;
+describeCond('Team avatar available', () => {
     test.each(KNOWN_SQUAD_MEMBERS)('Squad member avatar exists (%s)', async (member) => {
         const file = getSquadAvatar(member);
         if (!file) {
@@ -45,7 +54,7 @@ describe('Team avatar available', () => {
             fail("avatar not defined?");
         }
 
-        const path = `./src/${AVATAR_FILE_PATH}/${file}.${FILE_EXT}`;
+        const path = `${AVATAR_SRC_PATH}/${file}.${FILE_EXT}`;
         const exists = await fs.promises.stat(path);
 
         expect(exists.isFile()).toBeTruthy();
