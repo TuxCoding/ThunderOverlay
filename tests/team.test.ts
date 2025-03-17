@@ -44,22 +44,20 @@ describe('Squad member check', () => {
 });
 
 describe('find avatar', () => {
-    const KNOWN_SQUAD_MEMBERS = [
-        "CassualTux",
-        "Lukasxox",
-        "nudel28",
-        "SGTCross96",
-        "Icefruit",
-        "l-IlIllIIlIIllI",
-    ]
-
     test('Not existing', () => {
         expect(getSquadAvatar("somebody")).toBeNull();
     });
 
-    for (const member of KNOWN_SQUAD_MEMBERS) {
-        test('Existing', () => {
-            expect(getSquadAvatar(member)).toBeDefined();
-        });
-    }
+    const KNOWN_SQUAD_MEMBERS = [
+        ["CassualTux"],
+        ["Lukasxox"],
+        ["nudel28"],
+        ["SGTCross96"],
+        ["Icefruit"],
+        ["l-IlIllIIlIIllI"]
+    ]
+
+    test.each(KNOWN_SQUAD_MEMBERS)('Squad member check', (member) => {
+        expect(getSquadAvatar(member)).toBeDefined();
+    });
 })
