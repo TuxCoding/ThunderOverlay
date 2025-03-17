@@ -1,5 +1,5 @@
 import { findVehicleFile } from "./assets";
-import { Damage, fetchHUD } from "./network";
+import { fetchHUD, type Damage } from "./network";
 import { getSquadAvatar, isSquadRelevant } from "./team";
 
 async function updateHUD(seenEvent: number, seenDamange: number) {
@@ -10,7 +10,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
         let lastId = seenDamange;
         if (entries.length > 0) {
             lastId = entries[entries.length - 1].id;
-            console.log("Updating last id to " + lastId);
+            console.log(`Updating last id to ${lastId}`);
         }
 
         // schedule next update
@@ -26,10 +26,10 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
                 console.error("Updating after 1min");
                 setTimeout(() => updateHUD(seenEvent, seenDamange), 60 * 1000);
             } else {
-                console.error(`Uknown error: ${err.name}: ${err.message}`)
+                console.error(`Unknown error: ${err.name}: ${err.message}`)
             }
         } else {
-            console.error(`Uknown error: ${error}`)
+            console.error(`Unknown error: ${error}`)
         }
     }
 }
@@ -66,7 +66,7 @@ async function start() {
     const entries = events.damage;
     if (entries.length > 0) {
         lastId = entries[entries.length - 1].id;
-        console.log("Setting first id to " + lastId);
+        console.log(`Setting first id to ${lastId}`);
     }
 
     updateHUD(0, lastId);
@@ -104,6 +104,13 @@ function handleEvents(events: Damage[]) {
     for (const event of events) {
         const msg = parseMessage(event.msg);
         if (!msg) {
+            const rawMsg = event.msg;
+            if (rawMsg.includes("zerstört") || rawMsg.includes("bomb") || rawMsg.includes("abgeschossen")) {
+                if (isSquadRelevant(rawMsg)) {
+                    console.error(`Ignored msg: ${rawMsg}`);
+                }
+            }
+
             continue;
         }
 
@@ -112,19 +119,19 @@ function handleEvents(events: Damage[]) {
         const destroyerTank = findVehicleFile(msg.destroyerTank);
         const destroyedTank = findVehicleFile(msg.destroyedTank);
         if (!killerAvatar || !destroyerTank || !destroyedTank) {
-            console.error("NULL " + killerAvatar + " " + destroyedTank + " " + destroyedTank);
+            console.error(`Killer: ${msg.killer} (${killerAvatar}) with ${destroyerTank} to ${destroyedTank}`);
             continue;
         }
 
         const notification: Notification = {
             killer: msg.killer,
-            killerAvatar: "./assets/img/avatars/" + killerAvatar + ".png",
+            killerAvatar: `./assets/img/avatars/${killerAvatar}.png`,
             killerTankIcon: destroyerTank,
             destroyedTank: destroyedTank,
             killed: msg.killed,
         };
 
-        console.log("New notification: " + notification);
+        console.log(`New notification: ${notification}`);
         notifications.push(notification);
     }
 
@@ -137,6 +144,7 @@ let notificationQueueRunning = false;
 
 function startNotificationLoop() {
     if (notificationQueueRunning) {
+        // already running
         return;
     }
 
@@ -153,7 +161,7 @@ function notificationLoop() {
         return;
     }
 
-    console.log("Showing notification:" + lastNot);
+    console.log(`Showing notification: ${lastNot}`);
     showNotification(lastNot);
     setTimeout(() => notificationLoop(), 8 * 1000);
 }
