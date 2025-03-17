@@ -33,25 +33,7 @@
         </div> -->
     </div>
 
-    <!-- Disable module error -->
     <script src="./assets/javascript/bundle.js"></script>
-    <script>
-        /* Disable images if they are not found */
-        function restore() {
-            this.style.opacity = "1";
-        }
-
-        function hideImg() {
-            this.src = "";
-            this.style.opacity = "0";
-        }
-
-        document.getElementById("killer-tank").onload = restore
-        document.getElementById("killer-tank").onerror = hideImg;
-
-        document.getElementById("destroyed-tank").onload = restore;
-        document.getElementById("destroyed-tank").onerror = hideImg;
-    </script>
 </body>
 
 </html>
