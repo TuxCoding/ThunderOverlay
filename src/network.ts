@@ -6,25 +6,25 @@ const HOST = "http://localhost:8111";
  */
 export interface HudEvents {
     /** unknown always empty */
-    events: [],
+    readonly events: [],
     /** battle log */
-    damage: Damage[]
-};
+    readonly damage: Damage[]
+}
 
 export interface Damage {
     /** increasing id */
-    id: number,
+    readonly id: number,
     /** battle log message */
-    msg: string,
+    readonly msg: string,
     /** always empty */
-    sender: string,
+    readonly sender: string,
     /** always false */
-    enemy: boolean,
+    readonly enemy: boolean,
     /** represents squad, team, all, etc, but is always empty atm */
-    mode: string,
+    readonly mode: string,
     /** battle log timer in seconds */
-    time: number
-};
+    readonly time: number
+}
 
 const GET_METHOD = "GET";
 const JSON_TYPE = "application/json";

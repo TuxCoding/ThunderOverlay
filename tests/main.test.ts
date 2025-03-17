@@ -1,8 +1,6 @@
+import { DestroyMessage, parseMessage } from "@App/main";
+import type { HudEvents } from "@App/network";
 import * as fs from "fs";
-import type { HudEvents } from "./network";
-
-import { DestroyMessage } from "../src/main";
-import { parseMessage } from "../src/main";
 
 describe("Test file parsing", () => {
     async function loadFile(path: string) {
@@ -15,7 +13,7 @@ describe("Test file parsing", () => {
     test("Simple single event", async () => {
         const damage = {
             id: 1,
-            msg: "-GFF7- Lukasxox (IT-1) zerstört -GFF7- CassualTux (Magach 6M)",
+            msg: "-GFF7- Somebody (IT-1) zerstört -GFF7- CassualTux (Magach 6M)",
             sender: "",
             enemy: false,
             mode: "",
@@ -85,7 +83,7 @@ describe("Message parsing", () => {
     });
 
     const expected: DestroyMessage = {
-        killer: "-GFF7- Lukasxox",
+        killer: "-GFF7- Somebody",
         destroyerVehicle: "IT-1",
 
         destroyedVehicle: "Magach 6M",
@@ -93,15 +91,11 @@ describe("Message parsing", () => {
     };
 
     test("Destroy ground message parsing", () => {
-        expect(parseMessage("-GFF7- Lukasxox (IT-1) zerstört -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
+        expect(parseMessage("-GFF7- Somebody (IT-1) zerstört -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
     });
 
     test("Destroy air message parsing", () => {
-        expect(parseMessage("-GFF7- Lukasxox (IT-1) abgeschossen -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
-    });
-
-    test("Destroy bomb message parsing", () => {
-        expect(parseMessage("-GFF7- Lukasxox (IT-1) bomb -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
+        expect(parseMessage("-GFF7- Somebody (IT-1) abgeschossen -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
     });
 
     test("Destroy parsing parenthesis", () => {

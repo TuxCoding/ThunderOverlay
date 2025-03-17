@@ -5,7 +5,7 @@
     /* Language and Environment */
     // We can run on the latest browser so include the latest standards in output,
     // although it could still break if the browser didn't implement a specific feature from this standard
-    "target": "ES2023",                                /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "target": "ESNext",                                /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "module": "ESNext",                                /* Specify what module code is generated. */
 
     /* Modules */
@@ -13,6 +13,28 @@
         "src",
         "tests"
     ],
+
+    "lib": [
+        // Default for ESNext target above except we exclude scripthost for windows native systems
+        // https://github.com/microsoft/TypeScript/blob/main/src/lib/esnext.full.d.ts
+        "DOM",
+        "DOM.Iterable",
+        "DOM.AsyncIterable",
+        "ESNext",
+        "WebWorker.ImportScripts",
+        // Additional libs
+        "ESNext.Array",
+        "ESNext.AsyncIterable",
+        "ESNext.Symbol",
+        "ESNext.BigInt",
+    ],
+
+    // allow path aliases
+    "baseUrl": ".",
+    "paths": {
+      "@App/*": ["src/*"],
+      "@Mapping/*": ["src/mappings/*"]
+    },
 
     // import json directly into output
     "resolveJsonModule": true,                         /* Enable importing .json files. */

@@ -3,17 +3,17 @@
  */
 export interface Notification {
     /** killer name with clan */
-    killer: string,
+    readonly killer: string,
     /** avatar location */
-    killerAvatar: string,
+    readonly killerAvatar: string,
 
     /** killer vehicle location */
-    killerTankIcon: string,
+    readonly killerTankIcon: string,
 
     /** killed player name with clan */
-    killed: string,
+    readonly killed: string,
     /** destroyed vehicle location */
-    destroyedTank: string
+    readonly destroyedTank: string
 }
 
 // HTML ids

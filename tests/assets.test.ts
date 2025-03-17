@@ -1,11 +1,11 @@
-import { FILE_EXT, findVehicleFile, Mapping, VEHICLE_FILE_PATH, VehicleType } from "../src/assets";
+import { FILE_EXT, findVehicleFile, Mapping, VEHICLE_FILE_PATH, VehicleType } from "@App/assets";
+
+import airMapping from "@Mapping/air.json";
+import groundMapping from "@Mapping/ground.json";
+import shipMapping from "@Mapping/ships.json";
+import specialMapping from "@Mapping/specials.json";
+
 import * as fs from "fs";
-
-import groundMapping from "../src/mappings/ground.json";
-import airMapping from "../src/mappings/air.json";
-import shipMapping from "../src/mappings/ships.json";
-
-import specialMapping from "../src/mappings/specials.json";
 
 const VEHICLE_SRC_PATH = `./src/${VEHICLE_FILE_PATH}`;
 
@@ -108,7 +108,7 @@ describe("find vehicles with special names", () => {
 
     test("if duplicate mapping", () => {
         expect(findVehicleFile("Milan")).toBe("./assets/img/vehicles/air/mirage_milan.avif");
-        //expect(findVehicleFile("Milan")).toBe("./assets/img/vehicles/ships/fr_destroyer_aigle_class_milan.avif");
+        // expect(findVehicleFile("Milan")).toBe("./assets/img/vehicles/ships/fr_destroyer_aigle_class_milan.avif");
     });
 
     test("Q-5A/B", () => {
@@ -137,7 +137,7 @@ describe("Special handling unnecessary", () => {
         return false;
     }
 
-    test.each(specialVehicleNames)("if special case handling is now uncessary (%s)", (specialVehicleName) => {
+    test.each(specialVehicleNames)("if special case handling is now uncessary (%s)", specialVehicleName => {
         expect(isFoundInDefaultMap(specialVehicleName)).toBeFalsy();
     });
 });
@@ -188,7 +188,7 @@ describeCond("Vehicle image available", () => {
         }
     }
 
-    test.each(mergedMap)("Vehicle image not downloaded (%s)", async (filePath) => {
+    test.each(mergedMap)("Vehicle image not downloaded (%s)", async filePath => {
         const exists = await fs.promises.stat(filePath);
         expect(exists.isFile()).toBeTruthy();
         return;

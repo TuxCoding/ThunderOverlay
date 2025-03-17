@@ -1,6 +1,6 @@
-import { getSquadAvatar, isSquadRelevant } from "../src/team";
+import { AVATAR_FILE_PATH, FILE_EXT } from "@App/assets";
+import { getSquadAvatar, isSquadRelevant } from "@App/team";
 import * as fs from "fs";
-import { AVATAR_FILE_PATH, FILE_EXT } from "../src/assets";
 
 const KNOWN_SQUAD_MEMBERS = [
     ["TuxCode"],
@@ -30,7 +30,7 @@ describe("find avatar", () => {
         expect(getSquadAvatar("⋇l-IlIllIIlIIllI")).toBe("cardicon_fem_ru_modern_01");
     });
 
-    test.each(KNOWN_SQUAD_MEMBERS)("Squad member check (%s)", (member) => {
+    test.each(KNOWN_SQUAD_MEMBERS)("Squad member check (%s)", member => {
         // verify each player has avatar defined in source
         expect(getSquadAvatar(member)).toBeDefined();
     });
@@ -48,7 +48,7 @@ if (files.length > 1) {
 
 const describeCond = assetExtracted ? describe : describe.skip;
 describeCond("Team avatar available", () => {
-    test.each(KNOWN_SQUAD_MEMBERS)("Squad member avatar exists (%s)", async (member) => {
+    test.each(KNOWN_SQUAD_MEMBERS)("Squad member avatar exists (%s)", async member => {
         const file = getSquadAvatar(member);
         if (!file) {
             // not defined in source

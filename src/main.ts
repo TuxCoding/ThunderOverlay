@@ -1,8 +1,8 @@
-import { AVATAR_FILE_PATH, FILE_EXT, findVehicleFile } from "./assets";
-import { DESTROY_TYPE } from "./lang";
-import { fetchHUD, type Damage } from "./network";
-import { getSquadAvatar, isSquadRelevant } from "./team";
-import { addErrorHandlerImg, showNotification, type Notification } from "./ui";
+import { AVATAR_FILE_PATH, FILE_EXT, findVehicleFile } from "@App/assets";
+import { DESTROY_TYPE } from "@App/lang";
+import { type Damage,fetchHUD } from "@App/network";
+import { getSquadAvatar, isSquadRelevant } from "@App/team";
+import { addErrorHandlerImg, type Notification,showNotification } from "@App/ui";
 
 // time in ms
 const UPDATE_TIME = 1_000;
@@ -20,7 +20,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
         const entries = result.damage;
 
         let lastId = seenDamange;
-        if (entries.length != 0) {
+        if (entries.length !== 0) {
             lastId = entries[entries.length - 1].id;
             console.debug(`Updating last id to ${lastId}`);
         }
@@ -35,7 +35,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
     } catch (error) {
         if (error instanceof Error) {
             const err: Error = error;
-            if (err.name == "TypeError") {
+            if (err.name === "TypeError") {
                 // happens if application is not running, only minimal client or a web extension blocked it
                 console.warn("Unknown error: some browser extension might blocked this request or War Thunder is not running");
                 console.warn(`Updating after ${FAIL_UPDATE_TIME / 60 / 1_000} minute(s)`);
@@ -43,7 +43,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
                 // delay update process if not running
                 setTimeout(() => {
                     updateHUD(seenEvent, seenDamange).catch(console.error);
-                }, UPDATE_TIME);
+                }, FAIL_UPDATE_TIME);
             } else {
                 console.error(`Unknown error: ${err.name}: ${err.message}`);
             }
@@ -56,15 +56,15 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
 /** Parsed destroy message */
 export interface DestroyMessage {
     /** Killer name including clan */
-    killer: string,
+    readonly killer: string,
 
     /** battle log destroyer vehicle */
-    destroyerVehicle: string,
+    readonly destroyerVehicle: string,
     /** battle log destroyed vehicle */
-    destroyedVehicle: string
+    readonly destroyedVehicle: string
 
     /** Killed player name including clan */
-    killed: string
+    readonly killed: string
 }
 
 export function init() {
@@ -95,7 +95,7 @@ async function startUpdating() {
 
     let lastId = 0;
     const entries = events.damage;
-    if (entries.length != 0) {
+    if (entries.length !== 0) {
         lastId = entries[entries.length - 1].id;
         console.log(`Setting first id to ${lastId}`);
     }
@@ -191,7 +191,7 @@ function handleEvents(events: Damage[]) {
         notificationQueue.push(notification);
     }
 
-    if (notificationQueue.length != 0) {
+    if (notificationQueue.length !== 0) {
         // trigger the notification runtime if not running yet
         startNotificationLoop();
     }
