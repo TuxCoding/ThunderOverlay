@@ -15,7 +15,7 @@ on:
       - main
 
 jobs:
-  build:
+  lint-test:
     # Environment image - always use the newest OS
     runs-on: ubuntu-latest
     permissions:
@@ -39,23 +39,10 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm install
-  lint:
-    needs: build
-    runs-on: ubuntu-latest
+        run: pnpm install --frozen-lockfile
 
-    permissions:
-      contents: read
-
-    steps:
       - name: Lint web project
         run: pnpm lint
-  test:
-    needs: build
-    runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-    steps:
       - name: test web project
         run: pnpm test
