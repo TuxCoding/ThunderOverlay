@@ -2,9 +2,11 @@
 
 ## Description
 
+### Motiviation
+
 ## Building
 
->
+```shell
 # Install dependencies
 pnpm install
 # Optional (Development): run the test suit
@@ -13,6 +15,7 @@ pnpm test
 pnpm lint
 # Compile TypeScript
 pnpm watchJS
+```
 
 ## Installation
 
@@ -43,18 +46,18 @@ Only a mockup
 ### What doesn't work?
 
 * Squad members cannot be extracted automatically and have to be added manually
-    * The webinterface has indication that this feature was available or planned at least (`mode`)
+    * The data from the webinterface indicates that this feature was available or planned at least (`mode`)
 * Avatars cannot be downloaded on the fly i.e. for enemies
     * There is only a limited amount of avatars you can choose
     * However, we found no way to find out which of those is selected
     * There is:
         * The stats site, but it's bot protected [Stats](https://warthunder.com/de/community/userinfo?nick=TuxCode)
-        * Maybe the mobile app or in-game could provide an endpoint, but this would be highly
-        dependend on internal changes and not **approved** by `Gaijin`
+        * Maybe the mobile app or in-game could provide an API endpoint, but this would be highly
+        dependend on internal changes and not **approved** by `Gaijin`. Therefore it was not investigated further.
 * Which kind of ammunition was used
-    * This data is exposed in the in-game, but not available in the web interface
+    * This data is exposed in the in-game battle log, but not available in the web interface
     * Well, we could use optical character recognition, but this would be overkill and a performance hit
-    * We could make a database of standard ammunition per tank, but it would be very time consuming
+    * We could make a database of standard ammunition per tank, but it would be very time consuming and not always true
 
 ### The overlay doesn't work with the minimal client
 
@@ -63,7 +66,7 @@ The web server from the game client is only provided by the full client version.
 ### How does it work?
 
 It extracts the data from the battle log. This log is pulled from the the web server `http://localhost:9111` provided
-by the War Thunder client itself. It parses the corresponding raw data to player names and vehicles and then looks up
+by the War Thunder client itself. It parses the corresponding raw data to player and vehicle names and then looks up
 the corresponding image data provided by the wiki.
 
 ## Credits
@@ -75,5 +78,5 @@ the corresponding image data provided by the wiki.
     * By the War Thunder wiki:
         * Text font
         * Foreign vehicle prefix
-    * Vehicle symbols from the webinterface itself
+    * Vehicle symbols (i.e. fighter and tank) from the webinterface itself
 * Vehicle images from the wiki
