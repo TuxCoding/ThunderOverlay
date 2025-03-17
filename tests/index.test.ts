@@ -1,5 +1,7 @@
 import * as fs from 'fs';
-import { DestroyMessage, HudEvents, parseMessage } from '../src/index';
+import type { HudEvents } from './network';
+import type { DestroyMessage } from './index';
+import { parseMessage } from './index';
 
 describe('Test file parsing', () => {
     const damage = {
@@ -74,5 +76,16 @@ describe('Message parsing', () => {
     };
     test('Destroy parsing parenthesis', () => {
         expect(parseMessage("SCHIZAPHRENIK (Class 3 (P)) zerstört [GARD6] ⋇Brotmann89 (Strv 103С)")).toStrictEqual(expected_parenthesis2);
+    });
+
+    const expect_no_clan: DestroyMessage = {
+        killer: "SCHIZAPHRENIK",
+        destroyerTank: "Class 3 (P)",
+
+        destroyedTank: "Strv 103С",
+        killed: "⋇Brotmann89"
+    };
+    test('Destroy parsing parenthesis', () => {
+        expect(parseMessage("SCHIZAPHRENIK (Class 3 (P)) zerstört ⋇Brotmann89 (Strv 103С)")).toStrictEqual(expect_no_clan);
     });
 });
