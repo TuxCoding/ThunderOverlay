@@ -13,64 +13,64 @@ describe('find vehicle', () => {
     });
 
     test('Simple name', () => {
-        expect(findVehicleFile('2S38')).toBe("./assets/img/vehicles/ground/ussr_2s38.png");
+        expect(findVehicleFile('2S38')).toBe("./assets/img/vehicles/ground/ussr_2s38.avif");
     });
 
     test('Name with space', () => {
-        expect(findVehicleFile('Magach 6M')).toBe("./assets/img/vehicles/ground/il_magach_6m.png");
+        expect(findVehicleFile('Magach 6M')).toBe("./assets/img/vehicles/ground/il_magach_6m.avif");
     });
 
     test('Name with dash', () => {
-        expect(findVehicleFile('T-80B')).toBe("./assets/img/vehicles/ground/ussr_t_80b.png");
+        expect(findVehicleFile('T-80B')).toBe("./assets/img/vehicles/ground/ussr_t_80b.avif");
     });
 
     test("Name with quote symbol", () => {
-        expect(findVehicleFile("Ra'am Sagol")).toBe("./assets/img/vehicles/ground/il_merkava_mk_3_raam_segol.png");
+        expect(findVehicleFile("Ra'am Sagol")).toBe("./assets/img/vehicles/ground/il_merkava_mk_3_raam_segol.avif");
     });
 
     test("Name with parenthis", () => {
-        expect(findVehicleFile("T-72AV (TURMS-T)")).toBe("./assets/img/vehicles/ground/ussr_t_72av_turms.png");
+        expect(findVehicleFile("T-72AV (TURMS-T)")).toBe("./assets/img/vehicles/ground/ussr_t_72av_turms.avif");
     });
 
     test("Name with divisor", () => {
-        expect(findVehicleFile("VCC-80/30")).toBe("./assets/img/vehicles/ground/it_vcc_80_hitfist_30.png");
+        expect(findVehicleFile("VCC-80/30")).toBe("./assets/img/vehicles/ground/it_vcc_80_hitfist_30.avif");
     });
 
     test("Name with dot", () => {
-        expect(findVehicleFile("Merkava Mk.1B")).toBe("./assets/img/vehicles/ground/il_merkava_mk_1b.png");
+        expect(findVehicleFile("Merkava Mk.1B")).toBe("./assets/img/vehicles/ground/il_merkava_mk_1b.avif");
     });
 
     test("Aircraft", () => {
-        expect(findVehicleFile("Hampden TB Mk I")).toBe("./assets/img/vehicles/air/hp52_hampden_tbmk1.png");
+        expect(findVehicleFile("Hampden TB Mk I")).toBe("./assets/img/vehicles/air/hp52_hampden_tbmk1.avif");
     });
 
     test("Heli", () => {
-        expect(findVehicleFile("UH-1B")).toBe("./assets/img/vehicles/heli/uh_1b.png");
+        expect(findVehicleFile("UH-1B")).toBe("./assets/img/vehicles/air/uh_1b.avif");
     });
 
     test('Special chacter before vehicle', () => {
         // japan
-        expect(findVehicleFile("▅UH-1B")).toBe("./assets/img/vehicles/heli/uh_1b_japan.png");
+        expect(findVehicleFile("▅UH-1B")).toBe("./assets/img/vehicles/air/uh_1b_japan.avif");
     });
 
     test('Special chacter before vehicle', () => {
         // italy
-        expect(findVehicleFile("◔Mi-24D")).toBe("./assets/img/vehicles/heli/mi_24d_hungary.png");
+        expect(findVehicleFile("◔Mi-24D")).toBe("./assets/img/vehicles/air/mi_24d_hungary.avif");
     });
 
     test('Weird spacing after name', () => {
-        expect(findVehicleFile("ELC bis ")).toBe("./assets/img/vehicles/ground/fr_amx_elc_bis.png");
+        expect(findVehicleFile("ELC bis ")).toBe("./assets/img/vehicles/ground/fr_amx_elc_bis.avif");
     });
 
     test('Different name mapping from wiki', () => {
-        expect(findVehicleFile("Abrams")).toBe("./assets/img/vehicles/ground/us_m1_abrams.png");
+        expect(findVehicleFile("Abrams")).toBe("./assets/img/vehicles/ground/us_m1_abrams.avif");
     });
 
     test('Different name mapping from wiki', () => {
-        expect(findVehicleFile("T-62")).toBe("./assets/img/vehicles/ground/ussr_t_62.png");
+        expect(findVehicleFile("T-62")).toBe("./assets/img/vehicles/ground/ussr_t_62.avif");
     });
 });
-
+    
 // not really a best practice, because it's implementation specific, but it's a automated way to verify this
 describe('Special handling unnecessary', () => {
     const specialVehicleNames = Object.keys(specialMapping);
@@ -101,7 +101,7 @@ describe('Vehicle image available', () => {
     const vehicleTypes = [
         ["ground", groundMapping],
         // Then lookup heli, because of the smaller size
-        ["heli", heliMapping],
+        ["air", heliMapping],
         ["air", airMapping],
         ["", specialMapping]
     ];

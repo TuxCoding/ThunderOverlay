@@ -3,7 +3,7 @@ export const VEHICLE_FILE_PATH = "./assets/img/vehicles";
 export const AVATAR_FILE_PATH = "./assets/img/avatars";
 
 // File extension
-export const FILE_EXT = "png";
+export const FILE_EXT = "avif";
 
 // mappings will be loaded into Javascript bundle by using resolveJSON from Typescript
 import groundMapping from './mappings/ground.json';
@@ -66,7 +66,7 @@ function findMapping(vehicle: Vehicle): string | null {
     const vehicleTypes = [
         ["ground", groundMapping],
         // Then lookup heli, because of the smaller size
-        ["heli", heliMapping],
+        ["air", heliMapping],
         ["air", airMapping],
         ["", specialMapping]
     ];
