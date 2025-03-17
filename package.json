@@ -4,6 +4,7 @@
         "@types/jest": "^29.5.12",
         "jest": "^29.7.0",
         "stylelint": "^16.8.2",
+        "stylelint-config-standard": "^36.0.1",
         "ts-jest": "^29.2.4",
         "ts-loader": "^9.5.1",
         "typescript": "^5.5.4",
@@ -12,7 +13,7 @@
     "scripts": {
         "test": "jest",
         "watch": "esbuild src/index.ts --bundle --outfile=./src/assets/javascript/bundle.js --sourcemap --watch --minify",
-        "lint": "eslint ."
+        "lint": "eslint . && stylelint ./src/assets/*.css"
     },
     "dependencies": {
         "esbuild": "0.23.0"

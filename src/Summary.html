@@ -1,82 +1,11 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
+
+<head>
     <meta charset="utf-8">
-    <title></title>
-  </head>
-  <style>
-    :root {
-        --color-accent: #00A3A3;
-        --color-idea: #004d99;
-        --color-shadow: black;
-        --text-base-color: #302e24;
-
-        /* --font: 'Sans Serif'; */
-        --font: monaco;
-        /*--font: "Segoe UI"; */
-        /* --font: Roboto Mono;
-        /* --font: 'Helvetica, sans-serif'; */
-    }
-
-    #summary {
-        background-color: rgba(02, 02, 02, 0.7);
-        width: 200px;
-
-        box-shadow: 0 0.5rem 15rem rgba(0, 0, 0, 0.15);
-
-        color: #efeff1;
-        font-family: var(--font);
-
-        border-width: 3px;
-        border-color: var(--color-accent);
-        border-style: solid none solid solid;
-
-        animation: fade-in 2s 1;
-    }
-
-    @keyframes fade-in {
-        from   {
-            opacity: 0;
-        }
-
-        to {
-            opacity: 1;
-        }
-    }
-
-    h1 {
-        font-family: var(--font);
-        text-align: center;
-    }
-
-    .line {
-        display: flex;
-
-        align-items: center;
-    }
-
-    .line img {
-        height: 25px;
-    }
-
-    .line div {
-        width: 30px;
-
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-
-    .line-icon {
-        text-align: center;
-    }
-
-    .line p {
-        flex-grow: 1;
-        font-weight: 600;
-        font-size: 1.3rem;
-    }
-  </style>
-  <body>
+    <link rel="stylesheet" type="text/css" href="./assets/style.css" />
+</head>
+<body>
     <div id="summary">
         <h1>Heute</h1>
         <div class="line">
@@ -96,5 +25,6 @@
             </p>
         </div>
     </div>
-  </body>
+</body>
+
 </html>

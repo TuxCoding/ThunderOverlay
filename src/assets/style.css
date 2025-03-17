@@ -1,0 +1,195 @@
+:root {
+    --color-accent: #00A3A3;
+    --color-idea: #004d99;
+    --color-shadow: black;
+    --text-base-color: white;
+
+    /* --font: 'Sans Serif'; */
+    --font: 'Sans Serif';
+    /* --font: "Segoe UI"; */
+    /* --font: Roboto Mono;
+    /* --font: 'Helvetica, sans-serif'; */
+}
+
+#notification {
+    display: flex;
+    max-width: 1200px;
+
+    align-items: center;
+
+    /* By default hide it */
+    opacity: 0;
+}
+
+@keyframes slide-in {
+    from {
+        opacity: 1;
+        margin-top: 200px;
+    }
+
+    to {
+        opacity: 1;
+        margin-top: 0%;
+    }
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+.tank img {
+    height: 100px;
+    width: 200px;
+
+    /*
+    border: 2px solid #00A3A3;
+    border-radius: 5px;
+
+    background-color: rgba(02, 02, 02, 0.8%);
+
+    box-shadow: 0 0 10px black; */
+}
+
+.tank-single img {
+    height: 128px;
+    width: 256px;
+}
+
+.avatar img {
+    height: 125px;
+    width: 125px;
+
+    /* box-shadow: 0 0 10px var(--color-shadow); */
+    box-shadow: 0 0.5rem 15rem rgb(0 0 0 / 15%);
+
+    border: 3px solid var(--color-accent);
+
+    align-content: center;
+}
+
+#title {
+    font-size: 1.7rem;
+    font-weight: bolder;
+    font-family: var(--font);
+
+    text-align: center;
+
+    color: var(--text-base-color);
+
+    /* text-shadow: 0 3px 10px black; */
+    /* background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 5px black; */
+
+    flex-grow: 1;
+
+    margin: auto;
+}
+
+#killer-name,
+#killed-name {
+    color: var(--color-accent);
+}
+
+#summary {
+    background-color: rgb(02 02 02 / 70%);
+    width: 200px;
+
+    box-shadow: 0 0.5rem 15rem rgb(0 0 0 / 15%);
+
+    color: #efeff1;
+
+    border-width: 3px;
+    border-color: var(--color-accent);
+    border-style: solid none solid solid;
+
+    animation: fade-in 2s 1;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+h1 {
+    font-family: var("monaco");
+    text-align: center;
+}
+
+#summary .line {
+    display: flex;
+
+    align-items: center;
+}
+
+#summary .line img {
+    height: 25px;
+}
+
+#summary .line div {
+    width: 30px;
+
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#summary .line-icon {
+    text-align: center;
+}
+
+#summary .line p {
+    flex-grow: 1;
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+
+#team {
+    box-shadow: 0 0.5rem 15rem rgb(0 0 0 / 15%);
+
+    color: #efeff1;
+
+    border-width: 3px;
+    border-color: var(--color-accent);
+    border-style: solid solid solid none;
+
+    animation: fade-in 2s 1;
+}
+
+#team .line {
+    background-color: rgba(02 02 02 / 70%);
+
+    display: flex;
+
+    align-items: center;
+    margin-top: 5px;
+}
+
+#team .line:nth-child(1) {
+    margin-top: 0;
+}
+
+#team .line-icon {
+    width: 64px;
+
+    margin-right: 10px;
+    text-align: center;
+}
+
+#team .line p {
+    flex-grow: 1;
+
+    max-width: 150px;
+
+    font-weight: 600;
+    font-size: 1.3rem;
+}
