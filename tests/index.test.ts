@@ -1,8 +1,9 @@
 import * as fs from 'fs';
 import { DestroyMessage, HudEvents, isSquadRelevant, parseMessage } from '../src/index';
 
-describe('Test file parsing', () => {
-    const raw = JSON.parse(fs.readFileSync('./tests/hud_events.json', 'utf-8'));
+describe('Test file parsing', async () => {
+    const resp = await fs.promises.readFile('./tests/resources/events/simple.json', "utf8");
+    const raw = JSON.parse(resp);
     const events = raw as HudEvents;
 
     const damage = {
