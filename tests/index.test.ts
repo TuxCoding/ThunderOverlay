@@ -34,10 +34,6 @@ describe('Message parsing', () => {
         killed: "-GFF7- CassualTux"
     };
 
-    test('Destroy message parsing', () => {
-        expect(parseMessage("-GFF7- Lukasxox (IT-1) zerstört -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
-    });
-
     test('Ignore test drive', () => {
         expect(parseMessage("-GFF7- Lukasxox (IT-1) zerstört Magach 6M")).toBeNull();
     });
@@ -45,4 +41,38 @@ describe('Message parsing', () => {
     test('Ignore non destroy messages', () => {
         expect(parseMessage("=VNPAi= babyTurtle (Christian II) in Brand gesetzt [MVolk] Sam9841 (Objekt 292)")).toBeNull();
     })
+
+    test('Destroy ground message parsing', () => {
+        expect(parseMessage("-GFF7- Lukasxox (IT-1) zerstört -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
+    });
+
+    test('Destroy air message parsing', () => {
+        expect(parseMessage("-GFF7- Lukasxox (IT-1) abgeschossen -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
+    });
+
+    test('Destroy bomb message parsing', () => {
+        expect(parseMessage("-GFF7- Lukasxox (IT-1) bomb -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
+    });
+
+    const expected_parenthesis: DestroyMessage = {
+        killer: "-GFF7- SGTCross96",
+        destroyerTank: "BO 105 PAH-1",
+
+        destroyedTank: "XM1 (GM)",
+        killed: "sevenarchangel"
+    };
+    test('Destroy parsing parenthesis', () => {
+        expect(parseMessage("-GFF7- SGTCross96 (BO 105 PAH-1) zerstört sevenarchangel (XM1 (GM))")).toStrictEqual(expected_parenthesis);
+    });
+
+    const expected_parenthesis2: DestroyMessage = {
+        killer: "SCHIZAPHRENIK",
+        destroyerTank: "Class 3 (P)",
+
+        destroyedTank: "Strv 103С",
+        killed: "[GARD6] ⋇Brotmann89"
+    };
+    test('Destroy parsing parenthesis', () => {
+        expect(parseMessage("SCHIZAPHRENIK (Class 3 (P)) zerstört [GARD6] ⋇Brotmann89 (Strv 103С)")).toStrictEqual(expected_parenthesis2);
+    });
 });
