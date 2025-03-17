@@ -69,8 +69,12 @@ describe('find vehicle', () => {
     test('Different name mapping from wiki', () => {
         expect(findVehicleFile("T-62")).toBe("./assets/img/vehicles/ground/ussr_t_62.avif");
     });
+
+    test('Different name mapping from wiki', () => {
+        expect(findVehicleFile("Fw 190 D")).toBe("./assets/img/vehicles/air/fw-190d-13.avif");
+    });
 });
-    
+
 // not really a best practice, because it's implementation specific, but it's a automated way to verify this
 describe('Special handling unnecessary', () => {
     const specialVehicleNames = Object.keys(specialMapping);
