@@ -11,6 +11,7 @@
     <!-- Download the script in parallel making it unnecessary to place it at the end -->
     <script type="text/javascript" src="./assets/javascript/bundle.js" defer></script>
 </head>
+
 <body>
     <div id="notification" class="container">
         <div class="avatar">
@@ -22,11 +23,17 @@
         </div>
 
         <div id="title" class="title">
-            <p>
-                <span id="killer-name" class="player-name">-GFF7- Lukasxox</span>
-                <span> zerstörte </span>
-                <span id="killed-name" class="player-name">-GFF7- CassualTux</span>
-            </p>
+            <span id="killer-name" class="player-name">-GFF7- Lukasxox</span>
+
+            <!-- <span>zerstörte</span> -->
+            <video id="smoke">
+                <!-- Only VP9 supports transparant videos -->
+                <source src="./assets/smoke.webm" type="video/webm">
+            </video>
+
+            <img id="ammunition" src="./assets/img/APFSDS_hidpi.avif">
+
+            <span id="killed-name" class="player-name">-GFF7- CassualTux</span>
         </div>
 
         <div class="tank-single">

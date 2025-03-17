@@ -69,4 +69,5 @@ the corresponding image data provided by the wiki.
 
 ## Credits
 
-* Smoke video from: https://www.vecteezy.com/video/24454182-frosty-fog-effects-smoke-elements-loop-animation-video-transparent-background-with-alpha-channel
+* Smoke video from: [kinwun@vecteezy](https://www.vecteezy.com/video/40944070-muzzle-flash-on-green-background)
+    * Production video: allowed for up to 1,0000 $ for free
