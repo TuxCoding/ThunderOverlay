@@ -1,9 +1,7 @@
-export function xyz() {
-
-}
-
 export function findAvatarFile(name: string) {
-    xyz
     return "";
 }
 
+export function findVehicleFile(vehicle: string) {
+
+}
