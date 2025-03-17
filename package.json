@@ -17,7 +17,7 @@
         "url": "https://github.com/games647"
     },
     "devDependencies": {
-        "@stylistic/eslint-plugin": "^3.1.0",
+        "@stylistic/eslint-plugin": "^4.0.1",
         "@types/jest": "^29.5.14",
         "@types/node": "^22.13.4",
         "esbuild": "^0.25.0",
