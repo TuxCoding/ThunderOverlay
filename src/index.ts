@@ -14,7 +14,7 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
         }
 
         // schedule next update
-        setTimeout(() => updateHUD(seenEvent, lastId), 2000);
+        setTimeout(() => updateHUD(seenEvent, lastId), 1000);
 
         handleEvents(entries);
     } catch (error) {
@@ -219,11 +219,12 @@ function showNotification(notification: Notification) {
 
     // images
     killerAvatar.src = notification.killerAvatar;
+
     killerTank.src = notification.killerTankIcon;
     destroyedTank.src = notification.destroyedTank;
 
     // delay the pop by one ms to load the image first
-    setTimeout(() => popup(container, 2, 4, 2), 1);
+    setTimeout(() => popup(container, 1, 4, 2), 1);
 }
 
 function popup(container: HTMLElement, startSec: number, showSec: number, endSec: number) {
