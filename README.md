@@ -68,16 +68,15 @@ Only a mockup
 * Multiple layouts
     * User selectable
     * Type based like: vehicle, damage source, etc.
-* Fix names mapped to multiple vehicles based on previous item
 
 ## FAQ
 
 ### What doesn't work?
 
 * Squad members cannot be extracted automatically and have to be added manually
-    * The data from the webinterface indicates that this feature was available or planned at least (`mode`)
+    * The data from the webinterface indicates that this feature was available or planned at least (`mode` field)
 * Avatars cannot be downloaded on the fly i.e. for enemies
-    * There is only a limited amount of avatars you can choose
+    * There is a limited amount of avatars you can choose
     * However, we found no way to find out which of those is selected
     * There is:
         * The stats site, but it's bot protected [Stats](https://warthunder.com/de/community/userinfo?nick=TuxCode)
@@ -88,7 +87,11 @@ Only a mockup
     * Well, we could use optical character recognition, but this would be overkill and a performance hit
     * We could make a database of standard ammunition per tank, but it would be very time consuming and not always true
 * Vehicle images could be mapped to multiple names and is therefore not precise
-    * The name `T-34` is mapped to multiple vehicles like `ussr_t_34_1941` or `ussr_t_34_1942`
+    * The name `T-34` is mapped to multiple vehicles like `ussr_t_34_1941` or `ussr_t_34_1942`, so only a single image is mapped
+    * A few names are not unique across all vehicle types
+        * `English` has only two cases. Namely `Milan`->[`mirage_milan`(air), `fr_destroyer_aigle_class_milan`] and `Ariete`
+        * The maximum of those cases across all languages are only `6` however
+        * It's possible to detect the destroyed vehicle type based on destroyed trigger word (e.g. `shot down` or `destroyed`). Although this is not possible for damage source vehicle, because a tank or plane could destroy it and the trigger would be the same.
 
 ### The overlay doesn't work with the minimal client
 
