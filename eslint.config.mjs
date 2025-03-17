@@ -48,5 +48,5 @@ export default tseslint.config(
     ...tseslint.configs.recommendedTypeChecked,
     ...tseslint.configs.stylisticTypeChecked,
     // plugins
-    //jsdoc.configs["flat/recommended-typescript"],
+    jsdoc.configs["flat/recommended-typescript"],
 );

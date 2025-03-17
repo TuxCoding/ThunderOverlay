@@ -1,6 +1,6 @@
 import { AVATAR_FILE_PATH, FILE_EXT, findVehicleFile } from "@App/assets";
 import { DESTROY_TYPE } from "@App/lang";
-import { type Damage, fetchHUD, loadLocal, Settings } from "@App/network";
+import { type Damage, fetchHUD, loadLocale, Settings } from "@App/network";
 import { getSquadAvatar, isSquadRelevant } from "@App/team";
 import {
     addErrorHandlerImg,
@@ -16,7 +16,6 @@ const FAIL_UPDATE_TIME = 60 * 1_000;
 
 /**
  * Trigger next update iteration
- *
  * @param seenEvent last seen event id
  * @param seenDamange last seen damage id
  */
@@ -77,6 +76,9 @@ export interface DestroyMessage {
     readonly killed: string;
 }
 
+/**
+ * Initialize project / main entry-
+ */
 function init() {
     addErrorHandlerImg();
 
@@ -93,7 +95,7 @@ function init() {
     };
 
     // delay it slightly to relax demand on initialization
-    setTimeout(() => showNotification(not), 4000);
+    setTimeout(() => showNotification(not), 1_000);
 
     loadSettings().catch(console.error);
 
@@ -102,17 +104,26 @@ function init() {
     });
 }
 
+/**
+ * Load project settings
+ * @returns settings file
+ */
 async function loadSettings(): Promise<Settings> {
     const currentProtocol = document.location.protocol;
-    if (currentProtocol == "file") {
+    if (currentProtocol === "file:") {
+        console.warn("Loading default settings, because of file protocol");
+
         // load only the embedded default settings if loaded with the browser
         return defaultSettings as Settings;
     }
 
-    // CORS in OBS are disabled by using a different protocol
-    return await loadLocal();
+    // CORS in OBS is disabled by using a different protocol
+    return await loadLocale();
 }
 
+/**
+ * Start Updating loop
+ */
 async function startUpdating() {
     // ignore first result in case we fetch the data after one match was already completed
     const events = await fetchHUD(0, 0);
@@ -139,6 +150,11 @@ async function startUpdating() {
 const DESTROY_MSG_REGEX =
     /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen) ([^(]+) \((.+)\)/g;
 
+/**
+ * Parse battle log message if it's a destroy event
+ * @param msg battle log message
+ * @returns parsed destroy event or null
+ */
 export function parseMessage(msg: string): DestroyMessage | null {
     // convert from iterable to array
     const matches = [...msg.matchAll(DESTROY_MSG_REGEX)];
@@ -166,6 +182,10 @@ export function parseMessage(msg: string): DestroyMessage | null {
 /** Queue of not delivered notifications */
 const notificationQueue: Notification[] = [];
 
+/**
+ * Handle events for users
+ * @param events parsed battle log events
+ */
 function handleEvents(events: Damage[]) {
     for (const event of events) {
         const msg = parseMessage(event.msg);
@@ -211,6 +231,14 @@ function handleEvents(events: Damage[]) {
     }
 }
 
+/**
+ * Check if data extraction failed or any files were not available
+ * @param destroyerTank killer vehicle
+ * @param destroyedTank destroyed vehicle
+ * @param killerAvatar avatar
+ * @param msg parsed message
+ * @param rawMsg unparsed battle log message
+ */
 function logFailedMappings(
     destroyerTank: string | null,
     destroyedTank: string | null,
@@ -239,6 +267,10 @@ function logFailedMappings(
 const SUICIDE_MSG = "wurde zerstört";
 const AI_DRONE_MSG = "[ai] Recon Micro";
 
+/**
+ * Print warning messages for missing events
+ * @param rawMsg battle log message
+ */
 function checkRegexDetection(rawMsg: string) {
     // trigger words for destroy messages but with spaces to exclude player names
     if (
@@ -256,6 +288,9 @@ function checkRegexDetection(rawMsg: string) {
 
 let notificationQueueRunning = false;
 
+/**
+ * Trigger the notification loop if not running
+ */
 function startNotificationLoop() {
     // loop entry start loop if not running
     if (notificationQueueRunning) {
@@ -270,6 +305,9 @@ function startNotificationLoop() {
 
 const NOTIFICATION_SHOW_INTERVAL = 10 * 1_000;
 
+/**
+ * Runtime loop for showing the next notification
+ */
 function notificationLoop() {
     console.debug("Notification loop iteration");
 
@@ -287,5 +325,5 @@ function notificationLoop() {
 
 /* Run update only on the site not for tests */
 if (typeof document !== "undefined") {
-    init();
+    void init();
 }

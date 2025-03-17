@@ -36,7 +36,16 @@ const OUT_SECONDS = 2;
 
 const FIRE_START_EARLY = 300;
 
+/**
+ * Show notification contents to the user
+ * @param notification notification content
+ */
 export function showNotification(notification: Notification) {
+    /**
+     * Get type safe html image element
+     * @param id html id
+     * @returns html image
+     */
     function getImageElement(id: string): HTMLImageElement | null {
         // drops the usuage of unchecked type casting
         return document.getElementsByTagName(IMG_HTML_TAG).namedItem(id);
@@ -91,8 +100,7 @@ const SMOKE_VIDEO_ELEMENT = "smoke";
 
 /**
  * Start popup animation for the container
- *
- * @param container
+ * @param container html div element of the notification
  * @param startSec animation showing seconds
  * @param showSec showing seconds without any animation
  * @param endSec disappear animation
@@ -119,6 +127,10 @@ function popup(
     setTimeout(() => hide(container, endSec), showSec * 1_000);
 }
 
+/**
+ * Trigger when element is fully visible
+ * @param ammunitionEl animation container
+ */
 function onShow(ammunitionEl: HTMLElement | null) {
     // animate shell
     ammunitionEl?.classList.add(FIRING_ANIMATION_CLASS);
@@ -133,6 +145,11 @@ function onShow(ammunitionEl: HTMLElement | null) {
     });
 }
 
+/**
+ * Hide notification container
+ * @param container html container
+ * @param hideSec hide animation duration
+ */
 function hide(container: HTMLElement, hideSec: number) {
     // add the hide animation and make it invisible after it
     container.classList.replace(
@@ -142,13 +159,22 @@ function hide(container: HTMLElement, hideSec: number) {
     container.style.animationDuration = `${hideSec}s`;
 }
 
+/**
+ * Add missing image file handler so that they are empty and not show broken placeholder icons
+ */
 export function addErrorHandlerImg() {
-    // restore visibility
+    /**
+     * Restore visibility
+     * @param this html container
+     */
     function restore(this: HTMLElement) {
         this.style.opacity = "1";
     }
 
-    // Disable images if they are not found without showing browser default missing icon
+    /**
+     * Disable images if they are not found without showing browser default missing icon
+     * @param this html container
+     */
     function hideImg(this: HTMLImageElement) {
         console.error(`Failed to load image for: ${this.src}`);
         this.style.opacity = "0";

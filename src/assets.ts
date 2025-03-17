@@ -39,12 +39,12 @@ export enum VehicleType {
  */
 export function findVehicleFile(vehicle: LocalizedVehicle): string | null {
     // vehicles are translated to local languages
-    // some vehicles (i.e. russian) use cyrillic characters however they should not be cleaned, because then we would have duplicates
-    // see T-34-85
+    // some vehicles (i.e. russian) use cyrillic characters.
+    // however they should not be cleaned, because then we would have duplicates see for example T-34-85
     // RIGHT SINGLE QUOTATION MARK Ra’am Sagol -> Ra'am Sagol
     // Somehow the game uses NO-BREAK SPACE in localhost and wiki
     // Although it appears to be consistent across both
-    // However the ususage is inconsistent across different vehicles like 'A6M2 mod. 11' has a normal space while 'A6M3 mod. 22' had not
+    // However the usuage is inconsistent across different vehicles like 'A6M2 mod. 11' has a normal space while 'A6M3 mod. 22' had not
     // see: 'Bf 109 F' and only used in aircraft
     const cleanVehicleName = vehicle
         // clean up crlf that somehow got into game files and are therefore used
