@@ -1,9 +1,10 @@
 # Packages
 node_modules/
 
-# Temp projects
+# Game data extractor projects
 scraper/units.csv
 scraper/ui.csv
+scraper/unlocks_streaks.csv
 scraper/out/
 scraper/cache/
 

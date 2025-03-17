@@ -7,12 +7,12 @@ import (
 )
 
 // owner read, write only
-const OUT_PERMISSION = 0600
+const OutPerm = 0o600
 
 // execute to write into
-const OUT_DIR_PERM = 0700
+const OutDirPerm = 0o700
 
-const OUTPUT_DIR = "./out/"
+const OutDir = "./out/"
 
 func main() {
 	createMapping()
@@ -24,12 +24,12 @@ func writeJSON(content any, file string) {
 	// use formatted json
 	bytes, err := json.MarshalIndent(content, "", "    ")
 	if err != nil {
-		log.Fatal("Failed marshal json", err)
+		log.Panic("Failed marshal json", err)
 	}
 
-	err = os.WriteFile(file, bytes, OUT_PERMISSION)
+	err = os.WriteFile(file, bytes, OutPerm)
 	if err != nil {
 		log.Println("here")
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }
