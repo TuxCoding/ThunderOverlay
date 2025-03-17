@@ -24,7 +24,7 @@ func (langMap *LanguageMap) addVehicle(localName, vehicleType, vehicleID string)
 		langMap.TypedMap[vehicleType] = typeMap
 	}
 
-	overridden := langMap.checkedAdd(typeMap, localName, vehicleID)
+	overridden := checkedAdd(typeMap, localName, vehicleID)
 	if overridden != "" {
 		log.Printf(
 			"[%s] Overriding same language key in and type %s (%s): (%s)->(%s)\n",
@@ -33,7 +33,7 @@ func (langMap *LanguageMap) addVehicle(localName, vehicleType, vehicleID string)
 	}
 }
 
-func (LanguageMap) checkedAdd(collection map[string]string, key, vehicleID string) string {
+func checkedAdd(collection map[string]string, key, vehicleID string) string {
 	// check if we are overriding an existing value because the localized name represents multiple vehicles
 	prevItem, found := collection[key]
 	if found {
