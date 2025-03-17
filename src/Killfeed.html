@@ -8,8 +8,9 @@
 
     <link rel="stylesheet" type="text/css" href="./assets/style.css" />
     <style>
-        body {
-            margin: 0 auto;
+        #video {
+            text-align: center;
+            margin: auto;
         }
 
         video {
@@ -25,8 +26,8 @@
 
         #kill {
             animation: popup 9s 1;
-            animation-fill-mode: forwards;
             animation-timing-function: linear;
+            animation-fill-mode: forwards;
 
             opacity: 0;
         }
@@ -57,12 +58,14 @@
 
 <body>
     <div id="kill">
-        <video autoplay>
-            <source src="./assets/vid/bomb.mkv">
-        </video>
+        <div id="video">
+            <video autoplay>
+                <source src="./assets/vid/bomb.mkv">
+            </video>
+        </div>
         <div id="title">
             <p>
-                Grüße von oben:
+                Greetings from above:
                 <span id="killer-name">
                     ^GFF7^ 1234567890123456
                 </span>
