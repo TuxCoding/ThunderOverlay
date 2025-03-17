@@ -1,11 +1,7 @@
 import * as fs from 'fs';
 import { DestroyMessage, HudEvents, parseMessage } from '../src/index';
 
-describe('Test file parsing', async () => {
-    const resp = await fs.promises.readFile('./tests/resources/events/simple.json', "utf8");
-    const raw = JSON.parse(resp);
-    const events = raw as HudEvents;
-
+describe('Test file parsing', () => {
     const damage = {
         "id": 1,
         "msg": "-GFF7- Lukasxox (IT-1) zerstört -GFF7- CassualTux (Magach 6M)",
@@ -20,7 +16,11 @@ describe('Test file parsing', async () => {
         "damage": [damage]
     }
 
-    test('Equality check', () => {
+    test('Equality check', async () => {
+        const resp = await fs.promises.readFile('./tests/resources/events/simple.json', "utf8");
+        const raw = JSON.parse(resp);
+        const events = raw as HudEvents;
+
         expect(raw).toStrictEqual(expected);
     });
 });
