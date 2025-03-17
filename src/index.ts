@@ -10,11 +10,17 @@ export type Events = {
 };
 
 export type Damage = {
+    // increasing id
     id: number,
+    // battle log message
     msg: string,
+    // always empty atm
     sender: string,
+    // always false atm
     enemy: boolean,
+    // represents squad, team, all, etc, but is always empty atm
     mode: string,
+    // battle time in seconds
     time: number
 };
 
@@ -33,11 +39,41 @@ async function query(url: string): Promise<any> {
     return await response.json();
 }
 
-async function updateHUD(seenEvent: number, seenDamange: number): Promise<HudEvents> {
-    const json = await query(`hudmsg?lastEvt=${seenEvent}&lastDmg=${seenDamange}`);
+async function fetchHUD(seenEvent: number, seenDamange: number): Promise<HudEvents> {
+    const events = await query(`hudmsg?lastEvt=${seenEvent}&lastDmg=${seenDamange}`);
+    return events as HudEvents;
+}
 
-    const result = json as HudEvents;
-    return result;
+async function updateHUD(seenEvent: number, seenDamange: number) {
+    try {
+        const result = await fetchHUD(seenEvent, seenDamange);
+        const entries = result.damage;
+
+        let lastId = seenDamange;
+        if (entries.length > 0) {
+            lastId = entries[entries.length - 1].id;
+            console.log("Updating last id to " + lastId);
+        }
+
+        // schedule next update
+        setTimeout(() => updateHUD(seenEvent, lastId), 2000);
+
+        showNotification(entries);
+    } catch (error) {
+        if (error instanceof Error) {
+            const err = error as Error;
+            if (err.name == "TypeError") {
+                // delay update process if not running
+                console.error("Unknown error: some browser extension might blocked this request or War Thunder is not running");
+                console.error("Updating after 1min");
+                setTimeout(() => updateHUD(seenEvent, seenDamange), 60 * 1000);
+            } else {
+                console.error(`Uknown error: ${err.name}: ${err.message}`)
+            }
+        } else {
+            console.error(`Uknown error: ${error}`)
+        }
+    }
 }
 
 export type DestroyMessage = {
@@ -50,33 +86,20 @@ export type DestroyMessage = {
 }
 
 export function main() {
-    update(0, 0);
+    start();
 }
 
-async function update(seenEvent: number, seenDamange: number) {
-    try {
-        const events = await updateHUD(0, seenDamange);
-        const entries = events.damage;
+async function start() {
+    // ignore first result in case we fetch the data after one match was already completed
+    const events = await fetchHUD(0, 0);
 
-        let lastId = seenDamange;
-        if (entries.length > 0) {
-            lastId = entries[entries.length - 1].id;
-            console.log("Updating last id to " + lastId);
-        }
-
-        // schedule next update
-        setTimeout(() => update(seenEvent, lastId), 5000);
-    } catch (error) {
-        if (error instanceof Error) {
-            const err = error as Error;
-            if (err.name == "TypeError") {
-                // delay update process if not running
-                console.error("Unknown error: some browser extension might blocked this request or War Thunder is not running");
-                console.error("Updating after 1min");
-                setTimeout(() => update(seenEvent, seenDamange), 60 * 1000);
-            }
-        }
+    let lastId = 0;
+    const entries = events.damage;
+    if (entries.length > 0) {
+        lastId = entries[entries.length - 1].id;
     }
+
+    updateHUD(0, lastId);
 }
 
 export function parseMessage(msg: string): DestroyMessage | null {
@@ -94,22 +117,6 @@ export function parseMessage(msg: string): DestroyMessage | null {
     }
 }
 
-const KNOWN_SQUAD_MEMBERS = [
-    "CassualTux",
-    "Lukasxox",
-    "nudel28",
-    "SGTCross96",
-    "Icefruit",
-    "l-IlIllIIlIIllI",
-    "Frevbucksmaster"
-]
+function showNotification(events: Damage[]) {
 
-export function isSquadRelevant(msg: DestroyMessage): boolean {
-    for (const member of KNOWN_SQUAD_MEMBERS) {
-        if (msg.killer.includes(member) || msg.killed.includes(member)) {
-            return true;
-        }
-    }
-
-    return false;
 }
