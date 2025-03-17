@@ -85,15 +85,17 @@ export interface DestroyMessage {
 }
 
 export function main() {
+/*
     const not: Notification = {
         killer: "xyz",
         killerAvatar: "./assets/img/avatars/cardicon_fem_06.png",
-        killerTankIcon: "./assets/img/vehicles/t_55a.png",
-        destroyedTank: "./assets/img/vehicles/t_44_122.png",
+        killerTankIcon: "./assets/img/vehicles/ground/ussr_t_55a.png",
+        destroyedTank: "./assets/img/vehicles/ground/ussr_t_44_122.png",
         killed: "abc"
     }
 
     showNotification(not);
+*/
     start();
 }
 
@@ -105,17 +107,13 @@ async function start() {
     const entries = events.damage;
     if (entries.length > 0) {
         lastId = entries[entries.length - 1].id;
+        console.log("Setting first id to " + lastId);
     }
 
     updateHUD(0, lastId);
 }
 
 export function parseMessage(msg: string): DestroyMessage | null {
-    if (!msg.includes("zerstört")) {
-        // ignore non-destroy messages
-        return null;
-    }
-
     //(.* [\w]+) \(([\w ]+)\) zerstört (.* [\w]+) \(([\w ]+)\)
     const regexp = /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen|bomb)? ([^(]+) \((.+)\)/g;
     const matches = [...msg.matchAll(regexp)];
@@ -138,8 +136,9 @@ export function parseMessage(msg: string): DestroyMessage | null {
     }
 }
 
+const notifications: Notification[] = [];
+
 function handleEvents(events: Damage[]) {
-    const notifications = [];
     for (const event of events) {
         const msg = parseMessage(event.msg);
         if (!msg) {
@@ -151,24 +150,50 @@ function handleEvents(events: Damage[]) {
         const destroyerTank = findVehicleFile(msg.destroyerTank);
         const destroyedTank = findVehicleFile(msg.destroyedTank);
         if (!killerAvatar || !destroyerTank || !destroyedTank) {
+            console.error("NULL " + killerAvatar + " " + destroyedTank + " " + destroyedTank);
             continue;
         }
 
         const notification: Notification = {
             killer: msg.killer,
-            killerAvatar: "./assets/img/avatar/" + killerAvatar + ".png",
+            killerAvatar: "./assets/img/avatars/" + killerAvatar + ".png",
             killerTankIcon: destroyerTank,
             destroyedTank: destroyedTank,
             killed: msg.killed,
         };
+
+        console.log("New notification: " + notification);
         notifications.push(notification);
+    }
+
+    if (notifications.length > 0) {
+        startNotificationLoop();
     }
 }
 
-const notificationQueueRunning = false;
+let notificationQueueRunning = false;
+
+function startNotificationLoop() {
+    if (notificationQueueRunning) {
+        return;
+    }
+
+    console.log("Starting notification loop");
+    notificationQueueRunning = true;
+    notificationLoop();
+}
 
 function notificationLoop() {
+    const lastNot = notifications.pop();
+    if (!lastNot) {
+        // do not schedule another iteration
+        notificationQueueRunning = false;
+        return;
+    }
 
+    console.log("Showing notification:" + lastNot);
+    showNotification(lastNot);
+    setTimeout(() => notificationLoop(), 6 * 1000);
 }
 
 interface Notification {
