@@ -3,6 +3,7 @@ import * as fs from 'fs';
 
 import groundMapping from '../src/mappings/ground.json';
 import airMapping from '../src/mappings/air.json';
+import shipMapping from '../src/mappings/ships.json';
 
 import specialMapping from '../src/mappings/specials.json';
 
@@ -41,6 +42,10 @@ describe('find vehicle', () => {
 
     test("Heli", () => {
         expect(findVehicleFile("UH-1B")).toBe("./assets/img/vehicles/air/uh_1b.avif");
+    });
+
+    test("Ships", () => {
+        expect(findVehicleFile("Fairmile D (601)")).toBe("./assets/img/vehicles/ships/uk_fairmile_d_601_616.avif");
     });
 
     test('Special chacter before vehicle', () => {
@@ -104,6 +109,7 @@ describe('Special handling unnecessary', () => {
     function isFoundInDefaultMap(vehicle: string): boolean {
         const vehicleTypes = [
             groundMapping,
+            shipMapping,
             airMapping,
         ];
 
@@ -127,11 +133,13 @@ describe('Vehicle image available', () => {
     const vehicleTypes = [
         ["ground", groundMapping],
         ["air", airMapping],
+        ["ships", shipMapping],
         ["", specialMapping]
     ];
 
     const length = Object.keys(groundMapping).length
         + Object.keys(airMapping).length
+        + Object.keys(shipMapping).length
         + Object.keys(specialMapping).length;
 
     // pre allocate array to prevent memory allocation spam

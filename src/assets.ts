@@ -8,6 +8,7 @@ export const FILE_EXT = "avif";
 // mappings will be loaded into Javascript bundle by using resolveJSON from Typescript
 import groundMapping from './mappings/ground.json';
 import airMapping from './mappings/air.json';
+import shipMapping from './mappings/ships.json';
 
 // mapping that is different from the wiki definition
 // so we don't need to modify the original files
@@ -63,8 +64,8 @@ function findMapping(vehicle: Vehicle): string | null {
     // search ground vehicles first, because it is mostly played
     const vehicleTypes = [
         ["ground", groundMapping],
-        // Then lookup heli, because of the smaller size
         ["air", airMapping],
+        ["ships", shipMapping],
         ["", specialMapping]
     ];
 
