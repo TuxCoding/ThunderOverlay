@@ -1,5 +1,7 @@
 # War Thunder OBS/Streaming overlay
 
+![Project logo](https://github.com/user-attachments/assets/6b1a4727-3f88-4fd7-9ba9-22092f6dd238)
+
 ## Description
 
 This project models a web source displaying [War Thunder](https://warthunder.com/) in-game events to be integrated into
