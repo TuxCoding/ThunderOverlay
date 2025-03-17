@@ -1,6 +1,5 @@
 # Packages
 node_modules/
-pnpm-lock.yaml
 
 # Temp projects
 scraper/units.csv
