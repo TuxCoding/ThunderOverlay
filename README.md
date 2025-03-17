@@ -72,7 +72,7 @@ the corresponding image data provided by the wiki.
 ## Credits
 
 * Smoke video from: [kinwun@vecteezy](https://www.vecteezy.com/video/40944070-muzzle-flash-on-green-background)
-    * Production video: allowed for up to 1,0000 $ for free
+    * Production video: allowed for up to 1,000 $ for free
 * Fonts:
     * Death icon in Team mockup [FontAwesome](https://fontawesome.com/icons/skull-crossbones?f=classic&s=solid)
     * By the War Thunder wiki:
