@@ -3,7 +3,7 @@
     "private": true,
     "version": "0.6.0",
     "license": "MPL-2.0",
-    "description": "War Thunder streaming overlay",
+    "description": "War Thunder streaming overlay featuring visual kill feed",
     "homepage": "https://github.com/games647/WarThunderStreamOverlay",
     "bugs": {
         "url": "https://github.com/games647/WarThunderStreamOverlay/issues"
