@@ -56,6 +56,42 @@ const VEHICLE_TYPE_ID = "_2"
 
 const NUKE_DRONE_ID = "killstreak"
 
+type LanguageMap struct {
+	lang string
+
+	// localized name -> vehicle id
+	typedMap map[string]map[string]string
+}
+
+func (langMap LanguageMap) addVehicle(localName string, vehicleType string, vehicleId string) {
+	typeMap := langMap.typedMap[vehicleType]
+	if typeMap == nil {
+		typeMap = make(map[string]string)
+		langMap.typedMap[vehicleType] = typeMap
+	}
+
+	overriden := langMap.checkedAdd(typeMap, localName, vehicleId)
+	if len(overriden) != 0 {
+		//log.Printf("[%s] Overriding same language key in and type %s (%s): (%s)->(%s)\n", langMap.lang, localName, vehicleType, overriden, vehicleId)
+	}
+}
+
+func (langMap LanguageMap) checkedAdd(collection map[string]string, key string, vehicleId string) string {
+	// check if we are overriding an existing value because the localized name represents multiple vehicles
+	prevItem, ok := collection[key]
+	if ok {
+		if prevItem == vehicleId {
+			// same entry ignore
+			return ""
+		}
+
+		return prevItem
+	}
+
+	collection[key] = vehicleId
+	return ""
+}
+
 func createMapping() {
 	// read all at once
 	records := parseUnits(UNITS_FILE)
@@ -113,7 +149,7 @@ func assetExists(prefix string, file string) bool {
 
 func convertMap(records []UnitRecord) {
 	// map of language -> map of records
-	byLangMap := make(map[string]map[string]string)
+	byLangMap := make(map[string]LanguageMap)
 
 	// create a new map for each language
 	for _, record := range records {
@@ -137,14 +173,12 @@ func convertMap(records []UnitRecord) {
 	}
 }
 
-func onUserVehicle(byLangMap map[string]map[string]string, vehicleId string, record UnitRecord) {
+func onUserVehicle(byLangMap map[string]LanguageMap, vehicleId string, record UnitRecord) {
 	vehicleType := getVehicleType(vehicleId)
 	if len(vehicleType) == 0 {
 		// ignore if no type was found
 		return
 	}
-
-	overridenBefore := false
 
 	// go through each language column
 	for fieldIndex, field := range reflect.VisibleFields(reflect.TypeOf(UnitRecord{})) {
@@ -164,20 +198,17 @@ func onUserVehicle(byLangMap map[string]map[string]string, vehicleId string, rec
 		}
 
 		langMap := byLangMap[normalizedLangName]
-		if langMap == nil {
+		if reflect.ValueOf(langMap).IsZero() {
 			// create new map
-			langMap = make(map[string]string)
+			langMap = LanguageMap{
+				lang:     fieldName,
+				typedMap: map[string]map[string]string{},
+			}
+
 			byLangMap[normalizedLangName] = langMap
 		}
 
-		vehicleCombined := vehicleType + localName
-		overriden := onLanguageRecord(langMap, vehicleCombined, vehicleId)
-		if len(overriden) != 0 && !overridenBefore {
-			overridenBefore = true
-
-			// log it only once
-			log.Printf("Overriding at %s (%s)->(%s)\n", vehicleCombined, overriden, vehicleId)
-		}
+		langMap.addVehicle(localName, vehicleType, vehicleId)
 	}
 }
 
@@ -208,22 +239,7 @@ func getVehicleType(vehicleId string) string {
 	}
 
 	// return the first match for now and only log differences
-	return types[0] + "/"
-}
-
-// language specific mappings
-func onLanguageRecord(langMap map[string]string, localizedName string, vehicleId string) string {
-	// check if we are overriding an existing value because the localized name represents multiple vehicles
-	prevItem, ok := langMap[localizedName]
-	if ok {
-		if prevItem == vehicleId {
-			// same entry ignore
-			return prevItem
-		}
-	}
-
-	langMap[localizedName] = vehicleId
-	return ""
+	return types[0]
 }
 
 func logRecord(record UnitRecord, vehicleId string) {
@@ -266,13 +282,13 @@ func sortedKeys[V any](m map[string]V) []string {
 }
 
 // write mapping to filesystem
-func writeLangMapping(mapping map[string]string, lang string) {
+func writeLangMapping(mapping LanguageMap, lang string) {
 	// sort output by keys
-	keys := sortedKeys(mapping)
+	keys := sortedKeys(mapping.typedMap)
 
-	sortedMap := make(map[string]string)
+	sortedMap := make(map[string]map[string]string)
 	for _, key := range keys {
-		sortedMap[key] = mapping[key]
+		sortedMap[key] = mapping.typedMap[key]
 	}
 
 	writeJSON(sortedMap, OUTPUT_DIR+lang+JSON_EXT)

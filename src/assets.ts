@@ -28,6 +28,12 @@ export type Vehicle = keyof Mapping;
 
 const NUKE_SYMBOL = "☢";
 
+enum VehicleType {
+    Ground = "ground",
+    Air = "air",
+    Ship = "ships"
+}
+
 /**
  * Get file path or null
  * @param vehicle battle log vehicle name
@@ -65,9 +71,9 @@ export function findVehicleFile(vehicle: Vehicle): string | null {
 function findMapping(vehicle: Vehicle): string | null {
     // search ground vehicles first, because it is mostly played
     const vehicleTypes = [
-        ["ground", groundMapping],
-        ["air", airMapping],
-        ["ships", shipMapping],
+        [VehicleType.Ground, groundMapping],
+        [VehicleType.Air, airMapping],
+        [VehicleType.Ship, shipMapping],
         ["", specialMapping]
     ];
 
