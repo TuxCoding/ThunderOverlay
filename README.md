@@ -6,7 +6,7 @@ This project models a web source displaying [War Thunder](https://warthunder.com
 [OBS](https://obsproject.com/) or similar streaming software. The primary focus is the integration of a kill feed for squad
 members during match. You can see demonstration here:
 
-![](.webm)
+[Kill overlay.webm](https://github.com/user-attachments/assets/f61f20fa-680b-49d0-852d-6f0a91345aa2)
 
 ### Features
 
@@ -21,12 +21,23 @@ members during match. You can see demonstration here:
     * cyrillic names
     * etc.
 
+#### Further ideas
+
+* Events based on other battle log data:
+    * Awards
+    * Other player disconnects from battle/game
+    * Other damage events: fire, crit, severe damage
+* Dad
+    * [WTRTI](https://github.com/MeSoftHorny/WTRTI/)
+* Sound effects if not possible with the game client itself
+    * e.g. "Dumb ways to die" if you fly into a wall (`selfkill`)
+
 ### Goals
 
 The goal of this project is solely to provide visual appealing overlay for viewer. For example by displaying the vehicle
 images for people not familiar with the vehicle names or display squad kills in a more prominent way.
 
-This goal of this project is **never** to provide gameplay advantages over the vanilla behavior.
+This goal of this project is **never** to provide gameplay advantages over the vanilla behavior to the player.
 
 ## Building (development)
 
@@ -53,13 +64,25 @@ Warning: the overlay needs to refreshed after starting War Thunder at the moment
     * I found horizontal centered and height `150px` a good fit below mission object and above a kill notification
 4. Cut out at the bottom `200px` using transformation to make it slide out of nowhere
 
-### Summary
-
-Only a mockup
-
 ### Team
 
-Only a mockup
+<details>
+<summary>
+Only a mockup:
+</summary>
+
+![Squad.avif](https://github.com/user-attachments/assets/9fe25aef-86f5-472b-b982-c49e394f61d6)
+</details>
+
+### Summary
+
+<details>
+<summary>
+Only a mockup:
+</summary>
+
+![Summary.avif](https://github.com/user-attachments/assets/66c67265-050d-4ce4-b393-03100e5626d8)
+</details>
 
 ## Ideas
 
@@ -74,7 +97,10 @@ Only a mockup
 ### What doesn't work?
 
 * Squad members cannot be extracted automatically and have to be added manually
-    * The data from the webinterface indicates that this feature was available or planned at least (`mode` field)
+    * The data from the webinterface indicates that this feature is only available for game chat (`mode` field)
+* Count kill assists reliably
+    * There is a streak award, but it would only be printed for > 2 kills in a row
+    * We can detect critical damage from the battle log, but it doesn't seem to be reliable. Maybe you could proove it otherwise?
 * Avatars cannot be downloaded on the fly i.e. for enemies
     * There is a limited amount of avatars you can choose
     * However, we found no way to find out which of those is selected
@@ -114,4 +140,4 @@ the corresponding image data provided by the wiki.
         * Foreign vehicle prefix
     * Vehicle symbols (i.e. fighter and tank) from the webinterface itself
 * Vehicle images from the wiki or game client
-* APFDS shell from shooting range video
+* APFDS shell from shooting range video created by War Thunder
