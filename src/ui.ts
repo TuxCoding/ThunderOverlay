@@ -3,17 +3,16 @@
  */
 export interface Notification {
     /** killer name with clan */
-    readonly killer: string,
+    readonly killer: string;
     /** avatar location */
-    readonly killerAvatar: string,
-
+    readonly killerAvatar: string;
     /** killer vehicle location */
-    readonly killerTankIcon: string,
+    readonly killerTankIcon: string;
 
     /** killed player name with clan */
-    readonly killed: string,
+    readonly killed: string;
     /** destroyed vehicle location */
-    readonly destroyedTank: string
+    readonly destroyedTank: string;
 }
 
 // HTML ids
@@ -52,7 +51,14 @@ export function showNotification(notification: Notification) {
     const killerTank = getImageElement(KILLER_VEHICLE_ELEMENT);
 
     const destroyedTank = getImageElement(DESTROYED_VEHICLE_ELEMENT);
-    if (!container || !killerEl || !killedEl || !killerAvatar || !killerTank || !destroyedTank) {
+    if (
+        !container ||
+        !killerEl ||
+        !killedEl ||
+        !killerAvatar ||
+        !killerTank ||
+        !destroyedTank
+    ) {
         console.warn("HTML elements not found");
         return;
     }
@@ -68,7 +74,10 @@ export function showNotification(notification: Notification) {
     destroyedTank.src = notification.destroyedTank;
 
     // delay the pop by one ms to load the image first
-    setTimeout(() => popup(container, IN_SECONDS, SHOW_SECONDS, OUT_SECONDS), 1);
+    setTimeout(
+        () => popup(container, IN_SECONDS, SHOW_SECONDS, OUT_SECONDS),
+        1,
+    );
 }
 
 // HTML animation classes
@@ -88,7 +97,12 @@ const SMOKE_VIDEO_ELEMENT = "smoke";
  * @param showSec showing seconds without any animation
  * @param endSec disappear animation
  */
-function popup(container: HTMLElement, startSec: number, showSec: number, endSec: number) {
+function popup(
+    container: HTMLElement,
+    startSec: number,
+    showSec: number,
+    endSec: number,
+) {
     // reset the last animation position
     const ammunitionEl = document.getElementById(AMMUNITION_ELEMENT);
     ammunitionEl?.classList.remove(FIRING_ANIMATION_CLASS);
@@ -110,18 +124,21 @@ function onShow(ammunitionEl: HTMLElement | null) {
     ammunitionEl?.classList.add(FIRING_ANIMATION_CLASS);
 
     // start firing video
-    const smokeVideoEl = document.getElementsByTagName(VIDEO_HTML_TAG).namedItem(SMOKE_VIDEO_ELEMENT);
-    smokeVideoEl
-        ?.play()
-        .catch(error => {
-            // Videos would stop playing if the window is not visible for browser energy savings
-            console.debug("Video paused, because window is not in focus ", error);
-        });
+    const smokeVideoEl = document
+        .getElementsByTagName(VIDEO_HTML_TAG)
+        .namedItem(SMOKE_VIDEO_ELEMENT);
+    smokeVideoEl?.play().catch((error) => {
+        // Videos would stop playing if the window is not visible for browser energy savings
+        console.debug("Video paused, because window is not in focus", error);
+    });
 }
 
 function hide(container: HTMLElement, hideSec: number) {
     // add the hide animation and make it invisible after it
-    container.classList.replace(POP_IN_ANIMATION_CLASS, POP_OUT_ANIMATION_CLASS);
+    container.classList.replace(
+        POP_IN_ANIMATION_CLASS,
+        POP_OUT_ANIMATION_CLASS,
+    );
     container.style.animationDuration = `${hideSec}s`;
 }
 
@@ -141,7 +158,7 @@ export function addErrorHandlerImg() {
     const imgIcons = [
         DESTROYED_VEHICLE_ELEMENT,
         KILLER_VEHICLE_ELEMENT,
-        KILLER_AVATAR_ELEMENT
+        KILLER_AVATAR_ELEMENT,
     ];
 
     for (const id of imgIcons) {
@@ -150,8 +167,9 @@ export function addErrorHandlerImg() {
             el.addEventListener("load", restore);
             el.onerror = hideImg;
         } else {
-            console.warn(`Couldn't find img element "${id}" for error handling`);
+            console.warn(
+                `Couldn't find img element "${id}" for error handling`,
+            );
         }
     }
 }
-

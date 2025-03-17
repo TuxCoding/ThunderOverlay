@@ -2,24 +2,24 @@
 
 version: 2
 updates:
-  # Updates for workflow files
-  - package-ecosystem: "github-actions"
-    # Workflow files stored in the
-    # default location of `.github/workflows`
-    directory: "/"
-    schedule:
-      interval: "monthly"
+    # Updates for workflow files
+    - package-ecosystem: "github-actions"
+      # Workflow files stored in the
+      # default location of `.github/workflows`
+      directory: "/"
+      schedule:
+          interval: "monthly"
 
-  # NPM project
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "monthly"
-    # Otherwise the package.json is already enough
-    versioning-strategy: increase-if-necessary
+    # NPM project
+    - package-ecosystem: "npm"
+      directory: "/"
+      schedule:
+          interval: "monthly"
+      # Otherwise the package.json is already enough
+      versioning-strategy: increase-if-necessary
 
-    groups:
-      production-dependencies:
-        dependency-type: "production"
-      development-dependencies:
-        dependency-type: "development"
+      groups:
+          production-dependencies:
+              dependency-type: "production"
+          development-dependencies:
+              dependency-type: "development"

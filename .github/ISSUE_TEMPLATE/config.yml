@@ -5,7 +5,6 @@
 
 # Extra section on creating issues to redirect to another site
 contact_links:
-  - name: 📌 Questions
-    url: https://github.com/games647/WarThunderStreamOverlay/discussions
-    about:
-      You want to ask something - general questions. Example includes how to set it up or how it is working internally
+    - name: 📌 Questions
+      url: https://github.com/games647/WarThunderStreamOverlay/discussions
+      about: You want to ask something - general questions. Example includes how to set it up or how it is working internally

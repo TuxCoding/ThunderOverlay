@@ -23,13 +23,13 @@ export type Mapping = Record<string, string>;
 /**
  * Vehicle name from battle log
  */
-export type Vehicle = keyof Mapping;
+type LocalizedVehicle = keyof Mapping;
 
 /** vehicle types with their respective folders */
 export enum VehicleType {
     Ground = "ground",
     Air = "air",
-    Ship = "ships"
+    Ship = "ships",
 }
 
 /**
@@ -37,7 +37,7 @@ export enum VehicleType {
  * @param vehicle battle log vehicle name
  * @returns file name with extension and path or null if not existing
  */
-export function findVehicleFile(vehicle: Vehicle): string | null {
+export function findVehicleFile(vehicle: LocalizedVehicle): string | null {
     // vehicles are translated to local languages
     // some vehicles (i.e. russian) use cyrillic characters however they should not be cleaned, because then we would have duplicates
     // see T-34-85
@@ -64,13 +64,13 @@ export function findVehicleFile(vehicle: Vehicle): string | null {
  * @param vehicle battle log name
  * @returns folder name and file name if existing
  */
-function findMapping(vehicle: Vehicle): string | null {
+function findMapping(vehicle: LocalizedVehicle): string | null {
     // search ground vehicles first, because it is mostly played
     const vehicleTypes: [string, Mapping][] = [
         [VehicleType.Ground, groundMapping],
         [VehicleType.Air, airMapping],
         [VehicleType.Ship, shipMapping],
-        ["", specialMapping]
+        ["", specialMapping],
     ];
 
     for (const vehicleType of vehicleTypes) {

@@ -4,7 +4,10 @@ import * as fs from "fs";
 
 describe("Test file parsing", () => {
     async function loadFile(path: string) {
-        const resp = await fs.promises.readFile(`./tests/resources/events/${path}`, "utf8");
+        const resp = await fs.promises.readFile(
+            `./tests/resources/events/${path}`,
+            "utf8",
+        );
         const raw = JSON.parse(resp) as HudEvents;
 
         return raw;
@@ -17,12 +20,12 @@ describe("Test file parsing", () => {
             sender: "",
             enemy: false,
             mode: "",
-            time: 13
+            time: 13,
         };
 
         const expected: HudEvents = {
             events: [],
-            damage: [damage]
+            damage: [damage],
         };
 
         const events = await loadFile("/simple.json");
@@ -34,7 +37,7 @@ describe("Test file parsing", () => {
 
         const expected: HudEvents = {
             events: [],
-            damage: []
+            damage: [],
         };
 
         expect(events).toStrictEqual(expected);
@@ -48,11 +51,11 @@ describe("Test file parsing", () => {
             damage: [
                 {
                     id: 76,
-                    msg: "=ZV0RU= ⋇MiOKO69 (Typ 90 (B) \"Fuji\") zerstört -HUB- jorken12 (LAV-AD)",
+                    msg: '=ZV0RU= ⋇MiOKO69 (Typ 90 (B) "Fuji") zerstört -HUB- jorken12 (LAV-AD)',
                     sender: "",
                     enemy: false,
                     mode: "",
-                    time: 232
+                    time: 232,
                 },
                 {
                     id: 77,
@@ -60,9 +63,9 @@ describe("Test file parsing", () => {
                     sender: "",
                     enemy: false,
                     mode: "",
-                    time: 234
-                }
-            ]
+                    time: 234,
+                },
+            ],
         };
 
         expect(events).toStrictEqual(expected);
@@ -71,15 +74,23 @@ describe("Test file parsing", () => {
 
 describe("Message parsing", () => {
     test("Ignore suicide", () => {
-        expect(parseMessage("╀CroDD╀ NoPrisoners_ (Q-5A/B) wurde zerstört")).toBeNull();
+        expect(
+            parseMessage("╀CroDD╀ NoPrisoners_ (Q-5A/B) wurde zerstört"),
+        ).toBeNull();
     });
 
     test("Ignore test drive", () => {
-        expect(parseMessage("-GFF7- Lukasxox (IT-1) zerstört Magach 6M")).toBeNull();
+        expect(
+            parseMessage("-GFF7- Lukasxox (IT-1) zerstört Magach 6M"),
+        ).toBeNull();
     });
 
     test("Ignore non destroy messages", () => {
-        expect(parseMessage("=VNPAi= babyTurtle (Christian II) in Brand gesetzt [MVolk] Sam9841 (Objekt 292)")).toBeNull();
+        expect(
+            parseMessage(
+                "=VNPAi= babyTurtle (Christian II) in Brand gesetzt [MVolk] Sam9841 (Objekt 292)",
+            ),
+        ).toBeNull();
     });
 
     const expected: DestroyMessage = {
@@ -87,15 +98,23 @@ describe("Message parsing", () => {
         destroyerVehicle: "IT-1",
 
         destroyedVehicle: "Magach 6M",
-        killed: "-GFF7- CassualTux"
+        killed: "-GFF7- CassualTux",
     };
 
     test("Destroy ground message parsing", () => {
-        expect(parseMessage("-GFF7- Somebody (IT-1) zerstört -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
+        expect(
+            parseMessage(
+                "-GFF7- Somebody (IT-1) zerstört -GFF7- CassualTux (Magach 6M)",
+            ),
+        ).toStrictEqual(expected);
     });
 
     test("Destroy air message parsing", () => {
-        expect(parseMessage("-GFF7- Somebody (IT-1) abgeschossen -GFF7- CassualTux (Magach 6M)")).toStrictEqual(expected);
+        expect(
+            parseMessage(
+                "-GFF7- Somebody (IT-1) abgeschossen -GFF7- CassualTux (Magach 6M)",
+            ),
+        ).toStrictEqual(expected);
     });
 
     test("Destroy parsing parenthesis", () => {
@@ -104,10 +123,14 @@ describe("Message parsing", () => {
             destroyerVehicle: "BO 105 PAH-1",
 
             destroyedVehicle: "XM1 (GM)",
-            killed: "sevenarchangel"
+            killed: "sevenarchangel",
         };
 
-        expect(parseMessage("-GFF7- SGTCross96 (BO 105 PAH-1) zerstört sevenarchangel (XM1 (GM))")).toStrictEqual(expected_parenthesis);
+        expect(
+            parseMessage(
+                "-GFF7- SGTCross96 (BO 105 PAH-1) zerstört sevenarchangel (XM1 (GM))",
+            ),
+        ).toStrictEqual(expected_parenthesis);
     });
 
     test("Destroy parsing parenthesis", () => {
@@ -116,10 +139,14 @@ describe("Message parsing", () => {
             destroyerVehicle: "Class 3 (P)",
 
             destroyedVehicle: "Strv 103С",
-            killed: "[GARD6] ⋇Brotmann89"
+            killed: "[GARD6] ⋇Brotmann89",
         };
 
-        expect(parseMessage("SCHIZAPHRENIK (Class 3 (P)) zerstört [GARD6] ⋇Brotmann89 (Strv 103С)")).toStrictEqual(expected_parenthesis2);
+        expect(
+            parseMessage(
+                "SCHIZAPHRENIK (Class 3 (P)) zerstört [GARD6] ⋇Brotmann89 (Strv 103С)",
+            ),
+        ).toStrictEqual(expected_parenthesis2);
     });
 
     test("Destroy parsing parenthesis without clan", () => {
@@ -128,9 +155,13 @@ describe("Message parsing", () => {
             destroyerVehicle: "Class 3 (P)",
 
             destroyedVehicle: "Strv 103С",
-            killed: "⋇Brotmann89"
+            killed: "⋇Brotmann89",
         };
 
-        expect(parseMessage("SCHIZAPHRENIK (Class 3 (P)) zerstört ⋇Brotmann89 (Strv 103С)")).toStrictEqual(expect_no_clan);
+        expect(
+            parseMessage(
+                "SCHIZAPHRENIK (Class 3 (P)) zerstört ⋇Brotmann89 (Strv 103С)",
+            ),
+        ).toStrictEqual(expect_no_clan);
     });
 });

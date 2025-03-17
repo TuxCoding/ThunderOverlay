@@ -1,23 +1,23 @@
 name: 🐞 Bug Report
 description: Something isn't working, broken, not expected behavior
-labels: [ bug ]
+labels: [bug]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        This ticket is about bugs, so broken, not expected behavior. Feedback about this form is appreciated.
-  - type: textarea
-    attributes:
-      label: What happened?
-      description: What behavior is observed?
-    validations:
-      required: true
-  - type: textarea
-    attributes:
-      label: Steps to reproduce
-      description: The actions that cause the issues. Please explain it in detail.
-  - type: textarea
-    attributes:
-      label: Console log
-      description: The error, stacktrace or link the complete log.
-      placeholder: https://gist.github.com/ or directly in the above area
+    - type: markdown
+      attributes:
+          value: |
+              This ticket is about bugs, so broken, not expected behavior. Feedback about this form is appreciated.
+    - type: textarea
+      attributes:
+          label: What happened?
+          description: What behavior is observed?
+      validations:
+          required: true
+    - type: textarea
+      attributes:
+          label: Steps to reproduce
+          description: The actions that cause the issues. Please explain it in detail.
+    - type: textarea
+      attributes:
+          label: Console log
+          description: The error, stacktrace or link the complete log.
+          placeholder: https://gist.github.com/ or directly in the above area

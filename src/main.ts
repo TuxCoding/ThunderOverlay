@@ -1,8 +1,14 @@
 import { AVATAR_FILE_PATH, FILE_EXT, findVehicleFile } from "@App/assets";
 import { DESTROY_TYPE } from "@App/lang";
-import { type Damage,fetchHUD } from "@App/network";
+import { type Damage, fetchHUD, loadLocal, Settings } from "@App/network";
 import { getSquadAvatar, isSquadRelevant } from "@App/team";
-import { addErrorHandlerImg, type Notification,showNotification } from "@App/ui";
+import {
+    addErrorHandlerImg,
+    type Notification,
+    showNotification,
+} from "@App/ui";
+
+import defaultSettings from "@App/settings.json";
 
 // time in ms
 const UPDATE_TIME = 1_000;
@@ -37,8 +43,12 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
             const err: Error = error;
             if (err.name === "TypeError") {
                 // happens if application is not running, only minimal client or a web extension blocked it
-                console.warn("Unknown error: some browser extension might blocked this request or War Thunder is not running");
-                console.warn(`Updating after ${FAIL_UPDATE_TIME / 60 / 1_000} minute(s)`);
+                console.warn(
+                    "Unknown error: some browser extension might blocked this request or War Thunder is not running",
+                );
+                console.warn(
+                    `Updating after ${FAIL_UPDATE_TIME / 60 / 1_000} minute(s)`,
+                );
 
                 // delay update process if not running
                 setTimeout(() => {
@@ -56,37 +66,51 @@ async function updateHUD(seenEvent: number, seenDamange: number) {
 /** Parsed destroy message */
 export interface DestroyMessage {
     /** Killer name including clan */
-    readonly killer: string,
+    readonly killer: string;
 
     /** battle log destroyer vehicle */
-    readonly destroyerVehicle: string,
+    readonly destroyerVehicle: string;
     /** battle log destroyed vehicle */
-    readonly destroyedVehicle: string
+    readonly destroyedVehicle: string;
 
     /** Killed player name including clan */
-    readonly killed: string
+    readonly killed: string;
 }
 
-export function init() {
+function init() {
     addErrorHandlerImg();
 
     // test formatting with max number of clan and player characters
     // and demonstrate initialization
     const not: Notification = {
-        killer: "^12345^ 1234567890123456",
+        killer: "^GFF7^ TuxCode",
         killerAvatar: "./assets/img/avatars/cardicon_fem_06.avif",
 
-        killerTankIcon: "./assets/img/vehicles/ground/ussr_t_44_122.avif",
-        destroyedTank: "./assets/img/vehicles/ground/il_aml_90.avif",
+        killerTankIcon: "./assets/img/vehicles/ground/il_merkava_mk_3b.avif",
+        destroyedTank: "./assets/img/vehicles/ground/ussr_t_90a.avif",
 
-        killed: "by CasualTuxCode / games647"
+        killed: "^GFF7^ Somebody",
     };
 
-    showNotification(not);
+    // delay it slightly to relax demand on initialization
+    setTimeout(() => showNotification(not), 4000);
 
-    startUpdating().catch(err => {
+    loadSettings().catch(console.error);
+
+    startUpdating().catch((err) => {
         console.error("Failed to start updating", err);
     });
+}
+
+async function loadSettings(): Promise<Settings> {
+    const currentProtocol = document.location.protocol;
+    if (currentProtocol == "file") {
+        // load only the embedded default settings if loaded with the browser
+        return defaultSettings as Settings;
+    }
+
+    // CORS in OBS are disabled by using a different protocol
+    return await loadLocal();
 }
 
 async function startUpdating() {
@@ -103,26 +127,6 @@ async function startUpdating() {
     updateHUD(0, lastId).catch(console.error);
 }
 
-// plane -> plane: shot down
-// plane -> tank: destroyed
-// heli -> tank: destroyed (rocket)
-
-// tank -> tank: destroyed
-// tank -> plane: shot down
-
-// bomb? plane -> tank:
-// bomb? plane -> plane:
-
-// ship -> ship: destroyed
-// ship -> plane: shot down
-enum DESTROY_TYPE {
-    // NET_UNIT_KILLED_FM
-    PLANE_DESTROYED = "abgeschossen",
-    // NET_UNIT_KILLED_GM
-    GROUND_DESTROYED = "zerstört",
-    BOMB_DESTROYED = "bomb"
-}
-
 /**
  * Regex matching destroyed vehicles from battle log with the following groups
  *
@@ -132,7 +136,8 @@ enum DESTROY_TYPE {
  * 4 player name with clan
  * 5 vehicle
  */
-const DESTROY_MSG_REGEX = /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen|bomb) ([^(]+) \((.+)\)/g;
+const DESTROY_MSG_REGEX =
+    /(.[^(]+) \((.+)\) (?:zerstört|abgeschossen) ([^(]+) \((.+)\)/g;
 
 export function parseMessage(msg: string): DestroyMessage | null {
     // convert from iterable to array
@@ -151,7 +156,10 @@ export function parseMessage(msg: string): DestroyMessage | null {
     // groups 0 is the complete string
     const [, killer, destroyerVehicle, killed, destroyedVehicle] = groups;
     return {
-        killer, destroyerVehicle, killed, destroyedVehicle
+        killer,
+        destroyerVehicle,
+        killed,
+        destroyedVehicle,
     };
 }
 
@@ -171,7 +179,13 @@ function handleEvents(events: Damage[]) {
 
         const destroyerTank = findVehicleFile(msg.destroyerVehicle);
         const destroyedTank = findVehicleFile(msg.destroyedVehicle);
-        logFailedMappings(destroyerTank, destroyedTank, killerAvatar, msg, event.msg);
+        logFailedMappings(
+            destroyerTank,
+            destroyedTank,
+            killerAvatar,
+            msg,
+            event.msg,
+        );
 
         if (!killerAvatar || !destroyerTank || !destroyedTank) {
             // not squad member - ignore or couldn't find image
@@ -198,16 +212,25 @@ function handleEvents(events: Damage[]) {
 }
 
 function logFailedMappings(
-    destroyerTank: string | null, destroyedTank: string | null, killerAvatar: string | null,
-    msg: DestroyMessage, rawMsg: string
+    destroyerTank: string | null,
+    destroyedTank: string | null,
+    killerAvatar: string | null,
+    msg: DestroyMessage,
+    rawMsg: string,
 ) {
     if (!destroyerTank || !destroyedTank) {
         // missing mapping like special cases for Abrams which couldn't be extracted easily from wiki
-        console.error(`Killer: ${msg.killer} with '${msg.destroyerVehicle}'->${destroyerTank} to ${msg.killed} '${msg.destroyedVehicle}'->${destroyedTank}`);
+        console.error(
+            `Killer: ${msg.killer} with '${msg.destroyerVehicle}'->${destroyerTank} to ${msg.killed} '${msg.destroyedVehicle}'->${destroyedTank}`,
+        );
     }
 
     // Squad avatar linking failed maybe the regex included accidentally a space
-    if (!killerAvatar && isSquadRelevant(rawMsg) && !getSquadAvatar(msg.killed)) {
+    if (
+        !killerAvatar &&
+        isSquadRelevant(rawMsg) &&
+        !getSquadAvatar(msg.killed)
+    ) {
         // if the squad member got killed it should not be logged by now
         console.error(`Cannot find squad avatar: ${msg.killer}`);
     }
@@ -218,7 +241,11 @@ const AI_DRONE_MSG = "[ai] Recon Micro";
 
 function checkRegexDetection(rawMsg: string) {
     // trigger words for destroy messages but with spaces to exclude player names
-    if (rawMsg.includes(` ${DESTROY_TYPE.GROUND_DESTROYED} `) || rawMsg.includes(` ${DESTROY_TYPE.BOMB_DESTROYED} `) || rawMsg.includes(` ${DESTROY_TYPE.PLANE_DESTROYED} `)) {
+    if (
+        rawMsg.includes(` ${DESTROY_TYPE.GROUND_DESTROYED} `) ||
+        rawMsg.includes(` ${DESTROY_TYPE.BOMB_DESTROYED} `) ||
+        rawMsg.includes(` ${DESTROY_TYPE.PLANE_DESTROYED} `)
+    ) {
         // proof check that the regex was valid
         if (!rawMsg.includes(SUICIDE_MSG) && !rawMsg.includes(AI_DRONE_MSG)) {
             // if the message wasn't suicide or against the AI drone
