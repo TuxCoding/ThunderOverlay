@@ -1,4 +1,5 @@
-import { findVehicleFile } from "../src/assets";
+import { FILE_EXT, findVehicleFile, VEHICLE_FILE_PATH } from "../src/assets";
+import * as fs from 'fs';
 
 import groundMapping from '../src/mappings/ground.json';
 import airMapping from '../src/mappings/air.json';
@@ -95,3 +96,48 @@ describe('Special handling unnecessary', () => {
         expect(isFoundInDefaultMap(specialVehicleName)).toBeFalsy();
     });
 });
+
+describe('Vehicle image available', () => {
+    const length = Object.keys(groundMapping).length
+        + Object.keys(heliMapping).length
+        + Object.keys(airMapping).length
+        + Object.keys(specialMapping).length;
+
+    // pre allocate array to prevent memory allocation spam
+
+    const vehicleTypes = [
+        ["ground", groundMapping],
+        // Then lookup heli, because of the smaller size
+        ["heli", heliMapping],
+        ["air", airMapping],
+        ["", specialMapping]
+    ];
+
+    // merge into single array with only the paths
+    const mergedMap = new Array(length);
+
+    let position = 0;
+    for (const type of vehicleTypes) {
+        const [prefix, map] = type;
+
+        for (const vehicle of Object.keys(map)) {
+            const file = (map as Record<string, string>)[vehicle];
+
+            let path = `./src/${VEHICLE_FILE_PATH}`;
+            if (prefix) {
+                path += `/${prefix}/${file}.${FILE_EXT}`;
+            } else {
+                path += `/${prefix}/${file}.${FILE_EXT}`;
+            }
+
+            mergedMap[position++] = path;
+        }
+    }
+
+    test.each(mergedMap)('Vehicle image not downloaded (%s)', async (filePath) => {
+        const exists = await fs.promises.stat(filePath);
+        expect(exists.isFile()).toBeTruthy();
+        return;
+    });
+});
+
