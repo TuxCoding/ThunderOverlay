@@ -7,15 +7,14 @@
         "ts-jest": "^29.2.4",
         "ts-loader": "^9.5.1",
         "typescript": "^5.5.4",
-        "typescript-eslint": "^8.1.0",
-        "webpack": "^5.93.0"
+        "typescript-eslint": "^8.1.0"
     },
     "scripts": {
         "test": "jest",
-        "watch": "webpack -w",
+        "watch": "esbuild src/index.ts --bundle --outfile=./src/assets/javascript/bundle.js --sourcemap --watch",
         "lint": "eslint ."
     },
     "dependencies": {
-        "webpack-cli": "^5.1.4"
+        "esbuild": "0.23.0"
     }
 }
