@@ -3,8 +3,8 @@
 ## Description
 
 This project models a web source displaying [War Thunder](https://warthunder.com/) in-game events to be integrated into
-[OBS](https://obsproject.com/) or similar streaming software. The primary focus is the integration of a kill feed for squad
-members during match. You can see demonstration here:
+[OBS](https://obsproject.com/) or similar streaming software. The primary focus is the integration of a visual kill feed
+for squad members during match. You can see demonstration here:
 
 [Kill overlay.webm](https://github.com/user-attachments/assets/f61f20fa-680b-49d0-852d-6f0a91345aa2)
 
@@ -70,6 +70,29 @@ Warning: the overlay needs to refreshed after starting War Thunder at the moment
     - I found horizontal centered and height `150px` a good fit below mission object and above a kill notification
 4. Cut out at the bottom `200px` using transformation to make it slide out of nowhere
 
+### Videos/GIF kill feed
+
+For example for special events like bomb kills.
+
+<details>
+<summary>
+Only a mockup:
+</summary>
+
+[Video killfeed.avif](https://github.com/user-attachments/assets/ff106699-cd60-4e57-93d8-7ea4d4802ba6)
+
+</details>
+
+<details>
+<summary>
+Earlier variants
+</summary>
+
+![2Avatars.avif](https://github.com/user-attachments/assets/e64fcdfb-8f27-4b25-b041-009b55e90593)
+
+![Single line.avif](https://github.com/user-attachments/assets/e6c15087-ea43-4655-b6cf-b57c008c4ab9)
+</details>
+
 ### Team
 
 <details>
@@ -108,9 +131,9 @@ Only a mockup:
     -   The data from the webinterface indicates that this feature is only available for game chat (`mode` field)
 -   Count kill assists reliably
     -   There is a streak award, but it would only be printed for > 2 kills in a row
-    -   We can detect critical damage from the battle log, but it doesn't seem to be reliable. Maybe you could proove it otherwise?
+    -   We can detect critical damage from the battle log, but it could be unreliable to assume assists later. Maybe you could proove it otherwise?
 -   Avatars cannot be downloaded on the fly i.e. for enemies
-    -   There is a limited amount of avatars you can choose
+    -   Avatars selection is limited
     -   However, we found no way to find out which of those is selected
     -   There is:
         -   The stats site, but it's bot protected [Stats](https://warthunder.com/de/community/userinfo?nick=TuxCode)
@@ -121,11 +144,11 @@ Only a mockup:
     -   Well, we could use optical character recognition, but this would be overkill and a performance hit
     -   We could make a database of standard ammunition per tank, but it would be very time consuming and not always true
 -   Vehicle images could be mapped to multiple names and is therefore not precise
-    -   The name `T-34` is mapped to multiple vehicles like `ussr_t_34_1941` or `ussr_t_34_1942`, so only a single image is mapped
+    -   The name `T-34` is mapped to multiple vehicles like `ussr_t_34_1941` or `ussr_t_34_1942`, so only a single image is used
     -   A few names are not unique across all vehicle types
         -   `English` has only two cases. Namely `Milan`->[`mirage_milan`(air), `fr_destroyer_aigle_class_milan`] and `Ariete`
-        -   The maximum of those cases across all languages are only `6` however
-        -   It's possible to detect the destroyed vehicle type based on destroyed trigger word (e.g. `shot down` or `destroyed`). Although this is not possible for damage source vehicle, because a tank or aircraft could destroy it and the trigger would be the same.
+        -   However, the maximum of those cases across all languages are only `6`
+        -   It's possible to detect the destroyed vehicle type based on destroyed trigger word (e.g. `shot down` or `destroyed`), although this is not possible for damage source vehicle.
 
 ### The overlay doesn't work with the minimal client
 
@@ -135,7 +158,7 @@ The web server from the game client is only provided by the full client version.
 
 It extracts the data from the battle log. This log is pulled from the the web server `http://localhost:9111` provided
 by the War Thunder client itself. It parses the corresponding raw data to player and vehicle names and then looks up
-the corresponding image data provided by the wiki.
+the corresponding image data provided by the game files or wiki.
 
 ## Credits
 
