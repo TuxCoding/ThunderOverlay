@@ -80,3 +80,4 @@ the corresponding image data provided by the wiki.
         * Foreign vehicle prefix
     * Vehicle symbols (i.e. fighter and tank) from the webinterface itself
 * Vehicle images from the wiki
+* APFDS shell from shooting range video
