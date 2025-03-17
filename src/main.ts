@@ -322,7 +322,13 @@ function onShow(ammunitionEl: HTMLElement) {
     ammunitionEl.style.animationFillMode = "forwards";
 
     // start firing video
-    (document.getElementById("smoke") as HTMLVideoElement).play();
+    const SmokeVideoEl = document.getElementById("smoke") as HTMLVideoElement;
+    SmokeVideoEl
+        .play()
+        .catch(error => {
+            // Videos would stop playing if the window is not visible for browser energy savings
+            console.log(`Video paused, because window is not in focus ${error}`);
+        });
 }
 
 function hide(container: HTMLElement, hideSec: number) {
