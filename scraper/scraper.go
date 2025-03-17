@@ -9,6 +9,9 @@ import (
 // owner read, write only
 const OUT_PERMISSION = 0600
 
+// execute to write into
+const OUT_DIR_PERM = 0700
+
 const OUTPUT_DIR = "./out/"
 
 func main() {
@@ -26,6 +29,7 @@ func writeJSON(content any, file string) {
 
 	err = os.WriteFile(file, bytes, OUT_PERMISSION)
 	if err != nil {
+		log.Println("here")
 		log.Fatal(err)
 	}
 }

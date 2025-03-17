@@ -178,6 +178,11 @@ func convertMap(records []UnitRecord) {
 	}
 
 	// write all languages
+	err := os.MkdirAll(OUTPUT_DIR, OUT_DIR_PERM)
+	if err != nil {
+		log.Fatal("Failed to create output dir\n", err)
+	}
+
 	for lang, mapping := range byLangMap {
 		checkCommonKeys(lang, mapping)
 		writeLangMapping(mapping, lang)
@@ -298,7 +303,7 @@ func logRecord(record UnitRecord, vehicleId string) {
 	}
 
 	if strings.LastIndex(vehicleId, NUKE_DRONE_ID) != -1 {
-		//log.Printf("Nuke/Drone: %s %s \n", vehicleId, record.English)
+		log.Printf("Nuke/Drone: %s %s \n", vehicleId, record.English)
 	}
 }
 

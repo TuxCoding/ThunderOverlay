@@ -120,6 +120,11 @@ func startScraping(col *colly.Collector) {
 
 // write output files
 func writeOut(mappings map[string]string, queue []string) {
+	err := os.MkdirAll(OUTPUT_DIR, OUT_DIR_PERM)
+	if err != nil {
+		log.Fatal("Failed to create output dir\n", err)
+	}
+
 	writeJSON(mappings, MAPPING_OUTPUT)
 	writeImgList(queue)
 }
