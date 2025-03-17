@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
     "noImplicitAny": true,
 
     /* Visit https://aka.ms/tsconfig to read more about this file */
@@ -28,7 +27,7 @@
     // "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
 
     /* Modules */
-    "module": "es6",                                /* Specify what module code is generated. */
+    "module": "preserve",                                /* Specify what module code is generated. */
     "rootDirs": [
         "src",
         "tests"
