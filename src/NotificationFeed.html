@@ -50,8 +50,8 @@
     }
 
     .tank img {
-        width: 128px;
         height: 64px;
+        width: 128px;
 
         /*
         border: 2px solid #00A3A3;
@@ -63,8 +63,8 @@
     }
 
     .tank-single img {
-        width: 200px;
         height: 100px;
+        width: 200px;
     }
 
     .avatar img {
@@ -131,6 +131,7 @@
       <script>var exports = {};</script>
       <script src="./assets/javascript/bundle.js"></script>
       <script>
+        /* Disable images if they are not found */
         document.getElementById("killer-tank").onload = () => {
             document.getElementById("killer-tank").style.opacity = "1";
         };
