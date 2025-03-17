@@ -82,7 +82,7 @@ Warning: the overlay needs to be refreshed after starting War Thunder at the mom
 settings.json
 </summary>
 
-```json
+```jsonc
 {
     // required to read the battle log, available language identifiers can be retrieved from "src/mappings" folder based on the file names
     "lang": "german",
@@ -106,9 +106,7 @@ settings.json
             // <kill|firstblood|nuke>
             "event": "kill",
             // Either one of those <me|squad|all>
-            "src": "squad",
-            // what visual representation should be displayed
-            "layout": "xyz"
+            "src": "squad"
         },
         {
             "event": "firstblood",
