@@ -1,0 +1,10 @@
+{
+    "objectives" : [
+       {
+          "primary" : true,
+          "status" : "in_progress",
+          "text" : "Erobere und Halte die Vorherrschaft über die Zielgebiete ╸,╹,╺"
+       }
+    ],
+    "status" : "running"
+ }
