@@ -69,7 +69,7 @@ export function init() {
         killerTankIcon: "./assets/img/vehicles/ground/ussr_t_44_122.png",
         destroyedTank: "./assets/img/vehicles/ground/il_aml_90.png",
 
-        killed: "^12345^ 1234567890123456"
+        killed: "by CasualTuxCode / games647"
     }
 
     showNotification(not);
@@ -85,13 +85,15 @@ function addErrorHandlerImg() {
 
     // Disable images if they are not found without showing browser default missing icon
     function hideImg(this: HTMLImageElement) {
+        console.error(`Failed to load image for: ${this.src}`)
         this.style.opacity = "0";
     }
 
+    // document id of flaky images
     const imgIcons = [
-        // normally only the mapping could be incorrect, so avatars should match fine
         "killer-tank",
-        "destroyed-tank"
+        "destroyed-tank",
+        "killer-avatar"
     ];
 
     for (const id of imgIcons) {
