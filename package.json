@@ -4,17 +4,17 @@
     "version": "0.6.0",
     "license": "MPL-2.0",
     "description": "War Thunder streaming overlay featuring visual kill feed",
-    "homepage": "https://github.com/games647/WarThunderStreamOverlay",
+    "homepage": "https://github.com/TuxCoding/ThunderOverlay",
     "bugs": {
-        "url": "https://github.com/games647/WarThunderStreamOverlay/issues"
+        "url": "https://github.com/TuxCoding/ThunderOverlay/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/games647/WarThunderStreamOverlay.git"
+        "url": "git+https://github.com/TuxCoding/ThunderOverlay.git"
     },
     "author": {
-        "name": "games647",
-        "url": "https://github.com/games647"
+        "name": "TuxCoding",
+        "url": "https://github.com/TuxCoding"
     },
     "devDependencies": {
         "@stylistic/eslint-plugin": "^4.0.1",
