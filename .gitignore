@@ -21,6 +21,10 @@ src/assets/img/vehicles/ground/*
 src/assets/img/avatars/*
 !src/assets/img/avatars/.gitkeep
 
+# Licensed material
+src/assets/vid/smoke.webm
+src/assets/vid/bomb.mkv
+
 # War Thunder icons
 src/assets/img/13px-Rp_icon.png
 src/assets/img/19px-Ge_icon.png

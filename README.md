@@ -105,7 +105,7 @@ settings.json
 ```jsonc
 {
     // required to read the battle log, available language identifiers can be retrieved from "src/mappings" folder based on the file names
-    "lang": "german",
+    "lang": "english",
     // list of your squad and you and the corresponding avatar names
     "squad": [
         {
