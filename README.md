@@ -21,6 +21,7 @@ You can see demonstration here (low quality to be hosted on GitHub):
     -   Navy
     -   Nukes and drones too ;)
 -   Multi language support
+-   Works online and offline locally
 -   Sound effects
     -   Like [this](https://www.youtube.com/watch?v=e-ZLycuRLwc) for nukes
 
@@ -73,6 +74,26 @@ pnpm watchJS
 ## Installation
 
 Warning: the overlay needs to be refreshed after starting War Thunder at the moment.
+
+### Online
+
+This version makes web requests to retrieve the image data for vehicle and avatars.
+
+* Avatars: https://avatars.warthunder.com/img/
+* Vehicle images: https://static.encyclopedia.warthunder.com/images/
+
+1. Optional: Find your avatar name
+    * Visit your web profile at `https://warthunder.com/en/community/userinfo?nick=USERNAME`
+    * Then right click your avatar and open it in a new window/tab or copy the address
+    * Then extract the file name from the address. So for example `https://avatars.warthunder.com/img/cardicon_esport_drops.png` -> `cardicon_esport_drops`
+2. Add your browser source to OBS based on [this](#kill-feed), but using this address:
+    * `...?username=USERNAME`
+    * `USERNAME`: Your own username
+    * Full example: `...?username=TuxCode,cardicon_esport_drops&`
+
+### Local
+
+This version uses only local files. All relevant data is extracted from the game client.
 
 1. Download the project
 2. Open `src/settings.json` in a text editor and edit

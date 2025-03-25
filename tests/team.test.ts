@@ -1,4 +1,4 @@
-import { AVATAR_FILE_PATH, FILE_EXT } from "@App/assets";
+import { AVATAR_FILE_PATH, LOCAL_EXT } from "@App/assets";
 import { getSquadAvatar, isSquadRelevant } from "@App/team";
 import * as fs from "fs";
 
@@ -67,7 +67,7 @@ describeCond("Team avatar available", () => {
                 fail("avatar not defined?");
             }
 
-            const path = `${AVATAR_SRC_PATH}/${file}.${FILE_EXT}`;
+            const path = `${AVATAR_SRC_PATH}/${file}.${LOCAL_EXT}`;
             const exists = await fs.promises.stat(path);
 
             expect(exists.isFile()).toBeTruthy();

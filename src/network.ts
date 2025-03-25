@@ -79,7 +79,6 @@ export interface EventTrigger {
 
 export interface Settings {
     readonly lang: string;
-    readonly me: string;
 
     readonly squad: SquadAvatar[];
     readonly events: EventTrigger[];
@@ -89,7 +88,7 @@ export interface Settings {
  * Load current settings file
  * @returns current settings
  */
-export async function loadLocale(): Promise<Settings> {
+export async function loadSettingsFile(): Promise<Settings> {
     const resp = await fetch("./settings.json", {
         method: GET_METHOD,
         headers: {
@@ -98,6 +97,26 @@ export async function loadLocale(): Promise<Settings> {
     });
 
     return (await resp.json()) as Settings;
+}
+
+export interface AssetMap {
+    readonly air: Record<string, string>;
+    readonly ground: Record<string, string>;
+    readonly ships: Record<string, string>;
+}
+
+/**
+ *
+ */
+export async function loadLang(lang: string) {
+    const resp = await fetch(`./mappings/${lang}.json`, {
+            method: GET_METHOD,
+            headers: {
+                Accept: JSON_TYPE,
+            },
+    });
+
+    return (await resp.json()) as AssetMap;
 }
 
 /**

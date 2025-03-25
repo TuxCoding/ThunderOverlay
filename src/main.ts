@@ -1,6 +1,6 @@
-import { AVATAR_FILE_PATH, FILE_EXT, findVehicleFile } from "@App/assets";
+import { AVATAR_FILE_PATH, LOCAL_EXT, findVehicleFile, setAssetMap } from "@App/assets";
 import { DESTROY_TYPE } from "@App/lang";
-import { type Damage, fetchHUD, loadLocale, Settings } from "@App/network";
+import { type Damage, fetchHUD, loadLang, loadSettingsFile, Settings } from "@App/network";
 import { getSquadAvatar, isSquadRelevant } from "@App/team";
 import {
     addErrorHandlerImg,
@@ -97,9 +97,14 @@ function init() {
     // delay it slightly to relax demand on initialization
     setTimeout(() => showNotification(not), 1_000);
 
-    loadSettings().catch(console.error);
+    loadSettings().then(async settings => {
+        const lang = settings.lang;
+        const languageMapping = await loadLang(lang);
 
-    startUpdating().catch((err) => {
+        setAssetMap(languageMapping);
+    }).catch(console.error);
+
+    startUpdating().catch(err => {
         console.error("Failed to start updating", err);
     });
 }
@@ -110,6 +115,7 @@ function init() {
  */
 async function loadSettings(): Promise<Settings> {
     const currentProtocol = document.location.protocol;
+    // If opened locally in a browser load the default
     if (currentProtocol === "file:") {
         console.warn("Loading default settings, because of file protocol");
 
@@ -118,7 +124,7 @@ async function loadSettings(): Promise<Settings> {
     }
 
     // CORS in OBS is disabled by using a different protocol
-    return await loadLocale();
+    return await loadSettingsFile();
 }
 
 /**
@@ -214,7 +220,7 @@ function handleEvents(events: Damage[]) {
 
         const notification: Notification = {
             killer: msg.killer,
-            killerAvatar: `${AVATAR_FILE_PATH}/${killerAvatar}.${FILE_EXT}`,
+            killerAvatar: `${AVATAR_FILE_PATH}/${killerAvatar}.${LOCAL_EXT}`,
             killerTankIcon: destroyerTank,
 
             destroyedTank: destroyedTank,

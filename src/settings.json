@@ -1,6 +1,5 @@
 {
     "lang": "english",
-    "me": "TuxCode",
     "squad": [
         {
             "username": "TuxCode",
@@ -14,8 +13,7 @@
     "events": [
         {
             "event": "kill",
-            "src": "squad",
-            "layout": "xyz"
+            "src": "squad"
         },
         {
             "event": "firstblood",

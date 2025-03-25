@@ -1,9 +1,10 @@
 import {
-    FILE_EXT,
+    LOCAL_EXT,
     findVehicleFile,
     Mapping,
     VEHICLE_FILE_PATH,
     VehicleType,
+    setAssetMap,
 } from "@App/assets";
 
 import airMapping from "@Mapping/air.json";
@@ -12,8 +13,21 @@ import shipMapping from "@Mapping/ships.json";
 import specialMapping from "@Mapping/specials.json";
 
 import * as fs from "fs";
+import { AssetMap } from "./network";
 
 const VEHICLE_SRC_PATH = `./src/${VEHICLE_FILE_PATH}`;
+
+const resp = fs.readFileSync(
+    // use german mappings, because this is an example file that uses Cyrillic identifiers for vehicle we test against
+    "./src/mappings/german.json",
+    "utf8",
+);
+
+const germanMapping = JSON.parse(resp) as AssetMap;
+
+beforeEach(() => {
+    setAssetMap(germanMapping);
+});
 
 describe("find vehicle", () => {
     test("Not existing vehicle", () => {
@@ -139,6 +153,8 @@ describe("find vehicles with special names", () => {
     });
 
     test("if cyrillic vehicle are found", () => {
+        // Warning the Cyrillic identifiers are language specific
+        // they are not found in english, but in german locales for some reason
         expect(findVehicleFile("Т-10М")).toBe(
             "./assets/img/vehicles/ground/ussr_t_10m.avif",
         );
@@ -259,7 +275,7 @@ describeCond("Vehicle image available", () => {
                 path += `/${prefix}`;
             }
 
-            path += `/${file}.${FILE_EXT}`;
+            path += `/${file}.${LOCAL_EXT}`;
             mergedMap[position++] = path;
         }
     }
