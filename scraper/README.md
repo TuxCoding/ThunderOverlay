@@ -11,7 +11,7 @@ An old version used the scrape the War Thunder wiki for name translations. Howev
 are not translated to the local languages and therefore not precise enough. In [Update file name mappings](#update-file-name-mappings)
 is a lot better way documented.
 
-#### Images
+#### Images (old way)
 
 To download the images at once you can use this tool and then download the list images. However, those files are
 only distributed in `.png`. In [Adding vehicle images](#adding-vehicle-images) you use the files that are part of the

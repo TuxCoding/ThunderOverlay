@@ -1,6 +1,6 @@
 # War Thunder OBS/Streaming overlay
 
-![Project logo](https://github.com/user-attachments/assets/6b1a4727-3f88-4fd7-9ba9-22092f6dd238)
+![Project logo.avif](https://github.com/user-attachments/assets/a48cf364-69f8-4fd7-a810-7eeef0298b6d)
 
 ## Description
 
@@ -48,7 +48,7 @@ You can see demonstration here (low quality to be hosted on GitHub):
 The goal of this project is solely to provide visual appealing overlay for viewers. For example by displaying the vehicle
 images for people not familiar with the vehicle names or displaying kills from squad members in a more prominent way.
 
-This goal of this project is **never** to provide gameplay advantages over the vanilla behavior to the player.
+This goal of this project is **never** to provide gameplay advantages over the vanilla behavior.
 
 ## Building (development)
 
