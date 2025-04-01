@@ -77,6 +77,6 @@ jobs:
               working-directory: ./scraper
 
             - name: Lint go
-              uses: golangci/golangci-lint-action@v6
+              uses: golangci/golangci-lint-action@v7
               with:
                   working-directory: ./scraper
