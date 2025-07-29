@@ -1,6 +1,6 @@
 # War Thunder OBS/Streaming overlay
 
-![Project logo.avif](https://github.com/user-attachments/assets/a48cf364-69f8-4fd7-a810-7eeef0298b6d)
+![A promotional banner for "Thunder Overlay," a streaming overlay for War Thunder kill feeds. The background features an in-game scene from War Thunder, showing two tanks and a missile in mid-flight with a fiery trail. Above the missile, two usernames, "^GFF7^ games647" and "^GFF7^ Somebody," are displayed in teal text, resembling an in-game kill feed](https://github.com/user-attachments/assets/a48cf364-69f8-4fd7-a810-7eeef0298b6d "Project logo.avif")
 
 ## Description
 
@@ -10,7 +10,7 @@ This could include an image of the vehicle helping people who are not familiar w
 
 You can see demonstration here (low quality to be hosted on GitHub):
 
-[Kill overlay.webm](https://github.com/user-attachments/assets/f61f20fa-680b-49d0-852d-6f0a91345aa2)
+[Kill overlay.vp9.webm](https://github.com/user-attachments/assets/f61f20fa-680b-49d0-852d-6f0a91345aa2)
 
 ### Features
 
