@@ -1,0 +1,4 @@
+# PNPM approved build scripts
+ignoredBuiltDependencies:
+  - esbuild
+  - unrs-resolver
