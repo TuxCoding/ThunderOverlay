@@ -329,6 +329,9 @@ func parseKeywords(byLangMap map[string]LanguageMap) {
 			fillEachLang(byLangMap, &record, func(langMap *LanguageMap, localName string) {
 				langMap.GroundDestroyed = localName
 			})
+		default:
+			// ignore - explicitly define default to please linter
+			// and here it's explicitly allowed because we currently only these case and can safely ignore others
 		}
 	}
 
@@ -346,6 +349,9 @@ func parseKeywords(byLangMap map[string]LanguageMap) {
 			fillEachLang(byLangMap, &record, func(langMap *LanguageMap, localName string) {
 				langMap.FirstBlood = localName
 			})
+		default:
+			// ignore - explicitly define default to please linter
+			// and here it's explicitly allowed because we currently only these case and can safely ignore others
 		}
 	}
 }

@@ -20,6 +20,9 @@ linters:
     - unused
     # requires whitespaces even though for statements and assignments are common or used within loops
     - wsl
+    - wsl_v5
+    # Allow inline error handling - if reasonable we don't need to make it explicit
+    - noinlineerr
   settings:
     revive:
       confidence: 0.1

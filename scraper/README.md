@@ -37,3 +37,7 @@ The relevant file for this project is the `units.csv` file. This file is part of
 The vehicle images are located inside `tex.vromfs.bin`. There you can find `tanks`, `navy` and `aircrafts` (incl. helicopter).
 Unpack the file similar to above and copy the files into `src/assets/img/VEHICLE_TYPE/.`. So for example that you have:
 `src/assets/img/vehicles/ground/bt_5.avif`
+
+#### Adding avatars
+
+Similar to [Adding vehicle images](#adding-vehicle-images) these files can be extracted from the game files and named with `cardicon` prefix.
