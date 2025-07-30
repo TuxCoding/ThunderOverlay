@@ -10,7 +10,8 @@
 
         /* Modules */
         "rootDirs": [
-            /* Specify the root folder within your source files. */ "src",
+            /* Specify the root folder within your source files. */
+            "src",
             "tests"
         ],
 
@@ -22,7 +23,7 @@
             "DOM.AsyncIterable",
             "ESNext",
             "WebWorker.ImportScripts",
-            // Additional libs
+            // Additional libs that should be supported by latest browsers separate from ESNext
             "ESNext.Array",
             "ESNext.AsyncIterable",
             "ESNext.Symbol",
@@ -33,14 +34,15 @@
         "baseUrl": ".",
         "paths": {
             "@App/*": ["src/*"],
-            "@Mapping/*": ["src/mappings/*"]
+            "@Mapping/*": ["src/lang/mappings/*"]
         },
 
         // import json directly into output
-        "resolveJsonModule": true /* Enable importing .json files. */,
+        "resolveJsonModule": true,
 
-        // we are bundling the project
+        // we are bundling the project js into single file for optimized loading
         "moduleResolution": "Bundler" /* Specify how TypeScript looks up a file from a given module specifier. */,
+        // we use esbuild so disable duplicate JS output
         "noEmit": true /* Disable emitting files from a compilation. */,
 
         // strictness
@@ -49,7 +51,7 @@
 
         /* Interop Constraints */
         "isolatedModules": true /* Ensure that each file can be safely transpiled without relying on other imports. */,
-        //"verbatimModuleSyntax": true,                     /* Do not transform or elide any imports or exports not marked as type-only, ensuring they are written in the output file's format based on the 'module' setting. */
+        "verbatimModuleSyntax": true,                     /* Do not transform or elide any imports or exports not marked as type-only, ensuring they are written in the output file's format based on the 'module' setting. */
         "esModuleInterop": true /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */,
         "forceConsistentCasingInFileNames": true /* Ensure that casing is correct in imports. */,
 
@@ -62,11 +64,15 @@
         "noImplicitThis": true /* Enable error reporting when 'this' is given the type 'any'. */,
         "useUnknownInCatchVariables": true /* Default catch clause variables as 'unknown' instead of 'any'. */,
         "alwaysStrict": true /* Ensure 'use strict' is always emitted. */,
+
+        // allow unused vars for this project, because its more prototyping
         //"noUnusedLocals": true,                           /* Enable error reporting when local variables aren't read. */
         //"noUnusedParameters": true,                       /* Raise an error when a function parameter isn't read. */
         "exactOptionalPropertyTypes": true /* Interpret optional property types as written, rather than adding 'undefined'. */,
         "noImplicitReturns": true /* Enable error reporting for codepaths that do not explicitly return in a function. */,
         "noFallthroughCasesInSwitch": true /* Enable error reporting for fallthrough cases in switch statements. */,
+
+        // this would require index checks for many well-known properties like os.ENV - here it feels too strict than to allow runtime errors
         //"noUncheckedIndexedAccess": true,                 /* Add 'undefined' to a type when accessed using an index. */
         "noImplicitOverride": true /* Ensure overriding members in derived classes are marked with an override modifier. */,
         "noPropertyAccessFromIndexSignature": true /* Enforces using indexed accessors for keys declared using an indexed type. */,
