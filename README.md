@@ -33,7 +33,7 @@ You can see demonstration here (low quality to be hosted on GitHub):
     -   Other damage events: fire, crit, severe damage
 -   Sound effects if not possible with the game client itself
     -   Realistic sounds like from this awesome video [Battlefield 1](https://www.youtube.com/watch?v=J2JBmYt2Z44)
-        -   Detection for events like following are possible would be possible with the webinterface:
+        -   Detection for events like the following would be possible with the webinterface:
             -   lost crew members
             -   marked enemies on map
             -   and more.
@@ -109,7 +109,7 @@ settings.json
     // list of your squad and you and the corresponding avatar names
     "squad": [
         {
-            // again username without squadron tag
+            // username without squadron tag
             "username": "TuxCode",
             // Avatar name can be extracted from: https://warthunder.com/de/community/userinfo?nick=TuxCode
             // and opening getting the image url like opening it in a new tab
@@ -118,42 +118,6 @@ settings.json
         {
             "username": "Wingman",
             "avatar": "cardicon_bundeswehr_infantryman"
-        }
-    ],
-    // what should happen for certain game events
-    "events": [
-        {
-            // <kill|firstblood|nuke>
-            "event": "kill",
-            // Either one of those <me|squad|all>
-            "src": "squad"
-        },
-        {
-            "event": "firstblood",
-            "src": "me",
-            "sound": [
-                {
-                    // sound file from src/assets/sound
-                    "file": "xyz.opus",
-                    // percentage value from 0-100%
-                    "volume": 10
-                }
-            ]
-        },
-        {
-            "event": "nuke",
-            "src": "all",
-            "sound": [
-                // if multiple sounds are given, a random one will be played
-                {
-                    "file": "xyz.opus",
-                    "volume": 10
-                },
-                {
-                    "file": "xyz.opus",
-                    "volume": 10
-                }
-            ]
         }
     ]
 }

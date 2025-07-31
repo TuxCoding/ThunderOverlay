@@ -15,6 +15,55 @@ export interface Notification {
     readonly destroyedTank: string;
 }
 
+let notificationQueueRunning = false;
+
+/**
+ * Trigger the notification loop if not running
+ */
+export function startNotificationLoop() {
+    // loop entry start loop if not running
+    if (notificationQueueRunning) {
+        // already running
+        return;
+    }
+
+    notificationQueueRunning = true;
+    console.debug("Starting notification loop");
+    notificationLoop();
+}
+
+const NOTIFICATION_SHOW_INTERVAL = 10 * 1_000;
+
+/** Queue of not delivered notifications */
+const notificationQueue: Notification[] = [];
+
+export function addNotification(notification: Notification) {
+    notificationQueue.push(notification);
+
+    if (notificationQueue.length !== 0) {
+        // trigger the notification runtime if not running yet
+        startNotificationLoop();
+    }
+}
+
+/**
+ * Runtime loop for showing the next notification
+ */
+function notificationLoop() {
+    console.debug("Notification loop iteration");
+
+    const lastNot = notificationQueue.pop();
+    if (!lastNot) {
+        // do not schedule another iteration if there are no new entries
+        notificationQueueRunning = false;
+        return;
+    }
+
+    console.debug("Showing notification: ", lastNot);
+    showNotification(lastNot);
+    setTimeout(notificationLoop, NOTIFICATION_SHOW_INTERVAL);
+}
+
 // HTML ids
 const NOTIFICATION_CONTAINER_ELEMENT = "notification";
 const KILLER_TEXT_ELEMENT = "killer-name";

@@ -1,124 +1,115 @@
 import {
     LOCAL_EXT,
     findVehicleFile,
-    Mapping,
     VEHICLE_FILE_PATH,
     VehicleType,
-    setAssetMap,
-} from "@App/assets";
+} from "@App/lang/assets";
 
-import airMapping from "@Mapping/air.json";
-import groundMapping from "@Mapping/ground.json";
-import shipMapping from "@Mapping/ships.json";
 import specialMapping from "@Mapping/specials.json";
 
 import * as fs from "fs";
-import { AssetMap } from "./network";
+import type { AssetMap } from "./network";
 
 const VEHICLE_SRC_PATH = `./src/${VEHICLE_FILE_PATH}`;
 
 const resp = fs.readFileSync(
     // use german mappings, because this is an example file that uses Cyrillic identifiers for vehicle we test against
-    "./src/mappings/german.json",
+    "./src/lang/mappings/german.json",
     "utf8",
 );
 
 const germanMapping = JSON.parse(resp) as AssetMap;
 
-beforeEach(() => {
-    setAssetMap(germanMapping);
-});
-
 describe("find vehicle", () => {
     test("Not existing vehicle", () => {
-        expect(findVehicleFile("Unknown")).toBeNull();
+        expect(findVehicleFile(germanMapping, "Unknown")).toBeNull();
     });
 
     test("Simple name", () => {
-        expect(findVehicleFile("2S38")).toBe(
+        expect(findVehicleFile(germanMapping, "2S38")).toBe(
             "./assets/img/vehicles/ground/ussr_2s38.avif",
         );
     });
 
     test("Name with space", () => {
-        expect(findVehicleFile("Magach 6M")).toBe(
+        expect(findVehicleFile(germanMapping, "Magach 6M")).toBe(
             "./assets/img/vehicles/ground/il_magach_6m.avif",
         );
     });
 
     test("Name with dash", () => {
-        expect(findVehicleFile("T-80B")).toBe(
+        expect(findVehicleFile(germanMapping, "T-80B")).toBe(
             "./assets/img/vehicles/ground/ussr_t_80b.avif",
         );
     });
 
     test("Name with parenthis", () => {
-        expect(findVehicleFile("T-72AV (TURMS-T)")).toBe(
+        expect(findVehicleFile(germanMapping, "T-72AV (TURMS-T)")).toBe(
             "./assets/img/vehicles/ground/ussr_t_72av_turms.avif",
         );
     });
 
     test("Name with divisor", () => {
-        expect(findVehicleFile("VCC-80/30 ")).toBe(
+        expect(findVehicleFile(germanMapping, "VCC-80/30 ")).toBe(
             "./assets/img/vehicles/ground/it_vcc_80_hitfist_30.avif",
         );
     });
 
     test("Name with dot", () => {
-        expect(findVehicleFile("Merkava Mk.1B")).toBe(
+        expect(findVehicleFile(germanMapping, "Merkava Mk.1B")).toBe(
             "./assets/img/vehicles/ground/il_merkava_mk_1b.avif",
         );
     });
 
     test("Aircraft", () => {
-        expect(findVehicleFile("Hampden TB Mk I")).toBe(
+        expect(findVehicleFile(germanMapping, "Hampden TB Mk I")).toBe(
             "./assets/img/vehicles/air/hp52_hampden_tbmk1.avif",
         );
     });
 
     test("Heli", () => {
-        expect(findVehicleFile("UH-1B")).toBe(
+        expect(findVehicleFile(germanMapping, "UH-1B")).toBe(
             "./assets/img/vehicles/air/uh_1b.avif",
         );
     });
 
     test("Ships", () => {
-        expect(findVehicleFile("Fairmile D (601)")).toBe(
+        expect(findVehicleFile(germanMapping, "Fairmile D (601)")).toBe(
             "./assets/img/vehicles/ships/uk_fairmile_d_601_616.avif",
         );
     });
 
     test("Special chacter before vehicle", () => {
         // japan
-        expect(findVehicleFile("▅UH-1B")).toBe(
+        expect(findVehicleFile(germanMapping, "▅UH-1B")).toBe(
             "./assets/img/vehicles/air/uh_1b_japan.avif",
         );
     });
 
     test("Special chacter before vehicle", () => {
         // italy
-        expect(findVehicleFile("◔Mi-24D")).toBe(
+        expect(findVehicleFile(germanMapping, "◔Mi-24D")).toBe(
             "./assets/img/vehicles/air/mi_24d_hungary.avif",
         );
     });
 
     test("Weird spacing after name", () => {
-        expect(findVehicleFile("ELC bis ")).toBe(
+        expect(findVehicleFile(germanMapping, "ELC bis ")).toBe(
             "./assets/img/vehicles/ground/fr_amx_elc_bis.avif",
         );
-        expect(findVehicleFile("C2A1 ")).toBe(
+        expect(findVehicleFile(germanMapping, "C2A1 ")).toBe(
             "./assets/img/vehicles/ground/germ_leopard_c2_mexas.avif",
         );
-        expect(findVehicleFile("VCC-80/30 ")).toBe(
+        expect(findVehicleFile(germanMapping, "VCC-80/30 ")).toBe(
             "./assets/img/vehicles/ground/it_vcc_80_hitfist_30.avif",
         );
-        expect(findVehicleFile("B3C ")).toBe(
+        expect(findVehicleFile(germanMapping, "B3C ")).toBe(
             "./assets/img/vehicles/air/saab_b3c.avif",
         );
     });
 
     test("Different name mapping from wiki", () => {
-        expect(findVehicleFile("Abrams")).toBe(
+        expect(findVehicleFile(germanMapping, "Abrams")).toBe(
             "./assets/img/vehicles/ground/us_m1_abrams.avif",
         );
     });
@@ -126,28 +117,28 @@ describe("find vehicle", () => {
 
 describe("find vehicles with special names", () => {
     test("if vehicle found with non-break spaces", () => {
-        expect(findVehicleFile("Fw 190 D")).toBe(
+        expect(findVehicleFile(germanMapping, "Fw 190 D")).toBe(
             "./assets/img/vehicles/air/fw-190d-13.avif",
         );
     });
 
     test("if localized name is found", () => {
-        expect(findVehicleFile("Typ 90")).toBe(
+        expect(findVehicleFile(germanMapping, "Typ 90")).toBe(
             "./assets/img/vehicles/ground/jp_type_90.avif",
         );
-        expect(findVehicleFile("Objekt 292")).toBe(
+        expect(findVehicleFile(germanMapping, "Objekt 292")).toBe(
             "./assets/img/vehicles/ground/ussr_object_292.avif",
         );
     });
 
     test("if spaces trimmed", () => {
-        expect(findVehicleFile("Vickers Mk. 3")).toBe(
+        expect(findVehicleFile(germanMapping, "Vickers Mk. 3")).toBe(
             "./assets/img/vehicles/ground/uk_vickers_mbt_mk_3.avif",
         );
     });
 
     test("if quote is normalized", () => {
-        expect(findVehicleFile("Ra’am Sagol")).toBe(
+        expect(findVehicleFile(germanMapping, "Ra’am Sagol")).toBe(
             "./assets/img/vehicles/ground/il_merkava_mk_3_raam_segol.avif",
         );
     });
@@ -155,46 +146,46 @@ describe("find vehicles with special names", () => {
     test("if cyrillic vehicle are found", () => {
         // Warning the Cyrillic identifiers are language specific
         // they are not found in english, but in german locales for some reason
-        expect(findVehicleFile("Т-10М")).toBe(
+        expect(findVehicleFile(germanMapping, "Т-10М")).toBe(
             "./assets/img/vehicles/ground/ussr_t_10m.avif",
         );
     });
 
     test("if nuke vehicles are found", () => {
-        expect(findVehicleFile("☢Jaguar A")).toBe(
+        expect(findVehicleFile(germanMapping, "☢Jaguar A")).toBe(
             "./assets/img/vehicles/air/jaguar_a.avif",
         );
-        expect(findVehicleFile("☢Tu-4")).toBe(
+        expect(findVehicleFile(germanMapping, "☢Tu-4")).toBe(
             "./assets/img/vehicles/air/tu_4.avif",
         );
-        expect(findVehicleFile("☢IL-28")).toBe(
+        expect(findVehicleFile(germanMapping, "☢IL-28")).toBe(
             "./assets/img/vehicles/air/il_28.avif",
         );
-        expect(findVehicleFile("☢B-29A")).toBe(
+        expect(findVehicleFile(germanMapping, "☢B-29A")).toBe(
             "./assets/img/vehicles/air/b-29.avif",
         );
-        expect(findVehicleFile("☢Su-7BKL")).toBe(
+        expect(findVehicleFile(germanMapping, "☢Su-7BKL")).toBe(
             "./assets/img/vehicles/air/su-7bkl.avif",
         );
 
         // yes really both exist
-        expect(findVehicleFile("☢Canberra B")).toBe(
+        expect(findVehicleFile(germanMapping, "☢Canberra B")).toBe(
             "./assets/img/vehicles/air/canberra_bimk6.avif",
         );
-        expect(findVehicleFile("☢Canberra B Mk 6")).toBe(
+        expect(findVehicleFile(germanMapping, "☢Canberra B Mk 6")).toBe(
             "./assets/img/vehicles/air/canberra_bimk6.avif",
         );
     });
 
     test("if duplicate mapping", () => {
-        expect(findVehicleFile("Milan")).toBe(
+        expect(findVehicleFile(germanMapping, "Milan")).toBe(
             "./assets/img/vehicles/air/mirage_milan.avif",
         );
         // expect(findVehicleFile("Milan")).toBe("./assets/img/vehicles/ships/fr_destroyer_aigle_class_milan.avif");
     });
 
     test("Q-5A/B", () => {
-        expect(findVehicleFile("Q-5A/B\r\n")).toBe(
+        expect(findVehicleFile(germanMapping, "Q-5A/B\r\n")).toBe(
             "./assets/img/vehicles/air/q_5a.avif",
         );
     });
@@ -210,10 +201,10 @@ describe("Special handling unnecessary", () => {
      * @returns true if found anywhere
      */
     function isFoundInDefaultMap(vehicle: string): boolean {
-        const vehicleTypes: Mapping[] = [
-            groundMapping,
-            shipMapping,
-            airMapping,
+        const vehicleTypes: Record<string, string>[] = [
+            germanMapping.vehicles.ground,
+            germanMapping.vehicles.air,
+            germanMapping.vehicles.ships,
         ];
 
         for (const map of vehicleTypes) {
@@ -244,48 +235,61 @@ if (files.length > 1) {
 
 const describeCond = assetExtracted ? describe : describe.skip;
 describeCond("Vehicle image available", () => {
+    async function testImageExists(assetPath: string) {
+        const path = `${VEHICLE_SRC_PATH}/${assetPath}.${LOCAL_EXT}`;
+
+        const exists = await fs.promises.stat(path);
+        expect(exists.isFile()).toBeTruthy();
+    }
+
+    function merge(vehicles: [string, Record<string, string>][]) {
+        let length = 0;
+        for (const type of vehicles) {
+            const map = type[1];
+            length += Object.keys(map).length;
+        }
+
+        // pre allocate array to prevent memory allocation spam
+        const mergedMap = new Array<string>(length);
+
+        let position = 0;
+        for (const type of vehicles) {
+            const [prefix, map] = type;
+
+            for (const vehicle of Object.keys(map)) {
+                // unix is case-senstive
+                const file = map[vehicle].toLowerCase();
+
+                const path = `${prefix}/${file}`;
+                mergedMap[position++] = path;
+            }
+        }
+
+        return mergedMap;
+    }
+
     // merge into single array with only the paths
-    const vehicleTypes: [string, Mapping][] = [
-        [VehicleType.Ground, groundMapping],
-        [VehicleType.Air, airMapping],
-        [VehicleType.Ship, shipMapping],
-        ["", specialMapping],
+    const vehicleTypes: [string, Record<string, string>][] = [
+        [VehicleType.Ground, germanMapping.vehicles.ground],
+        [VehicleType.Air, germanMapping.vehicles.air],
+        [VehicleType.Ship, germanMapping.vehicles.ships]
     ];
 
-    let length = 0;
-    for (const type of vehicleTypes) {
-        const map = type[1];
-        length += Object.keys(map).length;
-    }
-
-    // pre allocate array to prevent memory allocation spam
-    const mergedMap = new Array<string>(length);
-
-    let position = 0;
-    for (const type of vehicleTypes) {
-        const [prefix, map] = type;
-
-        for (const vehicle of Object.keys(map)) {
-            // unix is case-senstive
-            const file = map[vehicle].toLowerCase();
-
-            let path = VEHICLE_SRC_PATH;
-            if (prefix) {
-                // vehicle type path prefix
-                path += `/${prefix}`;
-            }
-
-            path += `/${file}.${LOCAL_EXT}`;
-            mergedMap[position++] = path;
-        }
-    }
-
+    const mergedMap = merge(vehicleTypes);
     test.each(mergedMap)(
         "Vehicle image not downloaded (%s)",
-        async (filePath) => {
-            const exists = await fs.promises.stat(filePath);
-            expect(exists.isFile()).toBeTruthy();
-            return;
-        },
+        async (filePath) => await testImageExists(filePath),
+    );
+
+    const specialKeys = Object.entries(specialMapping);
+    test.each(specialKeys)(
+        "Special case image not downloaded (%s)",
+        async (_, value) => {
+            const vehicleType = value.type;
+            const vehicleFileName = value.file;
+
+            const filePath = `${vehicleType}/${vehicleFileName}`;
+            await testImageExists(filePath);
+        }
     );
 });

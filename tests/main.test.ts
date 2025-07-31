@@ -1,6 +1,16 @@
-import { DestroyMessage, parseMessage } from "@App/main";
-import type { HudEvents } from "@App/network";
+import { LanguageService } from "@App/lang/locale";
+import type { AssetMap, HudEvents } from "@App/network";
+import type { DestroyedEvent } from "@App/lang/types";
+
 import * as fs from "fs";
+
+const resp = fs.readFileSync(
+    // use german mappings, because it contains umlaute
+    "./src/lang/mappings/german.json",
+    "utf8",
+);
+
+const germanMapping = JSON.parse(resp) as AssetMap;
 
 describe("Test file parsing", () => {
     /**
@@ -78,37 +88,48 @@ describe("Test file parsing", () => {
 });
 
 describe("Message parsing", () => {
+    let langService: LanguageService;
+
+    beforeEach(() => {
+        langService = new LanguageService(germanMapping);
+    });
+
     test("Ignore suicide", () => {
         expect(
-            parseMessage("╀CroDD╀ NoPrisoners_ (Q-5A/B) wurde zerstört"),
+            langService.parseEventFromRaw("╀CroDD╀ NoPrisoners_ (Q-5A/B) wurde zerstört"),
         ).toBeNull();
     });
 
     test("Ignore test drive", () => {
         expect(
-            parseMessage("-GFF7- Lukasxox (IT-1) zerstört Magach 6M"),
+            langService.parseEventFromRaw("-GFF7- Lukasxox (IT-1) zerstört Magach 6M"),
         ).toBeNull();
     });
 
     test("Ignore non destroy messages", () => {
         expect(
-            parseMessage(
+            langService.parseEventFromRaw(
                 "=VNPAi= babyTurtle (Christian II) in Brand gesetzt [MVolk] Sam9841 (Objekt 292)",
             ),
         ).toBeNull();
     });
 
-    const expected: DestroyMessage = {
+    const expected: DestroyedEvent = {
         killer: "-GFF7- Somebody",
-        destroyerVehicle: "IT-1",
-
-        destroyedVehicle: "Magach 6M",
+        destroyerVehicle: {
+            assetPath: "./assets/img/vehicles/ground/ussr_it_1.avif",
+            localizedName: "IT-1"
+        },
+        destroyedVehicle: {
+            assetPath: "./assets/img/vehicles/ground/il_magach_6m.avif",
+            localizedName: "Magach 6M"
+        },
         killed: "-GFF7- CassualTux",
     };
 
     test("Destroy ground message parsing", () => {
         expect(
-            parseMessage(
+            langService.parseEventFromRaw(
                 "-GFF7- Somebody (IT-1) zerstört -GFF7- CassualTux (Magach 6M)",
             ),
         ).toStrictEqual(expected);
@@ -116,55 +137,70 @@ describe("Message parsing", () => {
 
     test("Destroy air message parsing", () => {
         expect(
-            parseMessage(
+            langService.parseEventFromRaw(
                 "-GFF7- Somebody (IT-1) abgeschossen -GFF7- CassualTux (Magach 6M)",
             ),
         ).toStrictEqual(expected);
     });
 
     test("Destroy parsing parenthesis", () => {
-        const expected_parenthesis: DestroyMessage = {
+        const expected_parenthesis: DestroyedEvent = {
             killer: "-GFF7- SGTCross96",
-            destroyerVehicle: "BO 105 PAH-1",
-
-            destroyedVehicle: "XM1 (GM)",
+            destroyerVehicle: {
+                assetPath: "./assets/img/vehicles/air/bo_105pah1.avif",
+                localizedName: "BO 105 PAH-1"
+            },
+            destroyedVehicle: {
+                assetPath: "./assets/img/vehicles/ground/us_xm1_gm.avif",
+                localizedName: "XM1 (GM)"
+            },
             killed: "sevenarchangel",
         };
 
         expect(
-            parseMessage(
+            langService.parseEventFromRaw(
                 "-GFF7- SGTCross96 (BO 105 PAH-1) zerstört sevenarchangel (XM1 (GM))",
             ),
         ).toStrictEqual(expected_parenthesis);
     });
 
     test("Destroy parsing parenthesis", () => {
-        const expected_parenthesis2: DestroyMessage = {
+        const expected_parenthesis2: DestroyedEvent = {
             killer: "SCHIZAPHRENIK",
-            destroyerVehicle: "Class 3 (P)",
-
-            destroyedVehicle: "Strv 103С",
+            destroyerVehicle: {
+                assetPath: "./assets/img/vehicles/ground/germ_th_800_bismark.avif",
+                localizedName: "Class 3 (P)"
+            },
+            destroyedVehicle: {
+                assetPath: "./assets/img/vehicles/ground/sw_strv_103c.avif",
+                localizedName: "Strv 103С"
+            },
             killed: "[GARD6] ⋇Brotmann89",
         };
 
         expect(
-            parseMessage(
+            langService.parseEventFromRaw(
                 "SCHIZAPHRENIK (Class 3 (P)) zerstört [GARD6] ⋇Brotmann89 (Strv 103С)",
             ),
         ).toStrictEqual(expected_parenthesis2);
     });
 
     test("Destroy parsing parenthesis without clan", () => {
-        const expect_no_clan: DestroyMessage = {
+        const expect_no_clan: DestroyedEvent = {
             killer: "SCHIZAPHRENIK",
-            destroyerVehicle: "Class 3 (P)",
-
-            destroyedVehicle: "Strv 103С",
+            destroyerVehicle: {
+                assetPath: "./assets/img/vehicles/ground/germ_th_800_bismark.avif",
+                localizedName: "Class 3 (P)"
+            },
+            destroyedVehicle: {
+                assetPath: "./assets/img/vehicles/ground/sw_strv_103c.avif",
+                localizedName: "Strv 103С"
+            },
             killed: "⋇Brotmann89",
         };
 
         expect(
-            parseMessage(
+            langService.parseEventFromRaw(
                 "SCHIZAPHRENIK (Class 3 (P)) zerstört ⋇Brotmann89 (Strv 103С)",
             ),
         ).toStrictEqual(expect_no_clan);

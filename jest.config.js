@@ -6,17 +6,19 @@ module.exports = {
     // might switch later to happy-dom for browser test environments
     testEnvironment: "node",
 
-    // including only test files
+    // Test naming convention to use ./tests/**/FILE.test.ts
     testMatch: ["**/tests/**/*.test.ts"],
+
     // Use Typescript test runner
     transform: {
         "^.+.tsx?$": ["ts-jest", {}],
     },
 
+    // Allow TS name mapper in test files too although requires duplicate defs
     moduleNameMapper: pathsToModuleNameMapper(
         {
             "@App/*": ["src/*"],
-            "@Mapping/*": ["src/mappings/*"],
+            "@Mapping/*": ["src/lang/mappings/*"],
         },
         { prefix: "<rootDir>/" },
     ),

@@ -1,4 +1,4 @@
-/** War thunder API host */
+/** War Thunder API host */
 const HOST = "http://localhost:8111";
 
 /**
@@ -52,71 +52,19 @@ async function query(url: string): Promise<Response> {
     return response;
 }
 
-export interface SquadAvatar {
-    readonly username: string;
-    readonly avatar: string;
-}
-
-export enum EventSource {
-    Me,
-    Squad,
-    Team,
-    Enemy,
-}
-
-export interface SoundSetting {
-    readonly file: string;
-    readonly volume: number;
-}
-
-export interface EventTrigger {
-    readonly event: string;
-    readonly src: EventSource;
-
-    readonly layout?: string;
-    readonly sound?: SoundSetting[];
-}
-
-export interface Settings {
-    readonly lang: string;
-
-    readonly squad: SquadAvatar[];
-    readonly events: EventTrigger[];
-}
-
-/**
- * Load current settings file
- * @returns current settings
- */
-export async function loadSettingsFile(): Promise<Settings> {
-    const resp = await fetch("./settings.json", {
-        method: GET_METHOD,
-        headers: {
-            Accept: JSON_TYPE,
-        },
-    });
-
-    return (await resp.json()) as Settings;
-}
-
-export interface AssetMap {
+export interface VehicleMap {
     readonly air: Record<string, string>;
     readonly ground: Record<string, string>;
     readonly ships: Record<string, string>;
 }
 
-/**
- *
- */
-export async function loadLang(lang: string) {
-    const resp = await fetch(`./mappings/${lang}.json`, {
-            method: GET_METHOD,
-            headers: {
-                Accept: JSON_TYPE,
-            },
-    });
+export interface AssetMap {
+    readonly lang: string,
 
-    return (await resp.json()) as AssetMap;
+    readonly vehicles: VehicleMap;
+
+    readonly groundDestroyed: string;
+    readonly flightDestroyed: string;
 }
 
 /**
@@ -129,11 +77,21 @@ export async function fetchHUD(
     seenEvent: number,
     seenDamange: number,
 ): Promise<HudEvents> {
-    // connect
     const resp = await query(
         `hudmsg?lastEvt=${seenEvent}&lastDmg=${seenDamange}`,
     );
 
-    // fetch data
     return (await resp.json()) as HudEvents;
+}
+
+// warning: this allows file traversal
+export async function loadLocalFile<T>(name: string): Promise<T> {
+    const resp = await fetch(`./${name}.json`, {
+        method: GET_METHOD,
+        headers: {
+            Accept: JSON_TYPE,
+        },
+    });
+
+    return (await resp.json()) as T;
 }

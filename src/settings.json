@@ -9,34 +9,5 @@
             "username": "Somebody",
             "avatar": "cardicon_bundeswehr_infantryman"
         }
-    ],
-    "events": [
-        {
-            "event": "kill",
-            "src": "squad"
-        },
-        {
-            "event": "firstblood",
-            "src": "me",
-            "sound": [
-                {
-                    "file": "xyz.opus",
-                    "volume": 10
-                }
-            ]
-        },
-        {
-            "event": "nuke",
-            "sound": [
-                {
-                    "file": "xyz.opus",
-                    "volume": 10
-                },
-                {
-                    "file": "xyz.opus",
-                    "volume": 10
-                }
-            ]
-        }
     ]
 }

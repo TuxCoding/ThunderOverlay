@@ -1,15 +1,17 @@
-import { AVATAR_FILE_PATH, LOCAL_EXT } from "@App/assets";
-import { getSquadAvatar, isSquadRelevant } from "@App/team";
+import { AVATAR_FILE_PATH, LOCAL_EXT } from "@App/lang/assets";
+import { getSquadAvatar, isSquadRelevant, setSquadList } from "@App/setting/team";
 import * as fs from "fs";
 
 const KNOWN_SQUAD_MEMBERS = [
-    ["TuxCode"],
-    ["Lukasxox"],
-    ["nudel28"],
-    ["SGTCross96"],
-    ["Icefruit"],
-    ["l-IlIllIIlIIllI"],
+    {username: "TuxCode", avatar: "cardicon_esport_drops"},
+    {username: "Lukasxox", avatar: "cardicon_bundeswehr_infantryman"},
+    {username: "nudel28", avatar: "cardicon_fem_06"},
+    {username: "l-IlIllIIlIIllI", avatar: "cardicon_general_06"},
 ];
+
+beforeAll(() => {
+    setSquadList(KNOWN_SQUAD_MEMBERS);
+});
 
 describe("Squad member relevance check", () => {
     test("relevant (squad member involved)", () => {
@@ -36,13 +38,13 @@ describe("find avatar", () => {
 
     test("Console player", () => {
         expect(getSquadAvatar("⋇l-IlIllIIlIIllI")).toBe(
-            "cardicon_fem_ru_modern_01",
+            "cardicon_general_06",
         );
     });
 
     test.each(KNOWN_SQUAD_MEMBERS)("Squad member check (%s)", (member) => {
         // verify each player has avatar defined in source
-        expect(getSquadAvatar(member)).toBeDefined();
+        expect(getSquadAvatar(member.username)).toBeDefined();
     });
 });
 
@@ -61,7 +63,7 @@ describeCond("Team avatar available", () => {
     test.each(KNOWN_SQUAD_MEMBERS)(
         "Squad member avatar exists (%s)",
         async (member) => {
-            const file = getSquadAvatar(member);
+            const file = getSquadAvatar(member.username);
             if (!file) {
                 // not defined in source
                 fail("avatar not defined?");

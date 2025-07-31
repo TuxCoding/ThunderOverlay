@@ -1,3 +1,21 @@
+export interface Vehicle {
+    readonly assetPath: string | null;
+    readonly localizedName: string;
+}
+
+export interface DestroyedEvent {
+    /** Killer name including clan */
+    readonly killer: string;
+
+    /** battle log destroyer vehicle */
+    readonly destroyerVehicle: Vehicle;
+    /** battle log destroyed vehicle */
+    readonly destroyedVehicle: Vehicle;
+
+    /** Killed player name including clan */
+    readonly killed: string;
+}
+
 // plane killed: shot down / NET_UNIT_KILLED_FM
 // heli killed: shot down / NET_UNIT_KILLED_FM
 
@@ -18,8 +36,6 @@ export enum DESTROY_TYPE {
 }
 
 /**
- *
- *
  * ui.csv
  */
 export enum Types {

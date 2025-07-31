@@ -1,6 +1,6 @@
 // @ts-check
 
-// add ts type data
+// ts type data
 import eslint from "@eslint/js";
 
 // plugins
@@ -11,19 +11,21 @@ import jsdoc from "eslint-plugin-jsdoc";
 
 export default tseslint.config(
     {
-        // ignored compiled and configs
+        // ignored compiled and build configs
         ignores: ["jest.config.js", "src/assets/**", "eslint.config.mjs"],
     },
     {
-        // Add warnings for missing simicolons
         rules: {
+            // Add warnings for missing simicolons
             semi: ["warn", "always"],
+            // allow await promises without checking return
             "@typescript-eslint/no-misused-promises": [
                 "error",
                 { checksVoidReturn: false },
             ],
 
             // plugins
+            // standardize qoute handling to use double and allow inner usuage
             "@stylistic/quotes": ["error", "double", { avoidEscape: true }],
         },
         plugins: {
@@ -48,5 +50,5 @@ export default tseslint.config(
     ...tseslint.configs.recommendedTypeChecked,
     ...tseslint.configs.stylisticTypeChecked,
     // plugins
-    jsdoc.configs["flat/recommended-typescript"],
+    jsdoc.configs["flat/stylistic-typescript"],
 );

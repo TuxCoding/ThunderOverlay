@@ -5,14 +5,8 @@ export const AVATAR_FILE_PATH = "./assets/img/avatars";
 // File extension
 export const LOCAL_EXT = "avif";
 
+import { type AssetMap } from "@App/network";
 // mappings will be loaded into Javascript bundle by using resolveJSON from Typescript
-import defaultMapping from "@Mapping/english.json";
-
-// mapping that is different from the wiki definition
-// so we don't need to modify the original files
-// content is sorted by values
-import specialMapping from "@Mapping/specials.json";
-import { AssetMap } from "./network";
 
 /**
  * Types for mapping vehicle name to file name
@@ -32,23 +26,25 @@ export enum VehicleType {
     Ship = "ships",
 }
 
-let assetMap: AssetMap = defaultMapping;
-
-/**
- * Selects the correct localized asset name mapping
- * @param mapping localized mapping
- */
-export function setAssetMap(mapping: AssetMap) {
-    console.log("Overriding mapping", mapping);
-    assetMap = mapping;
+// mapping that is different from the wiki definition
+// so we don't need to modify the original files
+// content is sorted by
+interface SpecialLocation {
+    type: VehicleType,
+    file: string
 }
+
+export type SpecialMap = Record<string, SpecialLocation>
+import specialMapping from "@Mapping/specials.json";
+
+
 
 /**
  * Get file path or null
  * @param vehicle localized battle log vehicle name
  * @returns file name with extension and path or null if not existing
  */
-export function findVehicleFile(vehicle: LocalizedVehicle): string | null {
+export function findVehicleFile(assetMap: AssetMap, vehicle: LocalizedVehicle): string | null {
     // vehicles are translated to local languages
     // some vehicles (i.e. russian) use cyrillic characters.
     // however they should not be cleaned, because then we would have duplicates see for example T-34-85
@@ -61,7 +57,7 @@ export function findVehicleFile(vehicle: LocalizedVehicle): string | null {
         // clean up crlf that somehow got into game files and are therefore used
         .replace("\r", "");
 
-    const fileName = findLocalMapping(cleanVehicleName);
+    const fileName = findLocalMapping(assetMap, cleanVehicleName);
     if (fileName) {
         // add path data if existing
         return `${VEHICLE_FILE_PATH}/${fileName}`;
@@ -75,8 +71,8 @@ export function findVehicleFile(vehicle: LocalizedVehicle): string | null {
  * @param vehicle localized vehicle name
  * @returns folder name and file name if existing
  */
-function findLocalMapping(vehicle: LocalizedVehicle): string | null {
-    const mapping = findMapping(vehicle);
+function findLocalMapping(assetMap: AssetMap, vehicle: LocalizedVehicle): string | null {
+    const mapping = findMapping(assetMap, vehicle);
     if (mapping) {
         const [typeFolder, normalizedFileName] = mapping;
 
@@ -97,8 +93,8 @@ const REMOTE_EXT = "png";
  * @returns full path to vehicle file
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function findRemoteMapping(vehicle: LocalizedVehicle): string | null {
-    const mapping = findMapping(vehicle);
+function findRemoteMapping(assetMap: AssetMap, vehicle: LocalizedVehicle): string | null {
+    const mapping = findMapping(assetMap, vehicle);
     if (mapping) {
         // images are organized here in a flatten folder structure
         const [, normalizedFileName] = mapping;
@@ -110,26 +106,35 @@ function findRemoteMapping(vehicle: LocalizedVehicle): string | null {
 
 /**
  * Find type and normalized vehicle identifier for a given localized vehicle name
- * @param vehicle localized vehicle name
+ * @param searchVehicle localized vehicle name
  * @returns vehicle type and vehicle identifier in an array
  */
-function findMapping(vehicle: LocalizedVehicle) {
+function findMapping(assetMap: AssetMap, searchVehicle: LocalizedVehicle) {
     // search ground vehicles first, because it is mostly played
     const vehicleTypes: [string, Mapping][] = [
-        [VehicleType.Ground, assetMap.ground],
-        [VehicleType.Air, assetMap.air],
-        [VehicleType.Ship, assetMap.ships],
-        ["", specialMapping],
+        [VehicleType.Ground, assetMap.vehicles.ground],
+        [VehicleType.Air, assetMap.vehicles.air],
+        [VehicleType.Ship, assetMap.vehicles.ships],
     ];
 
     for (const vehicleType of vehicleTypes) {
-        const [path, map] = vehicleType;
+        const [pathType, map] = vehicleType;
 
-        const name = map[vehicle];
+        const name = map[searchVehicle];
         if (name) {
             // UNIX file systems are case-sensitive
-            const normalizedFile = name.toLowerCase();
-            return [path, normalizedFile];
+            const normalizedFileName = name.toLowerCase();
+            return [pathType, normalizedFileName];
+        }
+    }
+
+    const specialMap = specialMapping as SpecialMap;
+    for (const specialVehicleName in specialMap) {
+        if (specialVehicleName === searchVehicle) {
+            const vehicleType = specialMap[specialVehicleName].type;
+            const vehicleFileName = specialMap[specialVehicleName].file.toLowerCase();
+
+            return [vehicleType, vehicleFileName];
         }
     }
 
