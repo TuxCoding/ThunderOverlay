@@ -22,8 +22,6 @@ You can see demonstration here (low quality to be hosted on GitHub):
     -   Nukes and drones too ;)
 -   Multi language support
 -   Works online and offline locally
--   Sound effects
-    -   Like [this](https://www.youtube.com/watch?v=e-ZLycuRLwc) for nukes
 
 #### Further ideas
 
@@ -42,6 +40,7 @@ You can see demonstration here (low quality to be hosted on GitHub):
         -   "Dumb ways to die" if you fly into a wall (`selfkill`)
         -   "Wilhelm scream" if you lost a crew member
     -   Drive gear switching sound
+    -   Nuke sounds like [this](https://www.youtube.com/watch?v=e-ZLycuRLwc) for nukes
     -   Similar to this great project: [WTRTI](https://github.com/MeSoftHorny/WTRTI/), but for ground vehicles
 
 ### Goals
