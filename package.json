@@ -21,7 +21,7 @@
         "@types/jest": "^30.0.0",
         "@types/node": "^24.1.0",
         "esbuild": "^0.25.8",
-        "eslint-plugin-jsdoc": "^52.0.0",
+        "eslint-plugin-jsdoc": "^52.0.1",
         "jest": "^30.0.5",
         "stylelint": "^16.23.0",
         "stylelint-config-standard": "^39.0.0",

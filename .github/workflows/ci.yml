@@ -31,7 +31,7 @@ jobs:
               name: Install pnpm
               with:
                   # Latest stable
-                  version: 9
+                  version: 10
                   # Use caching infrastructure from setup-node
                   run_install: false
 
