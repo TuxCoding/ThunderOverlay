@@ -64,7 +64,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v4
             - name: Setup go
-              uses: actions/setup-go@v5
+              uses: actions/setup-go@v6
               with:
                   go-version: stable
                   # Project is inside a sub folder
