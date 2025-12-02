@@ -2,3 +2,7 @@
 ignoredBuiltDependencies:
   - esbuild
   - unrs-resolver
+
+# Don't install packages < 1 day old to "reduce" risk of supply chain attacks
+minimumReleaseAge: 1440
+
