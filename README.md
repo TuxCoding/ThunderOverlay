@@ -20,7 +20,6 @@ You can see demonstration here (low quality to be hosted on GitHub):
     -   Helicopter
     -   Navy
     -   Nukes and drones too ;)
--   Multi language support
 -   Works online and offline locally
 
 #### Further ideas
