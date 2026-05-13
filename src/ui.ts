@@ -32,10 +32,21 @@ export function startNotificationLoop() {
     notificationLoop();
 }
 
-const NOTIFICATION_SHOW_INTERVAL = 10 * 1_000;
-
+const NOTIFICATION_SHOW_INTERVAL = 2 * 1_000;
 /** Queue of not delivered notifications */
 const notificationQueue: Notification[] = [];
+
+const notificationTimers: ReturnType<typeof setTimeout>[] = [];
+const NOTIFICATION_TOTAL_INTERVAL = 6 * 1_000;
+
+function clearNotificationTimers() {
+    while (notificationTimers.length !== 0) {
+        const timer = notificationTimers.pop();
+        if (timer !== undefined) {
+            clearTimeout(timer);
+        }
+    }
+}
 
 export function addNotification(notification: Notification) {
     notificationQueue.push(notification);
@@ -52,7 +63,7 @@ export function addNotification(notification: Notification) {
 function notificationLoop() {
     console.debug("Notification loop iteration");
 
-    const lastNot = notificationQueue.pop();
+    const lastNot = notificationQueue.shift();
     if (!lastNot) {
         // do not schedule another iteration if there are no new entries
         notificationQueueRunning = false;
@@ -61,7 +72,7 @@ function notificationLoop() {
 
     console.debug("Showing notification: ", lastNot);
     showNotification(lastNot);
-    setTimeout(notificationLoop, NOTIFICATION_SHOW_INTERVAL);
+    setTimeout(notificationLoop, NOTIFICATION_TOTAL_INTERVAL);
 }
 
 // HTML ids
@@ -79,9 +90,9 @@ const VIDEO_HTML_TAG = "video";
 const IMG_HTML_TAG = "img";
 
 // Timings
-const IN_SECONDS = 2;
-const SHOW_SECONDS = 8;
-const OUT_SECONDS = 2;
+const IN_SECONDS = 1;
+const SHOW_SECONDS = 4;
+const OUT_SECONDS = 1;
 
 const FIRE_START_EARLY = 300;
 
@@ -160,6 +171,8 @@ function popup(
     showSec: number,
     endSec: number,
 ) {
+    clearNotificationTimers();
+
     // reset the last animation position
     const ammunitionEl = document.getElementById(AMMUNITION_ELEMENT);
     ammunitionEl?.classList.remove(FIRING_ANIMATION_CLASS);
@@ -170,10 +183,18 @@ function popup(
     container.style.animationDuration = `${startSec}s`;
 
     // start fire animation
-    setTimeout(() => onShow(ammunitionEl), startSec * 1_000 - FIRE_START_EARLY);
+    const onShowTimer = setTimeout(
+        () => onShow(ammunitionEl),
+        startSec * 1_000 - FIRE_START_EARLY,
+    );
+    notificationTimers.push(onShowTimer);
 
     // start hide animation after showed it for showSec
-    setTimeout(() => hide(container, endSec), showSec * 1_000);
+    const hideTimer = setTimeout(
+        () => hide(container, endSec),
+        (startSec + showSec) * 1_000,
+    );
+    notificationTimers.push(hideTimer);
 }
 
 /**
@@ -188,10 +209,14 @@ function onShow(ammunitionEl: HTMLElement | null) {
     const smokeVideoEl = document
         .getElementsByTagName(VIDEO_HTML_TAG)
         .namedItem(SMOKE_VIDEO_ELEMENT);
-    smokeVideoEl?.play().catch((error) => {
-        // Videos would stop playing if the window is not visible for browser energy savings
-        console.debug("Video paused, because window is not in focus", error);
-    });
+    if (smokeVideoEl) {
+        smokeVideoEl.pause();
+        smokeVideoEl.currentTime = 0;
+        void smokeVideoEl.play().catch((error) => {
+            // Videos would stop playing if the window is not visible for browser energy savings
+            console.debug("Video paused, because window is not in focus", error);
+        });
+    }
 }
 
 /**

@@ -1,6 +1,5 @@
 {
-    "☢Canberra B Mk 6": {
-        "type": "air",
-        "file": "canberra_bimk6"
-    }
+    "☢Canberra B Mk 6": { "type": "air", "file": "canberra_bimk6" },
+    "Panczir'-SM-SV": { "type": "ground", "file": "ussr_pantsyr_sm_sv" },
+    "72V6": { "type": "ground", "file": "ussr_pantsyr_s1" }
 }

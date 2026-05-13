@@ -80,3 +80,4 @@ export class WebSetting extends SettingsRetriever {
         };
     }
 }
+

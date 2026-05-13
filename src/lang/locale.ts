@@ -12,8 +12,8 @@ import { getSquadAvatar, isSquadRelevant } from "@App/setting/team";
  * 4 player name with clan
  * 5 vehicle
  */
-const DESTROY_REGEX = "(.[^(]+) \\((.+)\\) (?:<groundDestroyed>|<planeDestroyed>) ([^(]+) \\((.+)\\)";
-
+const DESTROY_REGEX = "(.[^(]+) \\((.+?(?:\\([^)]*\\))?)\\) (?:<groundDestroyed>|<planeDestroyed>) ([^(]+?)(?: \\(([^)]+(?:\\([^)]*\\))?)\\))?$";
+    
 // NET_PLAYER_GM_HAS_DESTROYED
 const SUICIDE_MSG = "has been wrecked";
 const AI_DRONE_MSG = "[ai] Recon Micro";

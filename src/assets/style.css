@@ -14,11 +14,11 @@ body {
 
 :root {
     /* Brand color */
-    --color-accent: #00a3a3;
-    --color-accent-dark: #00c0c0;
+    --color-accent: #b8944e;
+    --color-accent-dark: #e5c67f;
 
     /* Blue style that seems fit nice */
-    --color-idea: #004d99;
+    --color-idea: #3a4638;
 
     /* Box background shadow color */
     --color-shadow: black;
@@ -31,9 +31,9 @@ body {
     --text-spacing: 10px;
 
     /* Backgrounds and borders */
-    --background-color: rgb(02 02 02 / 70%);
+    --background-color: rgb(10 12 10 / 78%);
     --shadow: 0 0.5rem 15rem rgb(0 0 0 / 15%);
-    --brand-border-width: 3px;
+    --brand-border-width: 2px;
 
     /* original size 150px */
     --avatar-size: 125px;
@@ -83,36 +83,88 @@ body {
     display: flex;
     /* Vertical align */
     align-items: center;
+    gap: 1rem;
+
+    padding: 0.72rem 1.1rem;
+
+    background:
+        linear-gradient(120deg, rgb(255 220 160 / 7%), rgb(255 255 255 / 0%) 32%),
+        linear-gradient(90deg, rgb(11 14 12 / 90%), rgb(20 24 20 / 84%) 55%, rgb(8 10 9 / 92%));
+    border: 1px solid rgb(184 148 78 / 56%);
+    border-radius: 0;
+    box-shadow:
+        0 1rem 2.2rem rgb(0 0 0 / 45%),
+        inset 0 1px 0 rgb(255 244 214 / 12%),
+        inset 0 -1px 0 rgb(0 0 0 / 42%);
+    backdrop-filter: blur(5px);
+    clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 50%, calc(100% - 22px) 100%, 0 100%);
+    overflow: hidden;
+    isolation: isolate;
 
     /* By default hide it */
     opacity: 0;
+
+    transform: translate3d(-12px, 14px, 0) scale(0.98);
+    will-change: transform, opacity;
+}
+
+#notification::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        repeating-linear-gradient(
+            -8deg,
+            rgb(255 255 255 / 4%) 0,
+            rgb(255 255 255 / 4%) 2px,
+            rgb(255 255 255 / 0%) 2px,
+            rgb(255 255 255 / 0%) 8px
+        );
+    pointer-events: none;
+    z-index: -2;
+}
+
+#notification::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 26px;
+    background: linear-gradient(180deg, rgb(229 198 127 / 34%), rgb(184 148 78 / 16%));
+    box-shadow: inset 1px 0 0 rgb(255 240 196 / 30%);
+    pointer-events: none;
 }
 
 .pop-in {
-    animation-name: slide-in;
+    animation-name: notification-enter;
     /* keep animation in end state meaning here visible */
     animation-fill-mode: forwards;
+
+    animation-timing-function: cubic-bezier(0.2, 0.85, 0.2, 1);
 
     animation-iteration-count: 1;
 }
 
-/* Make the component visible and slide it in from below */
-@keyframes slide-in {
+/* Make the component visible and settle it in from below */
+@keyframes notification-enter {
     from {
         /* Make component visible and keep it at the end */
-        opacity: 1;
-        margin-top: 150px;
+        opacity: 0;
+        transform: translate3d(-28px, 18px, 0) scale(0.965);
+        filter: blur(6px);
     }
 
     to {
         /* Without this the component would become invisible again */
         opacity: 1;
-        margin-top: 0;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0);
     }
 }
 
 .pop-out {
-    animation-name: fade-out;
+    animation-name: notification-exit;
     /* keep animation in end state meaning here invisble */
     animation-fill-mode: forwards;
 
@@ -123,13 +175,17 @@ body {
 }
 
 /* Disappear animation */
-@keyframes fade-out {
+@keyframes notification-exit {
     from {
         opacity: 1;
+        transform: translate3d(0, 0, 0) scale(1);
+        filter: blur(0);
     }
 
     to {
         opacity: 0;
+        transform: translate3d(22px, -8px, 0) scale(0.99);
+        filter: blur(4px);
     }
 }
 
@@ -142,6 +198,8 @@ body {
 
     /* Add brand accent border */
     border: var(--brand-border-width) solid var(--color-accent);
+    outline: 1px solid rgb(255 237 190 / 42%);
+    filter: saturate(0.95) contrast(1.04);
 }
 
 /* Smaller tank icon next to killer icon */
@@ -149,11 +207,12 @@ body {
     /* Smaller variant next to the avatar */
     height: var(--vehicle-size-combined);
     width: calc(var(--vehicle-size-combined) * 2);
+    filter: drop-shadow(0 0 10px rgb(0 0 0 / 40%));
 }
 
 /* Notification text */
 #title {
-    font-size: 2rem;
+    font-size: 1.9rem;
     font-weight: var(--text-normal-weight);
     font-family: var(--font);
 
@@ -167,14 +226,11 @@ body {
     /* format: horizontal vertical blur color */
     /* Text border around chars */
     text-shadow:
-        2px 0 black,
-        -2px 0 black,
-        0 2px black,
-        0 -2px black,
-        1px 1px black,
-        -1px -1px black,
-        1px -1px black,
-        -1px 1px black;
+        2px 0 rgb(0 0 0 / 92%),
+        -2px 0 rgb(0 0 0 / 92%),
+        0 2px rgb(0 0 0 / 92%),
+        0 -2px rgb(0 0 0 / 92%),
+        0 0 14px rgb(0 0 0 / 28%);
 
     /* Enlarage component based on need */
     flex-grow: 1;
@@ -186,17 +242,32 @@ body {
     & span {
         /* Disable inherited flex layout and display items below each other */
         display: block;
+        line-height: 1.02;
     }
 
     /* Ammunition image */
     & #ammunition {
         /* original size: 3107x414 */
-        height: 48px;
+        height: 50px;
         width: 360px;
 
         /* hide by default */
         opacity: 0;
+
+        mix-blend-mode: screen;
+        filter:
+            drop-shadow(0 0 0.95rem rgb(255 205 116 / 55%))
+            saturate(1.1)
+            contrast(1.1);
     }
+}
+
+#action-text {
+    margin: 0.1rem 0 0.16rem;
+    font-size: 1.08rem;
+    letter-spacing: 0.18em;
+    color: rgb(248 208 118);
+    text-shadow: 0 0 12px rgb(248 208 118 / 26%);
 }
 
 /* Firing smoke video */
@@ -205,7 +276,7 @@ body {
     position: absolute;
 
     /* video size */
-    --video-height: 200px;
+    --video-height: 228px;
     height: var(--video-height);
 
     /* position */
@@ -221,27 +292,51 @@ body {
     top: calc(
         0px - (var(--avatar-size) - var(--vehicle-size-combined)) / 2 - 20px
     );
+
+    mix-blend-mode: screen;
+    opacity: 0.97;
+    filter: saturate(1.08) brightness(1.05) drop-shadow(0 0 16px rgb(255 220 150 / 18%));
 }
 
 .ammu-firing {
-    animation: slide-right 3s 0s 1;
+    animation: ammo-slide 2.15s 0s 1;
+    animation-timing-function: cubic-bezier(0.18, 0.92, 0.12, 1);
     animation-fill-mode: forwards;
 }
 
 /* shot animation to slide from left to right */
-@keyframes slide-right {
+@keyframes ammo-slide {
     from {
         /* Do not hide it fully, because it causes a pop effect, but show it like it would appearing to the eye */
-        opacity: 0.4;
+        opacity: 0.28;
         /* Start from left side */
-        margin-right: 50%;
+        margin-right: 62%;
+        transform: translateY(9px) scale(0.9);
+        filter: brightness(0.9);
+    }
+
+    24% {
+        opacity: 1;
+        margin-right: 41%;
+        transform: translateY(1px) scale(1.12);
+        filter: brightness(1.42) drop-shadow(0 0 14px rgb(255 213 132 / 78%));
+    }
+
+    64% {
+        opacity: 1;
+        margin-right: 8%;
+        margin-left: 57%;
+        transform: translateY(-1px) scale(1.07);
+        filter: brightness(1.24) drop-shadow(0 0 10px rgb(255 198 102 / 55%));
     }
 
     to {
-        opacity: 1;
+        opacity: 0.95;
         /* move it only slightly above center to not go over the tank */
         margin-right: 0;
-        margin-left: 70%;
+        margin-left: 74%;
+        transform: translateY(0) scale(1.03);
+        filter: brightness(1.1);
     }
 }
 
@@ -250,6 +345,14 @@ body {
 #killed-name {
     /* Darker brand color variant */
     color: var(--color-accent-dark);
+}
+
+#killer-name {
+    color: rgb(220 232 210);
+}
+
+#killed-name {
+    color: rgb(255 178 132);
 }
 
 /* Right side slightly enlarged */
@@ -264,6 +367,7 @@ body {
         /* Similar size as the avatar for the left side */
         height: var(--vehicle-size-single);
         width: calc(var(--vehicle-size-single) * 2);
+        filter: drop-shadow(0 0 12px rgb(0 0 0 / 45%));
     }
 }
 

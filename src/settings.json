@@ -1,13 +1,7 @@
 {
-    "lang": "english",
-    "squad": [
-        {
-            "username": "TuxCode",
-            "avatar": "cardicon_esport_drops"
-        },
-        {
-            "username": "Somebody",
-            "avatar": "cardicon_bundeswehr_infantryman"
-        }
-    ]
+  "lang": "english",
+  "squad": [
+    { "username": "cupid00772", "avatar": "cardicon_norman_schwarzkopf" },
+    { "username": "Akula0517", "avatar": "cardicon_metal_santa" }
+  ]
 }
