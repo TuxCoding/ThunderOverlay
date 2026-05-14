@@ -93,18 +93,19 @@ function handleEvents(events: Damage[]) {
         const destroyEvent = langService.parseEventFromRaw(event.msg);
         if (!destroyEvent) {
             // not a destroy message likely an award?
-            return;
+            continue;
         }
 
         const killerAvatar = getSquadAvatar(destroyEvent.killer);
-        const destroyerTank = destroyEvent.destroyerVehicle.localizedName;
-        const destroyedTank = destroyEvent.destroyedVehicle.localizedName;
+        
+        const destroyerTank = destroyEvent.destroyerVehicle.assetPath ?? "";
+        const destroyedTank = destroyEvent.destroyedVehicle.assetPath ?? "";
 
         logFailedMappings(destroyerTank, destroyedTank, killerAvatar, destroyEvent, event.msg);
 
-        if (!killerAvatar || !destroyerTank || !destroyedTank) {
-            // not squad member - ignore or couldn't find image
-            return;
+        if (!killerAvatar) {
+            // not squad member - ignore
+            continue;
         }
 
         const notification: Notification = {

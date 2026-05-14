@@ -1,3 +1,8 @@
+allowBuilds:
+  '@swc/core': true
+  esbuild: true
+  unrs-resolver: true
+
 # PNPM approved build scripts
 ignoredBuiltDependencies:
   - esbuild
@@ -5,4 +10,3 @@ ignoredBuiltDependencies:
 
 # Don't install packages < 1 day old to "reduce" risk of supply chain attacks
 minimumReleaseAge: 1440
-

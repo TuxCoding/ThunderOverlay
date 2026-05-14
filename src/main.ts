@@ -1,4 +1,4 @@
-import { addErrorHandlerImg, showNotification, type Notification } from "@App/ui";
+import { addErrorHandlerImg, addNotification, type Notification } from "@App/ui";
 import { DefaultSetting, LocalSetting, type Settings } from "@App/setting/settings";
 
 import { loadLocalFile, type AssetMap } from "@App/network";
@@ -47,7 +47,7 @@ async function loadSettings(): Promise<Settings> {
 
 async function loadLang(lang: string): Promise<AssetMap> {
     if (isLocalEnvironment()) {
-        return new Promise(() => defaultMapping);
+        return Promise.resolve(defaultMapping as AssetMap);
     }
 
     return loadLocalFile(`./${lang}.json`);
@@ -61,6 +61,11 @@ function isLocalEnvironment() {
 const DELAY_SAMPLE_NOTIFICATION = 1_000;
 
 function showSampleNotification() {
+    const demoEnabled = new URLSearchParams(document.location.search).has("demo");
+    if (!demoEnabled) {
+        return;
+    }
+
     // test formatting with max number of clan and player characters and demonstrate initialization
     const sample: Notification = {
         killer: "^GFF7^ TuxCode",
@@ -73,5 +78,5 @@ function showSampleNotification() {
     };
 
     // delay it slightly to relax demand on initialization for client application
-    setTimeout(() => showNotification(sample), DELAY_SAMPLE_NOTIFICATION);
+    setTimeout(() => addNotification(sample), DELAY_SAMPLE_NOTIFICATION);
 }
