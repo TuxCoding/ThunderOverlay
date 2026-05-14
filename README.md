@@ -1,5 +1,6 @@
 # War Thunder OBS/Streaming overlay
 
+(Modified by cupid00772, thx to TuxCoding !)
 ![A promotional banner for "Thunder Overlay," a streaming overlay for War Thunder kill feeds. The background features an in-game scene from War Thunder, showing two tanks and a missile in mid-flight with a fiery trail. Above the missile, two usernames, "^GFF7^ games647" and "^GFF7^ Somebody," are displayed in teal text, resembling an in-game kill feed](https://github.com/user-attachments/assets/a48cf364-69f8-4fd7-a810-7eeef0298b6d "Project logo.avif")
 
 ## Description
@@ -10,16 +11,19 @@ This could include an image of the vehicle helping people who are not familiar w
 
 You can see demonstration here (low quality to be hosted on GitHub):
 
-[Kill overlay.vp9.webm](https://github.com/user-attachments/assets/f61f20fa-680b-49d0-852d-6f0a91345aa2)
+(Modified kill feed)
+<img width="800" height="145" alt="WT_killfeed_showcase" src="https://github.com/user-attachments/assets/ed39020b-35aa-43df-9a3b-346f16cd0bfa" />
+
 
 ### Features
+
 
 -   Supports different vehicle types:
     -   Tanks
     -   Planes
     -   Helicopter
     -   Navy
-    -   Nukes and drones too ;)
+    -   Nukes and drones too ;) (Manually added in `ThunderOverlay\src\lang\mappings\special.json`)
 -   Multi language support
 -   Works online and offline locally
 
@@ -67,8 +71,8 @@ pnpm watchJS
 
 * OBS 31+
     * Project uses CSS nesting which the browser inside OBS in older version doesn't support
-* Use the full game client (don't have game quality set to minimal)
-    * The web server accessible under `http://localhost:9111` from the game client is only provided by the full client version.
+* Use the full game client (!!!don't have game quality set to minimal!!!)
+    * The web server accessible under `http://localhost:8111` from the game client is only provided by the full client version
 
 ## Installation
 
@@ -90,12 +94,20 @@ This version makes web requests to retrieve the image data for vehicle and avata
     * `USERNAME`: Your own username
     * Full example: `...?username=TuxCode,cardicon_esport_drops&`
 
-### Local
+### Local (Recommended)
 
 This version uses only local files. All relevant data is extracted from the game client.
 
 1. Download the project
-2. Open `src/settings.json` in a text editor and edit
+2. Compile the project():
+   ```shell
+   cd [location of ThunderOverlay]
+   pnpm install
+   pnpm watchJS
+   ```
+3. Configure your squad members by editing `\src\settings.json`
+4. add all kinds of warthunder vehicle into `\src\assets\img\vehicles`(AI is very useful)
+
 <details>
 <summary>
 settings.json
@@ -125,11 +137,11 @@ settings.json
 
 ### Kill feed
 
-1. Add browser source pointing to local file `NotificationFeed`
+1. Add browser source pointing to local file `NotificationFeed.html`
 2. Set browser size to: `1200x400`
-3. Move it to the correct position
-    - I found horizontal centered and height `150px` a good fit below the mission objective and above a kill notification
-4. Cut out at the bottom `200px` using transformation to make it slide out
+3. Ensure War Thunder is running (web server on `http://localhost:8111` must be accessible)
+4. Move it to the correct position
+5. Cut out at the bottom `200px` using transformation to make it slide out
 
 <details>
 <summary>
@@ -218,13 +230,19 @@ Either:
 
 ### How does it work?
 
-It extracts the data from the battle log. This log is pulled from the the web server `http://localhost:9111` provided
-by the War Thunder client itself. It parses the corresponding textual data about player and vehicle names. Then, the localized vehicle
-names are translated back to vehicle identifiers using name mappings from the game client. This allows us to find the correct vehicle image,
-because the game files uses those identifiers. Squad membership and player avatars are unfortunatly manually configurred, but are less likely to change.
+It extracts kill events from the battle log via the War Thunder web server running on `http://localhost:8111`. 
 
-The kill notification is then displayed using CSS animations on a transparant background. The smoke effect is shown with a video where
-the green background is keyed out to add an alpha channel in order to make it transparant as well.
+The system works as follows:
+1. **Fetch events**: The `hudmsg` endpoint provides real-time kill and damage events from the in-game battle log
+2. **Parse messages**: Each event is parsed to extract player names and vehicle identifiers
+3. **Localize vehicle names**: Vehicle names are translated from localized names back to their identifiers using language mappings from the game client
+4. **Match squad members**: Player names are checked against your manually configured squad list in `src/settings.json`
+5. **Display notification**: When a squad member gets a kill, a notification is displayed with their avatar and vehicle image using CSS animations
+
+**Important limitation**: Squad membership and player avatars **must be manually configured** in `src/settings.json`. The War Thunder API does not expose this information through the web interface.
+
+The kill notification is then displayed using CSS animations on a transparent background. The smoke effect is shown with a video where
+the green background is keyed out to add an alpha channel in order to make it transparent as well.
 
 ## Credits
 
